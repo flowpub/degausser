@@ -1,0 +1,6 @@
+[
+  {
+    "i": "<div>\n  <div>hey</div>\n  <span style=\"color: red\">aa\n    <div>Text1</div>Text0</span><span>Text2</span>\n  <br id=\"break2\">\n  hey2\n</div>\nhello",
+    "o": "hey\naa\nText1\nText0Text2 \nhey2\nhello"
+  }
+]

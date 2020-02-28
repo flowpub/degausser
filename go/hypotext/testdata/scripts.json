@@ -1,0 +1,42 @@
+[
+  {
+    "i": "<style>Test</style>",
+    "o": ""
+  },
+  {
+    "i": "<style type=\"text/css\">body { color: #fff; }</style>",
+    "o": ""
+  },
+  {
+    "i": "<link rel=\"stylesheet\" href=\"main.css\">",
+    "o": ""
+  },
+  {
+    "i": "<script>Test</script>",
+    "o": ""
+  },
+  {
+    "i": "<script src=\"main.js\"></script>",
+    "o": ""
+  },
+  {
+    "i": "<script type=\"text/javascript\" src=\"main.js\"></script>",
+    "o": ""
+  },
+  {
+    "i": "<script type=\"text/javascript\">Test</script>",
+    "o": ""
+  },
+  {
+    "i": "<script type=\"text/ng-template\" id=\"template.html\"><a href=\"http://google.com\">Google</a></script>",
+    "o": ""
+  },
+  {
+    "i": "<script type=\"bla-bla-bla\" id=\"template.html\">Test</script>",
+    "o": ""
+  },
+  {
+    "i": "<html><head><title>Title</title></head><body></body></html>",
+    "o": ""
+  }
+]

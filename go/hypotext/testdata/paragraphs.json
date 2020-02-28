@@ -1,0 +1,42 @@
+[
+  {
+    "i": "Test text",
+    "o": "Test text"
+  },
+  {
+    "i": "Test text<br>",
+    "o": "Test text"
+  },
+  {
+    "i": "Test text<br>Test",
+    "o": "Test text\nTest"
+  },
+  {
+    "i": "<p>Test text</p>",
+    "o": "Test text"
+  },
+  {
+    "i": "<p>Test text</p><p>Test text</p>",
+    "o": "Test text\n\nTest text"
+  },
+  {
+    "i": "\n<p>Test text</p>\n\n\n\t<p>Test text</p>\n",
+    "o": "Test text\n\nTest text"
+  },
+  {
+    "i": "\n<p>Test text<br/>Test text</p>\n",
+    "o": "Test text\nTest text"
+  },
+  {
+    "i": "\n<p>Test text<br> \tTest text<br></p>\n",
+    "o": "Test text\nTest text"
+  },
+  {
+    "i": "Test text<br><BR />Test text",
+    "o": "Test text\n\nTest text"
+  },
+  {
+    "i": "<pre>test1\ntest 2\n\ntest  3</pre>",
+    "o": "test1\ntest 2\n\ntest  3"
+  }
+]

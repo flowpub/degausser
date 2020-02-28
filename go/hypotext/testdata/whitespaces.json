@@ -1,0 +1,22 @@
+[
+  {
+    "i": "test text",
+    "o": "test text"
+  },
+  {
+    "i": "  \ttext\ntext\n",
+    "o": "text text"
+  },
+  {
+    "i": "  \na \n\t \n \n a \t",
+    "o": "a a"
+  },
+  {
+    "i": "test        text",
+    "o": "test text"
+  },
+  {
+    "i": "test&nbsp;&nbsp;&nbsp; text&nbsp;",
+    "o": "test    text"
+  }
+]

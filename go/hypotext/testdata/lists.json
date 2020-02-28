@@ -1,0 +1,18 @@
+[
+  {
+    "i": "<ul></ul>",
+    "o": ""
+  },
+  {
+    "i": "<ul><li>item</li></ul>_",
+    "o": "* item\n\n_"
+  },
+  {
+    "i": "<li class='123'>item 1</li> <li>item 2</li>\n_",
+    "o": "* item 1\n* item 2\n_"
+  },
+  {
+    "i": "<li>item 1</li> \t\n <li>item 2</li> <li> item 3</li>\n_",
+    "o": "* item 1\n* item 2\n* item 3\n_"
+  }
+]

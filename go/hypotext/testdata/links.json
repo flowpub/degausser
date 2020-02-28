@@ -1,0 +1,34 @@
+[
+  {
+    "i": "<a></a>",
+    "o": ""
+  },
+  {
+    "i": "<a href=\"\"></a>",
+    "o": ""
+  },
+  {
+    "i": "<a href=\"http://example.com/\"></a>",
+    "o": ""
+  },
+  {
+    "i": "<a href=\"\">Link</a>",
+    "o": "Link"
+  },
+  {
+    "i": "<a href=\"http://example.com/\">Link</a>",
+    "o": "Link"
+  },
+  {
+    "i": "<a href=\"http://example.com/\"><span class=\"a\">Link</span></a>",
+    "o": "Link"
+  },
+  {
+    "i": "<a href='http://example.com/'>\n\t<span class='a'>Link</span>\n\t</a>",
+    "o": "Link"
+  },
+  {
+    "i": "<a href=\"http://example.com/\"><img src=\"http://example.ru/hello.jpg\" alt=\"Example\"></a>",
+    "o": "Example"
+  }
+]

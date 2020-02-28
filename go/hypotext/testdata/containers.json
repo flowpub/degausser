@@ -1,0 +1,22 @@
+[
+  {
+    "i": "<div>Test</div>",
+    "o": "Test"
+  },
+  {
+    "i": "\t<div>Test</div> ",
+    "o": "Test"
+  },
+  {
+    "i": "<div>Test line 1<div>Test 2</div></div>",
+    "o": "Test line 1\nTest 2"
+  },
+  {
+    "i": "Test 1<div>Test 2</div> <div>Test 3</div>Test 4",
+    "o": "Test 1\nTest 2\nTest 3\nTest 4"
+  },
+  {
+    "i": "Test 1<div>&nbsp;Test 2&nbsp;</div>",
+    "o": "Test 1\nTest 2"
+  }
+]

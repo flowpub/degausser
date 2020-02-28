@@ -1,4 +1,4 @@
-module github.com/flowpub/hypotext
+module github.com/flowpub/hypotext/go/hypotext
 
 go 1.13
 

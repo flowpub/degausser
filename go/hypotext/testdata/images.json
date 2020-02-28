@@ -1,0 +1,26 @@
+[
+  {
+    "i": "<img />",
+    "o": ""
+  },
+  {
+    "i": "<img src=\"http://example.ru/hello.jpg\" />",
+    "o": ""
+  },
+  {
+    "i": "<img alt=\"Example\"/>",
+    "o": "Example"
+  },
+  {
+    "i": "<img src=\"http://example.ru/hello.jpg\" alt=\"Example\"/>",
+    "o": "Example"
+  },
+  {
+    "i": "<a href=\"http://example.com/\"><img src=\"http://example.ru/hello.jpg\" alt=\"Example\"/></a>",
+    "o": "Example"
+  },
+  {
+    "i": "<div><p>Hello <img src=\"https://via.placeholder.com/140x100\" alt=\"World\"/></a></p></div>",
+    "o": "Hello World"
+  }
+]
