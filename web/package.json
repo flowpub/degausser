@@ -1,0 +1,18 @@
+{
+  "name": "hypotext",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "static": "static ."
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^25.1.0",
+    "jest-puppeteer": "^4.4.0",
+    "node-static": "^0.7.11",
+    "puppeteer": "^2.1.1"
+  }
+}
