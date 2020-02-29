@@ -17,6 +17,6 @@
   },
   {
     "i": "Test 1<div>&nbsp;Test 2&nbsp;</div>",
-    "o": "Test 1\nTest 2"
+    "o": "Test 1\n\u00A0Test 2\u00A0"
   }
 ]
