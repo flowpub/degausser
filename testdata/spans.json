@@ -1,0 +1,30 @@
+[
+  {
+    "i": "<span>Test text</span>",
+    "o": "Test text"
+  },
+  {
+    "i": "<span>Test</span><span>Text</span>",
+    "o": "TestText"
+  },
+  {
+    "i": "<span>Test</span> <span>Text</span>",
+    "o": "Test Text"
+  },
+  {
+    "i": "<span>Test</span>\n<span>Text</span>",
+    "o": "Test Text"
+  },
+  {
+    "i": "<span>Test</span>\n<br>\n<span>Text</span>",
+    "o": "Test\nText"
+  },
+  {
+    "i": "<p>This is a <em>test</em></p>",
+    "o": "This is a test"
+  },
+  {
+    "i": "<p>This <sup>is</sup> a <sub><em>test</em></sub></p>",
+    "o": "This is a test"
+  }
+]
