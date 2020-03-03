@@ -43,6 +43,13 @@ describe("textify!", () => {
     });
   });
 
+  it("spans", async () => {
+    const testCases = await loadTestCases("spans.json");
+    await asyncForEach(testCases, async testCase => {
+      expect(await hypotext(page, testCase.i)).toBe(testCase.o);
+    });
+  });
+
   it("lists", async () => {
     const testCases = await loadTestCases("lists.json");
     await asyncForEach(testCases, async testCase => {

@@ -83,7 +83,18 @@ func TestContainers(t *testing.T) {
 			t.Log(msg)
 		}
 	}
+}
 
+func TestSpans(t *testing.T) {
+	testCases := getTestCase("./spans.json")
+
+	for _, testCase := range testCases {
+		if msg, err := wantString(testCase.Input, testCase.Output); err != nil {
+			t.Error(err)
+		} else if len(msg) > 0 {
+			t.Log(msg)
+		}
+	}
 }
 
 func TestLists(t *testing.T) {
