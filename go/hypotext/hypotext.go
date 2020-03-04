@@ -12,14 +12,16 @@ func FromString(s string) (string, error) {
 		return "", err
 	}
 
-	var body *html.Node
+	var bodyNode *html.Node
 	runs := make([]string, 0)
+	breaks := make([]string, 0)
 	stack := make([]string, 0)
 	skipNode := false
+	preformatted := false
 
 	walk(doc, func(node *html.Node) bool {
 		if node.Type == html.ElementNode && strings.ToLower(node.Data) == "body" {
-			body = node
+			bodyNode = node
 			return false
 		}
 		return true
@@ -27,7 +29,7 @@ func FromString(s string) (string, error) {
 		return true
 	})
 
-	walk(body, func(node *html.Node) bool {
+	walk(bodyNode, func(node *html.Node) bool {
 		if node.Type == html.ElementNode && IsNodeOfType(node, MetadataContent) {
 			skipNode = true
 		}
@@ -38,6 +40,17 @@ func FromString(s string) (string, error) {
 
 		if node.Type == html.ElementNode {
 			nodeName := strings.ToLower(node.Data)
+
+			if nodeName == "pre" {
+				preformatted = true
+			}
+
+			// process container-caused new lines
+			if len(breaks) != 0 {
+				runs = append(runs, breaks...)
+				breaks = make([]string, 0)
+			}
+
 			if !IsNodeOfType(node, PhrasingContent) {
 				stack, runs = process(stack, runs)
 				if len(runs) != 0 && runs[len(runs)-1] != "\n" {
@@ -60,12 +73,22 @@ func FromString(s string) (string, error) {
 		}
 
 		if node.Type == html.TextNode {
-			trimmed := CollapseRepeatingWhitespace(node.Data)
-			if len(stack) != 0 && stack[len(stack)-1] == "\n" {
-				trimmed = TrimWhitespaceLeft(trimmed)
-			}
-			if !(len(stack) == 0 && trimmed == " " || len(trimmed) == 0) && !(trimmed == " " && len(stack) != 0 && CollapseRepeatingWhitespace(stack[len(stack)-1]) == " ") {
-				stack = append(stack, trimmed)
+			if !preformatted {
+				trimmed := CollapseRepeatingWhitespace(node.Data)
+				if len(stack) != 0 && stack[len(stack)-1] == "\n" {
+					trimmed = TrimWhitespaceLeft(trimmed)
+				}
+				if !(len(stack) == 0 && trimmed == " " || len(trimmed) == 0) && !(trimmed == " " && len(stack) != 0 && CollapseRepeatingWhitespace(stack[len(stack)-1]) == " ") {
+					// process container-caused new lines
+					if len(breaks) != 0 {
+						runs = append(runs, breaks...)
+						breaks = make([]string, 0)
+					}
+
+					stack = append(stack, trimmed)
+				}
+			} else {
+				stack = append(stack, node.Data)
 			}
 		}
 
@@ -81,20 +104,25 @@ func FromString(s string) (string, error) {
 
 		if node.Type == html.ElementNode {
 			nodeName := strings.ToLower(node.Data)
-			if !IsNodeOfType(node, PhrasingContent) {
+
+			if nodeName == "pre" {
+				preformatted = false
+				runs = append(runs, strings.Join(stack, ""))
+				stack = make([]string, 0)
+			} else if !IsNodeOfType(node, PhrasingContent) {
 				stack, runs = process(stack, runs)
-				if len(runs) != 0 && runs[len(runs)-1] != "\n" {
+				if len(runs) != 0 && runs[len(runs)-1] != "\n" && node != bodyNode {
 					if nodeName == "p" {
-						runs = append(runs, "\n")
+						breaks = append(breaks, "\n")
 					}
-					runs = append(runs, "\n")
+					breaks = append(breaks, "\n")
 				}
 			}
 		}
 		return true
 	})
 
-	return TrimWhitespace(strings.Join(runs, "")), nil
+	return strings.Join(runs, ""), nil
 }
 
 func process(stack []string, runs []string) ([]string, []string) {

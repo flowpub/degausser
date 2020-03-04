@@ -8,18 +8,7 @@ import (
 )
 
 func main() {
-	plain, err := hypotext.FromString(`Hello!
-	<p>This
-		<sup>is</sup>
-		a
-		<sub>
-			<em>test</em>
-		</sub>
-	</p>
-	<div>
-		<br>
-		Thanks!
-	</div>`)
+	plain, err := hypotext.FromString("#<ul><li>item</li></ul>_")
 	if err != nil {
 		log.Fatal(err)
 	}
