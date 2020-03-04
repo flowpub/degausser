@@ -9,8 +9,5 @@ globalThis.hypotext = input => {
   });
   const text = div.innerText;
   div.remove();
-  return text
-    .normalize()
-    .replace(/^[ \t\r\n]+/g, "")
-    .replace(/[ \t\r\n]+$/g, "");
+  return text.normalize();
 };
