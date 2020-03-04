@@ -1,7 +1,7 @@
 [
   {
     "i": "<table>\n  <tr>\n    <td></td>\n    <td></td>\n  </tr>\n</table>",
-    "o": ""
+    "o": "\t"
   },
   {
     "i": "<table>\n  <tr>\n    <td>cell1</td>\n    <td>cell2</td>\n  </tr>\n</table>",
