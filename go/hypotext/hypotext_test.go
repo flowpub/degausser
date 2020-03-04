@@ -207,8 +207,7 @@ Output
 Expected
 >>>
 %v
-<<<
-`,
+<<<`,
 			input,
 			text,
 			matcher.String(),
