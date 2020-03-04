@@ -14,5 +14,9 @@
   {
     "i": "<li>item 1</li> \t\n <li>item 2</li> <li> item 3</li>\n_",
     "o": "item 1\nitem 2\nitem 3\n_"
+  },
+  {
+    "i": "Fly me,\n<ul>\n    <li>Neil Armstrong</li>\n    <li>Alan Bean</li>\n    <li>Peter Conrad</li>\n    <li>Edgar Mitchell</li>\n    <li>Alan Shepard</li>\n</ul>\nto the moon!",
+    "o": "Fly me,\nNeil Armstrong\nAlan Bean\nPeter Conrad\nEdgar Mitchell\nAlan Shepard\nto the moon!"
   }
 ]
