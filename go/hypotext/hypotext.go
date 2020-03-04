@@ -111,7 +111,7 @@ func FromString(s string) (string, error) {
 				stack = make([]string, 0)
 			} else if !IsNodeOfType(node, PhrasingContent) {
 				stack, runs = process(stack, runs)
-				if len(runs) != 0 && runs[len(runs)-1] != "\n" && node != bodyNode {
+				if len(breaks) == 0 && len(runs) != 0 && runs[len(runs)-1] != "\n" && node != bodyNode {
 					if nodeName == "p" {
 						breaks = append(breaks, "\n")
 					}
