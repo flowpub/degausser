@@ -1,38 +1,38 @@
 [
   {
-    "i": "<style>Test</style>",
+    "i": "<html><head></head><body><style>Test</style></body></html>",
     "o": ""
   },
   {
-    "i": "<style type=\"text/css\">body { color: #fff; }</style>",
+    "i": "<html><head></head><body><style type=\"text/css\">body { color: #fff; }</style></body></html>",
     "o": ""
   },
   {
-    "i": "<link rel=\"stylesheet\" href=\"main.css\">",
+    "i": "<html><head></head><body><link rel=\"stylesheet\" href=\"main.css\"></body></html>",
     "o": ""
   },
   {
-    "i": "<script>Test</script>",
+    "i": "<html><head></head><body><script>Test</script></body></html>",
     "o": ""
   },
   {
-    "i": "<script src=\"main.js\"></script>",
+    "i": "<html><head></head><body><script src=\"main.js\"></script></body></html>",
     "o": ""
   },
   {
-    "i": "<script type=\"text/javascript\" src=\"main.js\"></script>",
+    "i": "<html><head></head><body><script type=\"text/javascript\" src=\"main.js\"></script></body></html>",
     "o": ""
   },
   {
-    "i": "<script type=\"text/javascript\">Test</script>",
+    "i": "<html><head></head><body><script type=\"text/javascript\">Test</script></body></html>",
     "o": ""
   },
   {
-    "i": "<script type=\"text/ng-template\" id=\"template.html\"><a href=\"http://google.com\">Google</a></script>",
+    "i": "<html><head></head><body><script type=\"text/ng-template\" id=\"template.html\"><a href=\"http://google.com\">Google</a></script></body></html>",
     "o": ""
   },
   {
-    "i": "<script type=\"bla-bla-bla\" id=\"template.html\">Test</script>",
+    "i": "<html><head></head><body><script type=\"bla-bla-bla\" id=\"template.html\">Test</script></body></html>",
     "o": ""
   },
   {
