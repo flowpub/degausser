@@ -33,7 +33,7 @@
   },
   {
     "i": "\n<p>Test text<br> \tTest text<br></p>\n",
-    "o": "Test text\nTest text"
+    "o": "Test text\nTest text\n"
   },
   {
     "i": "Test text<br><BR />Test text",
