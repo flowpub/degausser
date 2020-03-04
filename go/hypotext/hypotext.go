@@ -15,7 +15,7 @@ func FromString(s string) (string, error) {
 	var bodyNode *html.Node
 	runs := make([]string, 0)
 	breaks := make([]string, 0)
-	stack := make([]string, 0)
+	text := make([]string, 0)
 	skipNode := false
 	preformatted := false
 
@@ -52,7 +52,7 @@ func FromString(s string) (string, error) {
 			}
 
 			if !IsNodeOfType(node, PhrasingContent) {
-				stack, runs = process(stack, runs)
+				text, runs = process(text, runs)
 				if len(runs) != 0 && runs[len(runs)-1] != "\n" {
 					if nodeName == "p" {
 						runs = append(runs, "\n")
@@ -61,13 +61,13 @@ func FromString(s string) (string, error) {
 				}
 			} else {
 				if nodeName == "br" {
-					if len(stack) != 0 && stack[len(stack)-1] == " " {
-						stack = stack[:len(stack)-1]
+					if len(text) != 0 && text[len(text)-1] == " " {
+						text = text[:len(text)-1]
 					}
-					stack = append(stack, "\n")
+					text = append(text, "\n")
 				}
 				if nodeName == "wbr" {
-					stack = append(stack, "\u200B")
+					text = append(text, "\u200B")
 				}
 			}
 		}
@@ -75,20 +75,20 @@ func FromString(s string) (string, error) {
 		if node.Type == html.TextNode {
 			if !preformatted {
 				trimmed := CollapseRepeatingWhitespace(node.Data)
-				if len(stack) != 0 && stack[len(stack)-1] == "\n" {
+				if len(text) != 0 && text[len(text)-1] == "\n" {
 					trimmed = TrimWhitespaceLeft(trimmed)
 				}
-				if !(len(stack) == 0 && trimmed == " " || len(trimmed) == 0) && !(trimmed == " " && len(stack) != 0 && CollapseRepeatingWhitespace(stack[len(stack)-1]) == " ") {
+				if !(len(text) == 0 && trimmed == " " || len(trimmed) == 0) && !(trimmed == " " && len(text) != 0 && CollapseRepeatingWhitespace(text[len(text)-1]) == " ") {
 					// process container-caused new lines
 					if len(breaks) != 0 {
 						runs = append(runs, breaks...)
 						breaks = make([]string, 0)
 					}
 
-					stack = append(stack, trimmed)
+					text = append(text, trimmed)
 				}
 			} else {
-				stack = append(stack, node.Data)
+				text = append(text, node.Data)
 			}
 		}
 
@@ -107,10 +107,10 @@ func FromString(s string) (string, error) {
 
 			if nodeName == "pre" {
 				preformatted = false
-				runs = append(runs, strings.Join(stack, ""))
-				stack = make([]string, 0)
+				runs = append(runs, strings.Join(text, ""))
+				text = make([]string, 0)
 			} else if !IsNodeOfType(node, PhrasingContent) {
-				stack, runs = process(stack, runs)
+				text, runs = process(text, runs)
 				if len(breaks) == 0 && len(runs) != 0 && runs[len(runs)-1] != "\n" && node != bodyNode {
 					if nodeName == "p" {
 						breaks = append(breaks, "\n")
@@ -125,12 +125,12 @@ func FromString(s string) (string, error) {
 	return strings.Join(runs, ""), nil
 }
 
-func process(stack []string, runs []string) ([]string, []string) {
-	if len(stack) != 0 {
-		runs = append(runs, TrimSpaces(CollapseRepeatingSpaces(strings.Join(stack, ""))))
-		stack = make([]string, 0)
+func process(text []string, runs []string) ([]string, []string) {
+	if len(text) != 0 {
+		runs = append(runs, TrimSpaces(CollapseRepeatingSpaces(strings.Join(text, ""))))
+		text = make([]string, 0)
 	}
-	return stack, runs
+	return text, runs
 }
 
 type visitNode = func(node *html.Node) bool
