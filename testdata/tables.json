@@ -5,7 +5,7 @@
   },
   {
     "i": "<table>\n  <tr>\n    <td>cell1</td>\n    <td>cell2</td>\n  </tr>\n</table>",
-    "o": "cell1\u0009cell2"
+    "o": "cell1\tcell2"
   },
   {
     "i": "<table>\n  <tr>\n    <td>row1</td>\n  </tr>\n  <tr>\n    <td>row2</td>\n  </tr>\n</table>",
@@ -13,19 +13,19 @@
   },
   {
     "i": "<table>\n  <tbody>\n    <tr>\n      <td>\n        <p>Row-1-Col-1-Msg123456789012345</p>\n        <p>Row-1-Col-1-Msg2</p>\n      </td>\n      <td>Row-1-Col-2</td>\n    </tr>\n    <tr>\n      <td>Row-2-Col-1</td>\n      <td>Row-2-Col-2</td>\n    </tr>\n  </tbody>\n</table>",
-    "o": "Row-1-Col-1-Msg123456789012345\n\nRow-1-Col-1-Msg2\n\n\u0009Row-1-Col-2\nRow-2-Col-1\u0009Row-2-Col-2"
+    "o": "Row-1-Col-1-Msg123456789012345\n\nRow-1-Col-1-Msg2\n\n\tRow-1-Col-2\nRow-2-Col-1\tRow-2-Col-2"
   },
   {
     "i": "<table>\n  <tr>\n    <td>cell1-1</td>\n    <td>cell1-2</td>\n  </tr>\n  <tr>\n    <td>cell2-1</td>\n    <td>cell2-2</td>\n  </tr>\n</table>",
-    "o": "cell1-1\u0009cell1-2\ncell2-1\u0009cell2-2"
+    "o": "cell1-1\tcell1-2\ncell2-1\tcell2-2"
   },
   {
     "i": "<table>\n<thead>\n<tr><th>Header 1</th><th>Header 2</th></tr>\n</thead>\n<tfoot>\n<tr><td>Footer 1</td><td>Footer 2</td></tr>\n</tfoot>\n<tbody>\n<tr><td>Row 1 Col 1</td><td>Row 1 Col 2</td></tr>\n<tr><td>Row 2 Col 1</td><td>Row 2 Col 2</td></tr>\n</tbody>\n</table>",
-    "o": "Header 1\u0009Header 2\nFooter 1\u0009Footer 2\nRow 1 Col 1\u0009Row 1 Col 2\nRow 2 Col 1\u0009Row 2 Col 2"
+    "o": "Header 1\tHeader 2\nFooter 1\tFooter 2\nRow 1 Col 1\tRow 1 Col 2\nRow 2 Col 1\tRow 2 Col 2"
   },
   {
     "i": "<p>\n    <table>\n        <thead>\n            <tr><th>Table 1 Header 1</th><th>Table 1 Header 2</th></tr>\n        </thead>\n        <tfoot>\n            <tr><td>Table 1 Footer 1</td><td>Table 1 Footer 2</td></tr>\n        </tfoot>\n        <tbody>\n            <tr><td>Table 1 Row 1 Col 1</td><td>Table 1 Row 1 Col 2</td></tr>\n            <tr><td>Table 1 Row 2 Col 1</td><td>Table 1 Row 2 Col 2</td></tr>\n        </tbody>\n    </table>\n    <table>\n        <thead>\n            <tr><th>Table 2 Header 1</th><th>Table 2 Header 2</th></tr>\n        </thead>\n        <tfoot>\n            <tr><td>Table 2 Footer 1</td><td>Table 2 Footer 2</td></tr>\n        </tfoot>\n        <tbody>\n            <tr><td>Table 2 Row 1 Col 1</td><td>Table 2 Row 1 Col 2</td></tr>\n            <tr><td>Table 2 Row 2 Col 1</td><td>Table 2 Row 2 Col 2</td></tr>\n        </tbody>\n    </table>\n</p>",
-    "o": "Table 1 Header 1\u0009Table 1 Header 2\nTable 1 Footer 1\u0009Table 1 Footer 2\nTable 1 Row 1 Col 1\u0009Table 1 Row 1 Col 2\nTable 1 Row 2 Col 1\u0009Table 1 Row 2 Col 2\nTable 2 Header 1\u0009Table 2 Header 2\nTable 2 Footer 1\u0009Table 2 Footer 2\nTable 2 Row 1 Col 1\u0009Table 2 Row 1 Col 2\nTable 2 Row 2 Col 1\u0009Table 2 Row 2 Col 2"
+    "o": "Table 1 Header 1\tTable 1 Header 2\nTable 1 Footer 1\tTable 1 Footer 2\nTable 1 Row 1 Col 1\tTable 1 Row 1 Col 2\nTable 1 Row 2 Col 1\tTable 1 Row 2 Col 2\nTable 2 Header 1\tTable 2 Header 2\nTable 2 Footer 1\tTable 2 Footer 2\nTable 2 Row 1 Col 1\tTable 2 Row 1 Col 2\nTable 2 Row 2 Col 1\tTable 2 Row 2 Col 2"
   },
   {
     "i": "_<table><tr><td>cell</td></tr></table>_",
@@ -33,6 +33,6 @@
   },
   {
     "i": "<table>\n    <tr>\n        <th>Item</th>\n        <th>Description</th>\n        <th>Price</th>\n    </tr>\n    <tr>\n        <td>Golang</td>\n        <td>Open source programming language that makes it easy to build simple, reliable, and efficient software</td>\n        <td>$10.99</td>\n    </tr>\n    <tr>\n        <td>Hermes</td>\n        <td>Programmatically create beautiful e-mails using Golang.</td>\n        <td>$1.99</td>\n    </tr>\n</table>",
-    "o": "Item\u0009Description\u0009Price\nGolang\u0009Open source programming language that makes it easy to build simple, reliable, and efficient software\u0009$10.99\nHermes\u0009Programmatically create beautiful e-mails using Golang.\u0009$1.99"
+    "o": "Item\tDescription\tPrice\nGolang\tOpen source programming language that makes it easy to build simple, reliable, and efficient software\t$10.99\nHermes\tProgrammatically create beautiful e-mails using Golang.\t$1.99"
   }
 ]

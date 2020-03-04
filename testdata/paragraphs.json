@@ -46,5 +46,9 @@
   {
     "i": "\n<p>Test text</p>\n\n\n\t<p>Test text</p>\n<pre>test1\ntest 2\n\ntest  3</pre>",
     "o": "Test text\n\nTest text\n\ntest1\ntest 2\n\ntest  3"
+  },
+  {
+    "i": "<p>Fernstraßen<wbr>bau<wbr>privat<wbr>finanzierungs<wbr>gesetz</p>",
+    "o": "Fernstraßen\u200bbau\u200bprivat\u200bfinanzierungs\u200bgesetz"
   }
 ]

@@ -18,5 +18,9 @@
   {
     "i": "test&nbsp;&nbsp;&nbsp; text&nbsp;",
     "o": "test\u00A0\u00A0\u00A0 text\u00A0"
+  },
+  {
+    "i": "plain&shy;text&shy;ification",
+    "o": "plain\u00adtext\u00adification"
   }
 ]
