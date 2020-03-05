@@ -6,8 +6,14 @@ import (
 	"golang.org/x/net/html"
 )
 
-func FromString(s string) (string, error) {
-	doc, err := html.Parse(strings.NewReader(s))
+// HTMLToPlainText receives HTML markup text as input,
+// and returns a transformed plain-text representation.
+//
+// It implements an algorithm similar to an HTML5 DOM
+// element node's `.innerText` property.
+// This does not take layout or styling into account.
+func HTMLToPlainText(htmlMarkup string) (string, error) {
+	doc, err := html.Parse(strings.NewReader(htmlMarkup))
 	if err != nil {
 		return "", err
 	}
@@ -37,56 +43,65 @@ func FromString(s string) (string, error) {
 		}
 	}
 
-	appendNewLine := func(inRuns bool) {
-		if inRuns {
-			runs = append(runs, "\n")
+	appendNewLine := func(doubleBreak bool) {
+		if doubleBreak {
+			breaks = append(breaks, "\n\n")
 		} else {
 			breaks = append(breaks, "\n")
 		}
 	}
 
 	processBreaks := func() {
-		// process container-caused new lines
 		if len(breaks) != 0 {
-			runs = append(runs, breaks...)
+			joined := strings.Join(breaks, "")
+			split := strings.Split(joined, "")
+			runs = append(runs, split...)
 			breaks = make([]string, 0)
 		}
 	}
 
+	shouldBreak := func() bool {
+		return LastIn(runs) != "\n" && LastIn(runs) != "\x00" && len(breaks) == 0
+	}
+
 	visitElement := func(node *html.Node, enter bool) {
-		nodeName := getTag(node)
-		isNonPhrasing := !IsNodeOfType(node, PhrasingContent)
+		nodeName := GetNodeName(node)
+		isNonPhrasing := !IsElementNodeOfType(node, PhrasingContent)
 
 		if enter {
-
 			if nodeName == "pre" {
+				processText(true)
 				isPreformatted = true
+				if shouldBreak() {
+					appendNewLine(false)
+				}
+				processBreaks()
 			}
 
 			if nodeName == "tr" {
 				isInTableRow = true
 			}
 
-			processBreaks()
-
 			if isNonPhrasing {
 				processText(true)
 				if isInTableRow && nodeName == "td" || nodeName == "th" {
+					processBreaks()
 					if hasEncounteredFirstCell {
 						runs = append(runs, "\t")
 					} else {
 						hasEncounteredFirstCell = true
 					}
-
-				} else if peek(runs) != "\n" && peek(runs) != "" {
+				} else if shouldBreak() {
 					if nodeName == "p" {
 						appendNewLine(true)
+					} else {
+						appendNewLine(false)
 					}
-					appendNewLine(true)
 				}
 			} else {
+				processBreaks()
 				if nodeName == "br" {
-					if peek(text) == " " {
+					if LastIn(text) == " " {
 						text = text[:len(text)-1]
 					}
 					text = append(text, "\n")
@@ -96,7 +111,6 @@ func FromString(s string) (string, error) {
 				}
 			}
 		} else {
-
 			for _, attribute := range node.Attr {
 				if attribute.Key == "alt" {
 					text = append(text, attribute.Val)
@@ -106,13 +120,13 @@ func FromString(s string) (string, error) {
 			if nodeName == "pre" {
 				isPreformatted = false
 				processText(false)
+				appendNewLine(false)
 			} else if isNonPhrasing {
 				processText(true)
-				if len(breaks) == 0 && peek(runs) != "\n" && node != doc {
+				if shouldBreak() && node != doc {
 					if nodeName == "p" {
-						appendNewLine(false)
-					}
-					if nodeName != "td" && nodeName != "th" {
+						appendNewLine(true)
+					} else if nodeName != "td" && nodeName != "th" {
 						appendNewLine(false)
 					}
 				}
@@ -131,7 +145,7 @@ func FromString(s string) (string, error) {
 		if enter {
 			if !isPreformatted {
 				trimmed := CollapseRepeatingWhitespace(textContent)
-				if peek(text) == "\n" {
+				if LastIn(text) == "\n" {
 					trimmed = TrimWhitespaceLeft(trimmed)
 				}
 				if len(text) != 0 && len(trimmed) != 0 || trimmed != " " {
@@ -145,89 +159,36 @@ func FromString(s string) (string, error) {
 		}
 	}
 
-	walk(doc, func(node *html.Node) bool {
-		if isElement(node) && IsNodeOfType(node, MetadataContent) {
+	Walk(doc, func(node *html.Node) {
+		if IsElement(node) && IsElementNodeOfType(node, MetadataContent) {
 			shouldSkip = true
 		}
 
 		if shouldSkip {
-			return true
+			return
 		}
 
-		if isElement(node) {
+		if IsElement(node) {
 			visitElement(node, true)
 		}
 
-		if isTextNode(node) {
+		if IsTextNode(node) {
 			visitText(node, true)
 		}
-
-		return true
-	}, func(node *html.Node) bool {
-		if isElement(node) && IsNodeOfType(node, MetadataContent) {
+	}, func(node *html.Node) {
+		if IsElement(node) && IsElementNodeOfType(node, MetadataContent) {
 			shouldSkip = false
+			return
 		}
 
 		if shouldSkip {
-			return true
+			return
 		}
 
-		if isElement(node) {
+		if IsElement(node) {
 			visitElement(node, false)
 		}
-		return true
 	})
 
 	return strings.Join(runs, ""), nil
-}
-
-func isElement(node *html.Node) bool {
-	return node.Type == html.ElementNode
-}
-
-func isTextNode(node *html.Node) bool {
-	return node.Type == html.TextNode
-}
-
-func getTag(node *html.Node) string {
-	return strings.ToLower(node.Data)
-}
-
-func peek(slice []string) string {
-	if len(slice) != 0 {
-		return slice[len(slice)-1]
-	}
-	return ""
-}
-
-type visitNode = func(node *html.Node) bool
-
-func walk(root *html.Node, enter visitNode, exit visitNode) {
-	node := root
-Start:
-	for node != nil {
-		shouldContinue := enter(node)
-		if !shouldContinue {
-			return
-		}
-		if node.FirstChild != nil {
-			node = node.FirstChild
-			continue
-		}
-		for node != nil {
-			shouldContinue := exit(node)
-			if !shouldContinue {
-				return
-			}
-			if node.NextSibling != nil {
-				node = node.NextSibling
-				continue Start
-			}
-			if node == root {
-				node = nil
-			} else {
-				node = node.Parent
-			}
-		}
-	}
 }
