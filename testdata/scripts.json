@@ -38,5 +38,9 @@
   {
     "i": "<html><head><title>Title</title></head><body></body></html>",
     "o": ""
+  },
+  {
+    "i": "<html><head><title>Title</title></head><body><title>This should not show</title></body></html>",
+    "o": ""
   }
 ]

@@ -40,6 +40,26 @@
     "o": "Test text\n\nTest text"
   },
   {
+    "i": "T<br><p>E</p><br>S<p></p>T",
+    "o": "T\n\n\nE\n\n\nS\n\nT"
+  },
+  {
+    "i": "T<br><p>E</p><br>S<p></p>T\n",
+    "o": "T\n\n\nE\n\n\nS\n\nT"
+  },
+  {
+    "i": "T<br><p>E</p><br>S<p></p>T<br>",
+    "o": "T\n\n\nE\n\n\nS\n\nT\n"
+  },
+  {
+    "i": "T<br><p>E</p><br>S<p></p>T<br><p> </p>",
+    "o": "T\n\n\nE\n\n\nS\n\nT\n"
+  },
+  {
+    "i": "T<br><p>E</p><br>S<p></p>T<br><p> </p><br>",
+    "o": "T\n\n\nE\n\n\nS\n\nT\n\n\n\n"
+  },
+  {
     "i": "<pre>test1\ntest 2\n\ntest  3</pre>",
     "o": "test1\ntest 2\n\ntest  3"
   },

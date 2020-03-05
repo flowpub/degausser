@@ -30,5 +30,9 @@
   {
     "i": "<a href=\"http://example.com/\"><img src=\"http://example.ru/hello.jpg\" alt=\"Example\"></a>",
     "o": "Example"
+  },
+  {
+    "i": "<map name=\"infographic\">\n    <area shape=\"rect\" coords=\"184,6,253,27\"\n          href=\"https://mozilla.org\"\n          target=\"_blank\" alt=\"Mozilla\" />\n    <area shape=\"circle\" coords=\"130,136,60\"\n          href=\"https://developer.mozilla.org/\"\n          target=\"_blank\" alt=\"MDN\" />\n    <area shape=\"poly\" coords=\"130,6,253,96,223,106,130,39\"\n          href=\"https://developer.mozilla.org/docs/Web/Guide/Graphics\"\n          target=\"_blank\" alt=\"Graphics\" />\n    <area shape=\"poly\" coords=\"253,96,207,241,189,217,223,103\"\n          href=\"https://developer.mozilla.org/docs/Web/HTML\"\n          target=\"_blank\" alt=\"HTML\" />\n    <area shape=\"poly\" coords=\"207,241,54,241,72,217,189,217\"\n          href=\"https://developer.mozilla.org/docs/Web/JavaScript\"\n          target=\"_blank\" alt=\"JavaScript\" />\n    <area shape=\"poly\" coords=\"54,241,6,97,36,107,72,217\"\n          href=\"https://developer.mozilla.org/docs/Web/API\"\n          target=\"_blank\" alt=\"Web APIs\" />\n    <area shape=\"poly\" coords=\"6,97,130,6,130,39,36,107\"\n          href=\"https://developer.mozilla.org/docs/Web/CSS\"\n          target=\"_blank\" alt=\"CSS\" />\n</map>\n<img usemap=\"#infographic\" src=\"/media/examples/mdn-info.png\" alt=\"MDN infographic\" />\n",
+    "o": "Mozilla MDN Graphics HTML JavaScript Web APIs CSS MDN infographic"
   }
 ]

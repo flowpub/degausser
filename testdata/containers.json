@@ -24,7 +24,35 @@
     "o": "Testing\n\nTest line 1\nTest 2"
   },
   {
-    "i": "<div>Test line 1<p>Testing</p><div>Test 2</div></div>",
+    "i": "<div id=\"a\">Test line 1<p>Testing</p><div>Test 2</div></div>",
     "o": "Test line 1\n\nTesting\n\nTest 2"
+  },
+  {
+    "i": "<div id=\"b\">Test line 1<p>Testing</p><div><div></div></div></div>",
+    "o": "Test line 1\n\nTesting"
+  },
+  {
+    "i": "<div id=\"c\">Test line 1<p>Testing</p><div><div><p></p></div></div></div>",
+    "o": "Test line 1\n\nTesting"
+  },
+  {
+    "i": "<div id=\"d\">Test line 1<p>Testing</p><div><div><p></p></div></div></div>Test line 2",
+    "o": "Test line 1\n\nTesting\n\nTest line 2"
+  },
+  {
+    "i": "<div id=\"e\">Test line 1<p>Testing</p><div><div></div> \n</div>\n</div>",
+    "o": "Test line 1\n\nTesting"
+  },
+  {
+    "i": "<div id=\"f\">Test line 1<p>Testing</p><div><div></div> \n</div>\n</div><div></div><p></p><div id=\"g\">Test line 1<p>Testing</p><div><div></div> \n</div>\n</div>",
+    "o": "Test line 1\n\nTesting\n\nTest line 1\n\nTesting"
+  },
+  {
+    "i": "<div id=\"h\">Test line 1<p>Testing</p><div><div></div> \n</div>\n</div><div></div>\n\t \nH\n\t \n<p></p>\n\t \nI\n\t \n",
+    "o": "Test line 1\n\nTesting\n\nH\n\nI"
+  },
+  {
+    "i": "<div id=\"h\">Test line 1<p>Testing</p><div><div></div> \n</div>\n</div><div></div>\n\t \nH\n\t \n<p></p>\n\t \nI\n\t \n<div id=\"i\">Test line 1<p>Testing</p><div><div></div> \n</div>\n</div>",
+    "o": "Test line 1\n\nTesting\n\nH\n\nI\nTest line 1\n\nTesting"
   }
 ]
