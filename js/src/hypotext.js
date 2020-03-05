@@ -21,7 +21,8 @@ const isCharWhitespace = charCode => {
 };
 const trimBeginAndEnd = string => {
     // Get the first and last non-whitespace character index
-    let firstNonWhite, lastNonWhite;
+    let firstNonWhite = null,
+        lastNonWhite = null;
     for (let index = 0; index < string.length; index++) {
         if (!isCharWhitespace(string.charCodeAt(index))) {
             firstNonWhite = index;
@@ -30,13 +31,16 @@ const trimBeginAndEnd = string => {
     }
     for (let index = string.length - 1; index >= 0; index--) {
         if (!isCharWhitespace(string.charCodeAt(index))) {
+            // if(index !== string.length - 1){
+            // String slicing breaks if the last char is not whitespace
             lastNonWhite = index;
+            // }
             break;
         }
     }
 
-    // If both are undefined, the string is entirely whitespace
-    if (!firstNonWhite && !lastNonWhite) {
+    // If both are null, the string is entirely whitespace
+    if (firstNonWhite === null && lastNonWhite === null) {
         return null;
     }
 
@@ -67,30 +71,34 @@ const collapseWhitespace = string => {
             continue;
         }
     }
+
+    // At the end, add the rest of the string
     if (startOfNonWhite !== null) {
         textElements.push(string.slice(startOfNonWhite));
     }
 
     return textElements.join(" ");
 };
+
+const joinTypes = {
+    TEXT: "text",
+    FLOW: "flow",
+    BREAK: "break"
+};
 const joinEntries = entitiesList => {
     const processed = [];
+
+    let lastSignifincantNode = null;
 
     for (let i = 0; i < entitiesList.length; i++) {
         const entity = entitiesList[i];
 
-        // console.log('Entity: ', entity)
+        // console.log("Entity: ", entity);
 
         // TEXT Node
         switch (entity.type) {
             case entityType.TEXT:
-                // If preformatted, simply push it
-                if (entity.condition === "pre") {
-                    processed.push(`\n${entity.content}\n`);
-                    break;
-                }
-
-                const normalized = entity.content.normalize()
+                const normalized = entity.content.normalize();
 
                 // Trim
                 const trimmed = trimBeginAndEnd(normalized);
@@ -99,56 +107,153 @@ const joinEntries = entitiesList => {
                     break;
                 }
 
-                // Otherwise, collapse all whitespace
-                processed.push(collapseWhitespace(trimmed));
+                lastSignifincantNode = entity;
 
+                // Otherwise, collapse all whitespace
+                processed.push({
+                    type: joinTypes.TEXT,
+                    content: collapseWhitespace(trimmed)
+                });
                 break;
 
             case entityType.BREAK:
-                processed.push("\n");
+                lastSignifincantNode = entity;
+                processed.push({ type: joinTypes.BREAK });
                 break;
 
-            case entityType.PARAGRAPH:
-                // <p> always generates newlines, others do not
-                if (entity.tag === "p") {
-                    processed.push("\n");
-                } else {
-                    if(processed.length === 0){
-                        processed.push(null)
-                        break;
-                    }
+            case entityType.BLOCK:
+                // console.log('Entity: ', entity)
 
-                    let addedToList = false
-                    // Iterate backwards, and if we see another PARAGRAPH directly before,
-                    //  don't add new line
-                    for (
-                        let previousIndex = processed.length - 1;
-                        previousIndex >= 0;
-                        previousIndex--
-                    ) {
-                        // console.log("Processed: ", processed[previousIndex]);
-                        // console.log(
-                        //     "EntitesList: ",
-                        //     entitiesList[previousIndex]
-                        // );
-                        if (processed[previousIndex] != null) {
-                            if (
-                                entitiesList[previousIndex].type !==
-                                entityType.PARAGRAPH
-                            ) {
-                                processed.push("\n");
-                            } else {
-                                processed.push(null)
-                            }
-                            addedToList = true
-                            break;
+                // If preformatted, simply push it
+                if (entity.condition === "pre") {
+                    if( lastSignifincantNode &&
+                        lastSignifincantNode.type !== entityType.BLOCK){
+                            processed.push({type: joinTypes.FLOW, content:'\n'})
                         }
-                    }
-                    if(!addedToList){
-                        processed.push(null)
-                    }
+                    processed.push({
+                        type: joinTypes.TEXT,
+                        content: `${entity.content}`
+                    });
+                    processed.push({type: joinTypes.FLOW, content:'\n'})
+                    lastSignifincantNode = entity;
+                    break;
                 }
-                break;
+
+                switch (entity.tag) {
+                    case "p":
+                        if (lastSignifincantNode) {
+                            if (
+                                lastSignifincantNode.type !== entityType.BLOCK
+                            ) {
+                                processed.push({
+                                    type: joinTypes.FLOW,
+                                    content: "\n"
+                                });
+                            }
+
+                            if (lastSignifincantNode.tag !== "p") {
+                                processed.push({
+                                    type: joinTypes.FLOW,
+                                    content: "\n"
+                                });
+                            }
+                        } else {
+                            processed.push({
+                                type: joinTypes.FLOW,
+                                content: "\n\n"
+                            });
+                        }
+
+                        break;
+
+                    case "table":
+                        if (
+                            !lastSignifincantNode ||
+                            lastSignifincantNode.type !== entityType.BLOCK
+                        ) {
+                            processed.push({
+                                type: joinTypes.FLOW,
+                                content: "\n",
+                                special: "table"
+                            });
+                        }
+                        break;
+                    case "div":
+                    case "ul":
+                        // console.log('Last: ', lastSignifincantNode)
+                        if (
+                            lastSignifincantNode &&
+                            lastSignifincantNode.type !== entityType.BLOCK
+                        ) {
+                            processed.push({
+                                type: joinTypes.FLOW,
+                                content: "\n"
+                            });
+                        }
+                        break;
+
+                    case "tr":
+                        if (lastSignifincantNode) {
+                            switch (lastSignifincantNode.tag) {
+                                case "table":
+                                case "tr":
+                                    break;
+                                case "td":
+                                case "th":
+                                    do {
+                                        const popped = processed.pop();
+                                        if (
+                                            popped !== null &&
+                                            popped.type === joinTypes.TEXT
+                                        ) {
+                                            processed.push(popped);
+                                            break;
+                                        }
+                                    } while (processed.length > 0);
+                                    processed.push({
+                                        type: joinTypes.FLOW,
+                                        content: "\n"
+                                    });
+                                    break;
+                                default:
+                                    processed.push({
+                                        type: joinTypes.FLOW,
+                                        content: "\n"
+                                    });
+                            }
+                        }
+                        break;
+
+                    case "td":
+                    case "th":
+                        if (
+                            lastSignifincantNode &&
+                            !["td", "th", "tr"].includes(
+                                lastSignifincantNode.tag
+                            )
+                        ) {
+                            processed.push({
+                                type: joinTypes.FLOW,
+                                content: "\t"
+                            });
+                        }
+                        break;
+
+                    case "li":
+                        if (
+                            lastSignifincantNode &&
+                            !["li", "ul"].includes(lastSignifincantNode.tag)
+                        ) {
+                            processed.push({
+                                type: joinTypes.FLOW,
+                                content: "\n"
+                            });
+                        }
+                        break;
+                }
+
+                lastSignifincantNode = entity;
+                break; // Entity Type
         }
     }
 
@@ -156,22 +261,65 @@ const joinEntries = entitiesList => {
     // console.log(processed);
 
     // Filter out all Nulls
-    const filtered = processed.filter(element => element !== null).join("");
+    const filtered = processed.filter(element => element !== null);
 
     // Special case for if all elements were empty
     if (filtered.length === 0) {
         return "";
+    } else if (filtered.length === 1 && filtered[0].special === "table") {
+        return "\t";
+    }
+
+    // console.log(filtered)
+
+    // Break apart Filtered array by Hard Breaks
+    let firstNonFlow = null,
+        lastNonFlow = null;
+    for (let index = 0; index < filtered.length; ++index) {
+        if (filtered[index].type !== joinTypes.FLOW) {
+            firstNonFlow = index;
+            break;
+        }
+    }
+    for (let index = filtered.length - 1; index >= 0; --index) {
+        if (filtered[index].type !== joinTypes.FLOW) {
+            lastNonFlow = index;
+            break;
+        }
+    }
+
+    // Entirely Flow components
+    if (firstNonFlow == null || lastNonFlow == null) {
+        return "";
     }
 
     // Finally, trim again the end result
-    return trimBeginAndEnd(filtered);
+    let finalOutput = "";
+    for (let index = firstNonFlow; index < lastNonFlow + 1; ++index) {
+        const entity = filtered[index];
+
+        switch (entity.type) {
+            case joinTypes.BREAK:
+                finalOutput += "\n";
+                break;
+            case joinTypes.TEXT:
+            case joinTypes.FLOW:
+                finalOutput += entity.content;
+                break;
+        }
+        // console.log(`|${finalOutput}|`)
+    }
+
+    // console.log(`|${finalOutput}|`)
+
+    return finalOutput;
 };
 
-const blacklist = ["script", "style", "head"];
+const blacklist = ["script", "style", "head", "title"];
 const entityType = {
     TEXT: "text",
     BREAK: "break",
-    PARAGRAPH: "paragraph"
+    BLOCK: "block"
 };
 const processNode = (node, entityList) => {
     const tag = node.tagName && node.tagName.toLowerCase();
@@ -186,7 +334,7 @@ const processNode = (node, entityList) => {
         // Process Preformatted Tags
         if (tag === "pre") {
             entityList.push({
-                type: entityType.TEXT,
+                type: entityType.BLOCK,
                 content: node.textContent,
                 condition: "pre"
             });
@@ -214,6 +362,8 @@ const processNode = (node, entityList) => {
 
     // Process special tags
 
+
+
     switch (tag) {
         case "br":
             entityList.push({ type: entityType.BREAK });
@@ -223,6 +373,9 @@ const processNode = (node, entityList) => {
             if (node.hasAttribute("alt")) {
                 addTextToEntities(` ${node.getAttribute("alt")}`, entityList);
             }
+            break;
+        case "wbr":
+            addTextToEntities("\u200B", entityList);
             break;
     }
 };
@@ -239,7 +392,18 @@ const addTextToEntities = (text, entityList) => {
     }
 };
 
-const blockConstructs = ["div", "p", "section"];
+const blockConstructs = [
+    "div",
+    "p",
+    "section",
+    "table",
+    "th",
+    "tr",
+    "td",
+    "ul",
+    "ol",
+    "li"
+];
 const checkForBlockConstructs = (tag, textEntries) => {
     // If this construct is a Run of Phrasing
 
@@ -248,6 +412,6 @@ const checkForBlockConstructs = (tag, textEntries) => {
     // Refer to Container and Paragraphs tests respectively
 
     if (blockConstructs.includes(tag)) {
-        textEntries.push({ type: entityType.PARAGRAPH, tag: tag });
+        textEntries.push({ type: entityType.BLOCK, tag: tag });
     }
 };
