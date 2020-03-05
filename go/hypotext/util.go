@@ -53,6 +53,9 @@ var PhrasingContent = []string{
 	"var",
 	"video",
 	"wbr",
+	// special cases
+	"map",
+	"area",
 }
 
 var MetadataContent = []string{
@@ -64,12 +67,9 @@ var MetadataContent = []string{
 	"script",
 	"style",
 	"title",
-}
-
-var ContentWithAlt = []string{
-	"img",
-	"area",
-	"input",
+	// special cases
+	"html",
+	"head",
 }
 
 var trimWhitespaceLeftRegex, _ = regexp.Compile(`^\s+`)
