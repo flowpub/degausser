@@ -1,0 +1,503 @@
+{
+  "@context": [
+    "https://readium.org/webpub-manifest/context.jsonld"
+  ],
+  "metadata": {
+    "@type": "http://schema.org/Book",
+    "title": "Accessible EPUB 3",
+    "identifier": "urn:isbn:9781449328030",
+    "author": [
+      {
+        "name": "Matt Garrish"
+      }
+    ],
+    "contributor": [
+      {
+        "name": "O’Reilly Production Services"
+      },
+      {
+        "name": "David Futato"
+      },
+      {
+        "name": "Robert Romano"
+      },
+      {
+        "name": "Brian Sawyer"
+      },
+      {
+        "name": "Dan Fauxsmith"
+      },
+      {
+        "name": "Karen Montgomery"
+      }
+    ],
+    "publisher": [
+      {
+        "name": "O’Reilly Media, Inc."
+      }
+    ],
+    "language": [
+      "en"
+    ],
+    "modified": "2020-02-03T14:35:52.769879-08:00",
+    "published": "2012-02-20T00:00:00Z",
+    "rights": "Copyright © 2012 O’Reilly Media, Inc"
+  },
+  "links": [
+    {
+      "href": "/assets/publications/accessible_epub_3/manifest.json",
+      "type": "application/webpub+json",
+      "templated": false,
+      "rel": "self"
+    }
+  ],
+  "readingOrder": [
+    {
+      "href": "EPUB/spi-ad.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/index.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/bk01-toc.xhtml",
+      "type": "application/xhtml+xml",
+      "rel": [
+        "contents"
+      ]
+    },
+    {
+      "href": "EPUB/pr01.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/pr01s02.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/pr01s03.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/pr01s04.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/pr01s05.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch01.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch01s02.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch02.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch02s02.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch02s03.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch03.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch03s02.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch03s03.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch03s04.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch03s05.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch03s06.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch04.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/co01.xhtml",
+      "type": "application/xhtml+xml"
+    }
+  ],
+  "resources": [
+    {
+      "href": "EPUB/bk01-toc.xhtml",
+      "type": "application/xhtml+xml",
+      "rel": [
+        "contents"
+      ]
+    },
+    {
+      "href": "EPUB/css/epub.css",
+      "type": "text/css"
+    },
+    {
+      "href": "EPUB/css/synth.css",
+      "type": "text/css"
+    },
+    {
+      "href": "EPUB/cover.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/covers/9781449328030_lrg.jpg",
+      "type": "image/jpeg",
+      "rel": [
+        "cover"
+      ]
+    },
+    {
+      "href": "EPUB/index.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/pr01.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/pr01s02.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/pr01s03.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/pr01s04.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/pr01s05.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch01.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch01s02.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch02.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch02s02.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch02s03.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch03.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch03s02.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch03s03.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch03s04.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch03s05.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch03s06.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/ch04.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/co01.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/images/web/epub3_0401.png",
+      "type": "image/png"
+    },
+    {
+      "href": "EPUB/spi-ad.xhtml",
+      "type": "application/xhtml+xml"
+    },
+    {
+      "href": "EPUB/images/spi_global_ad.png",
+      "type": "image/png"
+    },
+    {
+      "href": "EPUB/fonts/UbuntuMono-B.ttf",
+      "type": "application/vnd.ms-opentype"
+    },
+    {
+      "href": "EPUB/fonts/UbuntuMono-BI.ttf",
+      "type": "application/vnd.ms-opentype"
+    },
+    {
+      "href": "EPUB/fonts/UbuntuMono-R.ttf",
+      "type": "application/vnd.ms-opentype"
+    },
+    {
+      "href": "EPUB/fonts/UbuntuMono-RI.ttf",
+      "type": "application/vnd.ms-opentype"
+    },
+    {
+      "href": "EPUB/fonts/FreeSerif.otf",
+      "type": "application/vnd.ms-opentype"
+    },
+    {
+      "href": "EPUB/fonts/FreeSansBold.otf",
+      "type": "application/vnd.ms-opentype"
+    },
+    {
+      "href": "EPUB/lexicon/en.pls",
+      "type": "application/pls+xml"
+    },
+    {
+      "href": "EPUB/lexicon/fr.pls",
+      "type": "application/pls+xml"
+    }
+  ],
+  "toc": [
+    {
+      "href": "EPUB/pr01.xhtml",
+      "title": "Preface",
+      "children": [
+        {
+          "href": "EPUB/pr01.xhtml#I_sect1_d1e137",
+          "title": "Conventions Used in This Book"
+        },
+        {
+          "href": "EPUB/pr01s02.xhtml",
+          "title": "Using Code Examples"
+        },
+        {
+          "href": "EPUB/pr01s03.xhtml",
+          "title": "Safari® Books Online"
+        },
+        {
+          "href": "EPUB/pr01s04.xhtml",
+          "title": "How to Contact Us"
+        },
+        {
+          "href": "EPUB/pr01s05.xhtml",
+          "title": "Acknowledgments"
+        }
+      ]
+    },
+    {
+      "href": "EPUB/ch01.xhtml",
+      "title": "1. Introduction",
+      "children": [
+        {
+          "href": "EPUB/ch01.xhtml#_the_digital_famine",
+          "title": "The Digital Famine"
+        },
+        {
+          "href": "EPUB/ch01s02.xhtml",
+          "title": "Accessibility and Usability"
+        }
+      ]
+    },
+    {
+      "href": "EPUB/ch02.xhtml",
+      "title": "2. Building a Better EPUB: Fundamental Accessibility",
+      "children": [
+        {
+          "href": "EPUB/ch02.xhtml#_a_solid_foundation_structure_and_semantics",
+          "title": "A Solid Foundation: Structure and Semantics",
+          "children": [
+            {
+              "href": "EPUB/ch02.xhtml#_data_integrity",
+              "title": "Data Integrity"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_separation_of_style",
+              "title": "Separation of Style"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_semantic_inflection",
+              "title": "Semantic Inflection"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_language",
+              "title": "Language"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_logical_reading_order",
+              "title": "Logical Reading Order"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_sections_and_headings",
+              "title": "Sections and Headings"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_context_changes",
+              "title": "Context Changes"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_lists",
+              "title": "Lists"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_tables",
+              "title": "Tables"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_figures",
+              "title": "Figures"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_images",
+              "title": "Images"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_svg",
+              "title": "SVG"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_mathml",
+              "title": "MathML"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_footnotes",
+              "title": "Footnotes"
+            },
+            {
+              "href": "EPUB/ch02.xhtml#_page_numbering",
+              "title": "Page Numbering"
+            }
+          ]
+        },
+        {
+          "href": "EPUB/ch02s02.xhtml",
+          "title": "Getting Around: Navigating an EPUB"
+        },
+        {
+          "href": "EPUB/ch02s03.xhtml",
+          "title": "The Untold Story: Metadata"
+        }
+      ]
+    },
+    {
+      "href": "EPUB/ch03.xhtml",
+      "title": "3. It’s Alive: Rich Content Accessibility",
+      "children": [
+        {
+          "href": "EPUB/ch03.xhtml#_the_sound_and_the_fury_audio_and_video",
+          "title": "The Sound and the Fury: Audio and Video",
+          "children": [
+            {
+              "href": "EPUB/ch03.xhtml#_timed_tracks",
+              "title": "Timed Tracks"
+            }
+          ]
+        },
+        {
+          "href": "EPUB/ch03s02.xhtml",
+          "title": "Talk to Me: Media Overlays",
+          "children": [
+            {
+              "href": "EPUB/ch03s02.xhtml#_building_an_overlay",
+              "title": "Building an Overlay"
+            },
+            {
+              "href": "EPUB/ch03s02.xhtml#_structural_considerations",
+              "title": "Structural Considerations"
+            }
+          ]
+        },
+        {
+          "href": "EPUB/ch03s03.xhtml",
+          "title": "Tell It Like It Is: Text-to-Speech (TTS)",
+          "children": [
+            {
+              "href": "EPUB/ch03s03.xhtml#_pls_lexicons",
+              "title": "PLS Lexicons"
+            },
+            {
+              "href": "EPUB/ch03s03.xhtml#_ssml",
+              "title": "SSML"
+            },
+            {
+              "href": "EPUB/ch03s03.xhtml#_css3_speech",
+              "title": "CSS3 Speech"
+            }
+          ]
+        },
+        {
+          "href": "EPUB/ch03s04.xhtml",
+          "title": "The Coded Word: Scripted Interactivity"
+        },
+        {
+          "href": "EPUB/ch03s05.xhtml",
+          "title": "A Little Help: WAI-ARIA",
+          "children": [
+            {
+              "href": "EPUB/ch03s05.xhtml#_custom_controls",
+              "title": "Custom Controls"
+            },
+            {
+              "href": "EPUB/ch03s05.xhtml#_forms",
+              "title": "Forms"
+            },
+            {
+              "href": "EPUB/ch03s05.xhtml#_live_regions",
+              "title": "Live Regions"
+            }
+          ]
+        },
+        {
+          "href": "EPUB/ch03s06.xhtml",
+          "title": "A Blank Slate: Canvas"
+        }
+      ]
+    },
+    {
+      "href": "EPUB/ch04.xhtml",
+      "title": "4. Conclusion",
+      "children": [
+        {
+          "href": "EPUB/ch04.xhtml#_epub_3_best_practices_teaser",
+          "title": "EPUB 3 Best Practices Teaser",
+          "children": [
+            {
+              "href": "EPUB/ch04.xhtml#_about_the_book",
+              "title": "About the Book"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

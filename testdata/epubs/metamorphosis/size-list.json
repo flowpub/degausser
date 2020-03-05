@@ -1,0 +1,38 @@
+{
+  "total": 127898,
+  "chapters": [
+      {
+        "href": "OEBPS/front-cover.html",
+        "size": 557
+      },
+      {
+        "href": "OEBPS/title-page.html",
+        "size": 684
+      },
+      {
+        "href": "OEBPS/copyright.html",
+        "size": 1185
+      },
+      {
+        "href": "OEBPS/table-of-contents.html",
+        "size": 884
+      },
+      {
+        "href": "OEBPS/pressbooks-promo.html",
+        "size": 661
+      },
+      {
+        "href": "OEBPS/chapter-001-chapter-i.html",
+        "size": 39962
+      },
+      {
+        "href": "OEBPS/chapter-002-chapter-ii.html",
+        "size": 41745
+      },
+      {
+        "href": "OEBPS/chapter-003-chapter-iii.html",
+        "size": 42220
+      }
+  ]
+}
+
