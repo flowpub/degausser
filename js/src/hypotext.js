@@ -40,7 +40,7 @@ const trimBeginAndEnd = string => {
     }
 
     // If both are null, the string is entirely whitespace
-    if (firstNonWhite === null && lastNonWhite === null) {
+    if (firstNonWhite === null || lastNonWhite === null) {
         return null;
     }
 
@@ -126,15 +126,17 @@ const joinEntries = entitiesList => {
 
                 // If preformatted, simply push it
                 if (entity.condition === "pre") {
-                    if( lastSignifincantNode &&
-                        lastSignifincantNode.type !== entityType.BLOCK){
-                            processed.push({type: joinTypes.FLOW, content:'\n'})
-                        }
+                    if (
+                        lastSignifincantNode &&
+                        lastSignifincantNode.type !== entityType.BLOCK
+                    ) {
+                        processed.push({ type: joinTypes.FLOW, content: "\n" });
+                    }
                     processed.push({
                         type: joinTypes.TEXT,
                         content: `${entity.content}`
                     });
-                    processed.push({type: joinTypes.FLOW, content:'\n'})
+                    processed.push({ type: joinTypes.FLOW, content: "\n" });
                     lastSignifincantNode = entity;
                     break;
                 }
@@ -142,26 +144,30 @@ const joinEntries = entitiesList => {
                 switch (entity.tag) {
                     case "p":
                         if (lastSignifincantNode) {
-                            if (
+                            if (!entity.closing) {
+                                if (
+                                    lastSignifincantNode.type ===
+                                    entityType.BLOCK
+                                ) {
+                                    let lastPopped = null;
+                                    do {
+                                        lastPopped = processed.pop();
+                                    } while (lastPopped === null);
+                                }
+                                processed.push({
+                                    type: joinTypes.FLOW,
+                                    content: "\n\n",
+                                    special: "p"
+                                });
+                            } else if (
                                 lastSignifincantNode.type !== entityType.BLOCK
                             ) {
                                 processed.push({
                                     type: joinTypes.FLOW,
-                                    content: "\n"
+                                    content: "\n\n",
+                                    special: "p"
                                 });
                             }
-
-                            if (lastSignifincantNode.tag !== "p") {
-                                processed.push({
-                                    type: joinTypes.FLOW,
-                                    content: "\n"
-                                });
-                            }
-                        } else {
-                            processed.push({
-                                type: joinTypes.FLOW,
-                                content: "\n\n"
-                            });
                         }
 
                         break;
@@ -227,13 +233,12 @@ const joinEntries = entitiesList => {
                     case "td":
                     case "th":
                         if (
+                            !entity.closing &&
                             lastSignifincantNode &&
-                            !["td", "th", "tr"].includes(
-                                lastSignifincantNode.tag
-                            )
+                            lastSignifincantNode.tag !== "tr"
                         ) {
                             processed.push({
-                                type: joinTypes.FLOW,
+                                type: joinTypes.TEXT,
                                 content: "\t"
                             });
                         }
@@ -257,8 +262,8 @@ const joinEntries = entitiesList => {
         }
     }
 
-    // console.log(entitiesList);
-    // console.log(processed);
+    // console.log("Entities: ", entitiesList);
+    // console.log("Processed: ", processed);
 
     // Filter out all Nulls
     const filtered = processed.filter(element => element !== null);
@@ -266,11 +271,9 @@ const joinEntries = entitiesList => {
     // Special case for if all elements were empty
     if (filtered.length === 0) {
         return "";
-    } else if (filtered.length === 1 && filtered[0].special === "table") {
-        return "\t";
     }
 
-    // console.log(filtered)
+    // console.log("Filtered: ", filtered);
 
     // Break apart Filtered array by Hard Breaks
     let firstNonFlow = null,
@@ -329,27 +332,29 @@ const processNode = (node, entityList) => {
         return;
     }
 
+    // Process Preformatted Tags
+    if (tag === "pre") {
+        entityList.push({
+            type: entityType.BLOCK,
+            content: node.textContent,
+            condition: "pre"
+        });
+        return;
+    }
+
+    checkForBlockConstructs(tag, entityList, false);
+
     // If this node has children
     if (node.hasChildNodes()) {
-        // Process Preformatted Tags
-        if (tag === "pre") {
-            entityList.push({
-                type: entityType.BLOCK,
-                content: node.textContent,
-                condition: "pre"
-            });
-            return;
-        }
-
-        checkForBlockConstructs(tag, entityList);
-
         // Iterate
         node.childNodes.forEach(node => {
             // Process nodes recursively
             processNode(node, entityList);
         });
+    }
 
-        checkForBlockConstructs(tag, entityList);
+    // Short cut if it's a Block
+    if (checkForBlockConstructs(tag, entityList, true)) {
         return;
     }
 
@@ -362,12 +367,11 @@ const processNode = (node, entityList) => {
 
     // Process special tags
 
-
-
     switch (tag) {
         case "br":
             entityList.push({ type: entityType.BREAK });
             break;
+        case "area":
         case "img":
             // Count |alt| attribute of image tags as text
             if (node.hasAttribute("alt")) {
@@ -404,7 +408,7 @@ const blockConstructs = [
     "ol",
     "li"
 ];
-const checkForBlockConstructs = (tag, textEntries) => {
+const checkForBlockConstructs = (tag, textEntries, closing) => {
     // If this construct is a Run of Phrasing
 
     // P and Div have different behaviours
@@ -412,6 +416,7 @@ const checkForBlockConstructs = (tag, textEntries) => {
     // Refer to Container and Paragraphs tests respectively
 
     if (blockConstructs.includes(tag)) {
-        textEntries.push({ type: entityType.BLOCK, tag: tag });
+        textEntries.push({ type: entityType.BLOCK, tag: tag, closing });
+        return true;
     }
 };
