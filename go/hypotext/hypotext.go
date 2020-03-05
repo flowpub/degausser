@@ -12,16 +12,18 @@ func FromString(s string) (string, error) {
 		return "", err
 	}
 
-	var bodyNode *html.Node
+	var root *html.Node
+
 	runs := make([]string, 0)
 	breaks := make([]string, 0)
 	text := make([]string, 0)
-	skipNode := false
-	preformatted := false
+
+	shouldSkip := false
+	isPreformatted := false
 
 	walk(doc, func(node *html.Node) bool {
-		if node.Type == html.ElementNode && strings.ToLower(node.Data) == "body" {
-			bodyNode = node
+		if isElement(node) && getTag(node) == "body" {
+			root = node
 			return false
 		}
 		return true
@@ -29,20 +31,20 @@ func FromString(s string) (string, error) {
 		return true
 	})
 
-	walk(bodyNode, func(node *html.Node) bool {
-		if node.Type == html.ElementNode && IsNodeOfType(node, MetadataContent) {
-			skipNode = true
+	walk(root, func(node *html.Node) bool {
+		if isElement(node) && IsNodeOfType(node, MetadataContent) {
+			shouldSkip = true
 		}
 
-		if skipNode {
+		if shouldSkip {
 			return true
 		}
 
-		if node.Type == html.ElementNode {
-			nodeName := strings.ToLower(node.Data)
+		if isElement(node) {
+			nodeName := getTag(node)
 
 			if nodeName == "pre" {
-				preformatted = true
+				isPreformatted = true
 			}
 
 			// process container-caused new lines
@@ -53,7 +55,7 @@ func FromString(s string) (string, error) {
 
 			if !IsNodeOfType(node, PhrasingContent) {
 				text, runs = process(text, runs)
-				if len(runs) != 0 && runs[len(runs)-1] != "\n" {
+				if peek(runs) != "\n" && peek(runs) != "" {
 					if nodeName == "p" {
 						runs = append(runs, "\n")
 					}
@@ -61,7 +63,7 @@ func FromString(s string) (string, error) {
 				}
 			} else {
 				if nodeName == "br" {
-					if len(text) != 0 && text[len(text)-1] == " " {
+					if peek(text) == " " {
 						text = text[:len(text)-1]
 					}
 					text = append(text, "\n")
@@ -72,13 +74,13 @@ func FromString(s string) (string, error) {
 			}
 		}
 
-		if node.Type == html.TextNode {
-			if !preformatted {
+		if isTextNode(node) {
+			if !isPreformatted {
 				trimmed := CollapseRepeatingWhitespace(node.Data)
-				if len(text) != 0 && text[len(text)-1] == "\n" {
+				if peek(text) == "\n" {
 					trimmed = TrimWhitespaceLeft(trimmed)
 				}
-				if !(len(text) == 0 && trimmed == " " || len(trimmed) == 0) && !(trimmed == " " && len(text) != 0 && CollapseRepeatingWhitespace(text[len(text)-1]) == " ") {
+				if len(text) != 0 && len(trimmed) != 0 || trimmed != " " {
 					// process container-caused new lines
 					if len(breaks) != 0 {
 						runs = append(runs, breaks...)
@@ -94,24 +96,24 @@ func FromString(s string) (string, error) {
 
 		return true
 	}, func(node *html.Node) bool {
-		if node.Type == html.ElementNode && IsNodeOfType(node, MetadataContent) {
-			skipNode = false
+		if isElement(node) && IsNodeOfType(node, MetadataContent) {
+			shouldSkip = false
 		}
 
-		if skipNode {
+		if shouldSkip {
 			return true
 		}
 
-		if node.Type == html.ElementNode {
-			nodeName := strings.ToLower(node.Data)
+		if isElement(node) {
+			nodeName := getTag(node)
 
 			if nodeName == "pre" {
-				preformatted = false
+				isPreformatted = false
 				runs = append(runs, strings.Join(text, ""))
 				text = make([]string, 0)
 			} else if !IsNodeOfType(node, PhrasingContent) {
 				text, runs = process(text, runs)
-				if len(breaks) == 0 && len(runs) != 0 && runs[len(runs)-1] != "\n" && node != bodyNode {
+				if len(breaks) == 0 && peek(runs) != "\n" && node != root {
 					if nodeName == "p" {
 						breaks = append(breaks, "\n")
 					}
@@ -123,6 +125,25 @@ func FromString(s string) (string, error) {
 	})
 
 	return strings.Join(runs, ""), nil
+}
+
+func isElement(node *html.Node) bool {
+	return node.Type == html.ElementNode
+}
+
+func isTextNode(node *html.Node) bool {
+	return node.Type == html.TextNode
+}
+
+func getTag(node *html.Node) string {
+	return strings.ToLower(node.Data)
+}
+
+func peek(slice []string) string {
+	if len(slice) != 0 {
+		return slice[len(slice)-1]
+	}
+	return ""
 }
 
 func process(text []string, runs []string) ([]string, []string) {
