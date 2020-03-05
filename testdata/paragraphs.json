@@ -64,6 +64,10 @@
     "o": "test1\ntest 2\n\ntest  3"
   },
   {
+    "i": "<pre>test1\ntest 2\n\ntest  3</pre>TEST",
+    "o": "test1\ntest 2\n\ntest  3\nTEST"
+  },
+  {
     "i": "\n<p>Test text</p>\n\n\n\t<p>Test text</p>\n<pre>test1\ntest 2\n\ntest  3</pre>",
     "o": "Test text\n\nTest text\n\ntest1\ntest 2\n\ntest  3"
   },
