@@ -188,7 +188,7 @@ func wantString(input string, output string) (string, error) {
 }
 
 func match(input string, matcher StringMatcher) (string, error) {
-	text, err := FromString(input)
+	text, err := HTMLToPlainText(input)
 	if err != nil {
 		return "", err
 	}
