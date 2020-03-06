@@ -1,4 +1,4 @@
-package hypotext
+package degausser
 
 import (
 	"encoding/json"
@@ -16,7 +16,7 @@ var testCaseFiles []string
 func init() {
 	os.Chdir("./testdata")
 
-	if v := os.Getenv("HYPOTEXT_VERBOSE"); v == "1" || v == "true" {
+	if v := os.Getenv("degausser_VERBOSE"); v == "1" || v == "true" {
 		verboseLogging = true
 	}
 

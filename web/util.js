@@ -11,9 +11,9 @@ async function loadTestCases(file) {
   return JSON.parse(json);
 }
 
-async function hypotext(page, input) {
+async function degausser(page, input) {
   return await page.evaluate(async input => {
-    return hypotext(input);
+    return degausser(input);
   }, input);
 }
 
@@ -28,7 +28,7 @@ const isOfValidType = fileName => {
 module.exports = {
   asyncForEach,
   loadTestCases,
-  hypotext,
+  degausser,
   isOfValidType,
   validFileTypes
 };
