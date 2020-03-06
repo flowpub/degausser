@@ -10,7 +10,7 @@ const epubs = fs
     .map(epub => path.join(pathToEpubs, epub));
 
 epubs.forEach(epubDir => {
-    test(`Testing EPUB: ${path.basename(epubDir)}`, () => {
+    test.skip(`Testing EPUB: ${path.basename(epubDir)}`, () => {
         glob(`${epubDir}/**/*.{html,xhtml,htm}`, (er, files) => {
             for (const epubFile of files) {
                 const sourceHTML = fs.readFileSync(epubFile, "utf8");
