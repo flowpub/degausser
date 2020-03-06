@@ -1,5 +1,9 @@
 # degausser
 
+![JS](https://github.com/flowpub/degausser/workflows/JS/badge.svg)
+![Go](https://github.com/flowpub/degausser/workflows/Go/badge.svg)
+![Reference](https://github.com/flowpub/degausser/workflows/Reference/badge.svg)
+
 Implementations of HTML to plain text conversion.
 
 *For when you want to eliminate HTML tags from a document, leaving reasonably rendered text behind.*
