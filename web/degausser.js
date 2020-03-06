@@ -1,4 +1,4 @@
-globalThis.hypotext = input => {
+globalThis.degausser = input => {
   var div = document.createElement("div");
   div.innerHTML = input;
   document.body.appendChild(div);

@@ -1,4 +1,4 @@
-module github.com/flowpub/hypotext/go/hypotext
+module github.com/flowpub/degausser/go/degausser
 
 go 1.13
 

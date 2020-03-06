@@ -2,7 +2,7 @@ const fs = require("fs");
 const glob = require("glob");
 const path = require("path");
 
-const hypotext = require("../../src/hypotext");
+const degausser = require("../../src/degausser");
 
 const pathToEpubs = "../testdata/parsed_epubs";
 const epubs = fs
@@ -34,9 +34,9 @@ epubs.forEach(epubDir => {
                     const root = doc.documentElement;
                     expect(root).toBeTruthy();
 
-                    const output = hypotext(doc.documentElement);
+                    const output = degausser(doc.documentElement);
                     expect(output).toBeTruthy();
-                    fs.writeFileSync(txtFile + ".out", output, 'utf8');
+                    fs.writeFileSync(txtFile + ".out", output, "utf8");
                     expect(output).toBe(sourceTXT);
                 }
             }

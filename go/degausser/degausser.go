@@ -1,4 +1,4 @@
-package hypotext
+package degausser
 
 import (
 	"strings"

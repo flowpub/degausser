@@ -5,7 +5,7 @@ const puppeteer = require("puppeteer");
 const cpy = require("cpy");
 const glob = require("glob");
 const path = require("path");
-const { asyncForEach, hypotext } = require("./util");
+const { asyncForEach, degausser } = require("./util");
 
 const startServer = async port => {
   const fileServer = new static.Server(".");
@@ -31,7 +31,7 @@ const processFile = async (page, file, cwd) => {
     path.basename(pathToFile, path.extname(pathToFile)) + ".txt"
   );
 
-  await hypotext(page, html).then(parsed => {
+  await degausser(page, html).then(parsed => {
     fs.writeFileSync(fileToCreate, parsed);
   });
 };
@@ -80,7 +80,7 @@ const processEpub = async (entryPoint, page) => {
 };
 
 const main = async pathToEpubs => {
-  const URL = "http://localhost:8080/hypotext.html";
+  const URL = "http://localhost:8080/degausser.html";
 
   await startServer();
   const browser = await puppeteer.launch();

@@ -1,4 +1,4 @@
-const hypotext = require("../../src/hypotext");
+const degausser = require("../../src/degausser");
 const { getInputFile } = require('../util')
 
 describe(`Testing Crazy Shit`, () => {
@@ -11,7 +11,7 @@ describe(`Testing Crazy Shit`, () => {
 
             document.documentElement.innerHTML = element.i
 
-            expect(hypotext(document.documentElement)).toBe(element.o)
+            expect(degausser(document.documentElement)).toBe(element.o)
 
         })
 
