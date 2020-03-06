@@ -1,0 +1,7 @@
+Acknowledgments
+
+I would like to thank the following people for their invaluable input, assistance reviewing, and plain general patience answering my dumb questions along the way: Markus Gylling, George Kerscher, Daniel Weck, Romain Deltour, and Marisa DeMeglio from the DAISY Consortium; Graham Bell from EDItEUR; Dave Gunn from RNIB; Ping Mei Law, Richard Wilson, and Sean Brooks from CNIB; and Dave Cramer from Hachette Book Group.
+
+And a special second thanks to Markus, Bill McCoy, and George for the opportunity I was given to be involved in the EPUB revision and to write this guide.
+
+And a final thanks to Brian Sawyer and all the people at O’Reilly for their work putting this guide together!

@@ -1,0 +1,268 @@
+Talk to Me: Media Overlays
+
+When you watch words get highlighted in your reading system as a narrator speaks, the term media overlay probably doesn’t immediately jump to mind as the best marketing buzzword to describe the experience. But what you are in fact witnessing is a media type (audio) being overlaid on your text content, and tech trumps marketing in standards!
+
+The audio-visual magic that overlays enable in EPUBs is just the tip of the iceberg, however. Overlays represent a bridge between the audio and video worlds, and between mainstream and accessibility needs, which is what really makes this new technology so exciting. They offer accessible audio navigation for blind and low-vision readers. They can improve the reading experience for persons with trouble focusing across a page and improve reading comprehension for many types of readers. They can also provide a unique read-along experience for young readers.
+
+From a mainstream publisher’s perspective, overlays provide a bridge between audiobook and ebook production streams. Create a single source using overlays and you could transform and distribute across the spectrum from audio-only to text-only. With full-text and full-audio synchronization ebooks, you can transform down to a variety of formats. If you’re going to create an audiobook version of your ebook, it doesn’t make sense not to combine production, which is exactly what EPUB 3 allows you to now do. Your source content is more valuable by virtue of its completeness, and you can also choose to target and distribute your ebook with different modalities enabled for different audiences.
+
+From a reader’s perspective, they can purchase a format that provides adaptive modalities to meet their reading needs: they can choose which playback format they prefer, or purchase a book with multiple modalities and switch between them as the situation warrants—listening while driving and visually reading when back at home, for example.
+
+Media overlays are the answer to a lot of problems on both sides of the accessibility fence, in other words.
+
+If you’re coming to this guide from accessibility circles, however, you’re probably wondering why this is considered new and exciting when it sounds an awful lot like the SMIL technology that has been at the core of the DAISY talking book specifications for more than a decade. And you’re right…sort of. Overlays are not new technology, but represent a new evolution of the DAISY standard, which EPUB 3 is a successor to. What is really exciting from an accessibility perspective is the chance to move this production back to the source to get high-quality audio and text synchronized ebooks directly from publishers. Removing synchronization information from having to be encoded in content files is another benefit overlays provide over older talking book formats, greatly simplifying their creation.
+
+But knowing what overlays are and how they can enhance ebooks doesn’t get us any closer to understanding how they work and the considerations involved in making them, which is the real goal for this section. If you like to believe in magic, though, here’s an early warning that by the end it won’t seem all that fantastic how your reading system makes words and paragraphs highlight as a voice narrates the text. Prepare to be disappointed that your reading system doesn’t have superpowers.
+
+To begin moving under the hood of an EPUB, though, the first thing to understand is that overlays are just specialized xml documents that contain the instructions a reading system uses to synchronize the text display with the audio playback. They’re expressed using a subset of SMIL that we’ll cover as we move along, combined with the epub:type attribute we ran into earlier for semantic inflection.
+
+Note
+
+SMIL (pronounced “smile”) is the shorthand way of referring to the Synchronized Multimedia Integration Language. For more information on this technology, see http://www.w3.org/TR/SMIL
+
+The order of the instructions in the overlay document defines the reading order for the ebook when in playback mode. A reading system will move through the instructions one at a time, or a reader can manually navigate in similar fashion to how assistive technologies enable navigation through the markup (i.e., escaping and skipping).
+
+As a reading system encounters each synchronization point, it determines from the provided information which element in which content file has to be loaded (by its id) and the corresponding position in the audio track at which to start the narration. The reading system will then load and highlight the word or passage for you at the same time that you hear the audio start. When the audio track reaches the end point you’ve specified—or the end of the audio file if you haven’t specified one—the reading system checks the next synchronization point to see what text and audio to load next.
+
+This process of playback and resynchronization continues over and over until you reach the end of the book, giving the appearance to the reader that their system has come alive and is guiding them through it.
+
+Note
+
+This portrayal is intentionally simple. In practice, overlay synchronization points may, for example, omit an audio reference when the reading system is expected to synthetically render the text, or if the text reference points to a multimedia object like the audio or video element that the reading system is expected to initiate. Refer to the Media Overlays specification for more information on the full range of features.
+
+As you might suspect at this point, the reading system can’t synchronize or play content back any way but what has been defined; as a reader you cannot, for example, dynamically change from word-to-word to paragraph-by-paragraph read-back as you desire. The magic is only as magical as you make it, at least at this time.
+
+With only a single level of playback granularity available, the decision on how fine a playback experience to provide has typically been influenced by the disability you’re targeting, going back to the origins of the functionality in talking books. Books for blind and low-vision readers are often only synchronized to the heading level, for example, and omit the text entirely. Readers with dyslexia or cognitive issues, however, may benefit more from word-level synchronization using full-text full-audio playback.
+
+Coarser synchronization—for example at the phrase or paragraph level—can be useful in cases where the defining characteristics of a particular human narration (flow, intonation, emphasis) add an extra dimension to the prose, such as with spoken poetry or religious verses. The production costs associated with synchronizing human-narrated ebooks to the word level, however, has typically meant that only short-prose works (such as children’s books) get this treatment.
+
+Let’s turn to the practical construction of an overlay to discover why the complexity increases by level, though. Understanding the issues will give better insight into which model you ultimately decide to use.
+
+Building an Overlay
+
+Every overlay document begins with root smil element and a body, as exemplified in the following markup:
+
+<smil
+    xmlns="http://www.w3.org/ns/SMIL"
+    xmlns:epub="http://www.idpf.org/2007/ops"
+    version="3.0">
+    <body>
+
+    </body>
+</smil>
+
+There’s nothing exciting going on here but a couple of namespace declarations and a version attribute on the root. These are static in EPUB 3, so of little interest beyond their existence. There is no required metadata in the overlays themselves, which is why we don’t need to add a head element.
+
+Of course, in order to now illustrate how to build up this shell and include it in an EPUB, we’re going to need some content. I’m going to use the Moby Dick ebook that Dave Cramer, a member of the EPUB working group, built as a proof of concept of the specification for the rest of this section. This book is available from the EPUB 3 Sample Content project page.
+
+If we look at the content file for chapter one, we can see that the HTML markup has been structured to showcase different levels of text/audio synchronization. After the chapter heading, for example, the first paragraph has been broken down to achieve fine synchronization granularity (word and sentence level), whereas the following paragraph hasn’t been divided into smaller parts.
+
+Compressing the markup in the file to just what we’ll be looking at, we have:
+
+<section id="c01">
+    <h1 id="c01h01">Chapter 1. Loomings.</h1>
+
+    <p><span id="c01w00001">Call</span>
+        <span id="c01w00002">me</span>
+        <span id="c01w00003">Ishmael.</span>
+        <span id="c01s0002">Some years ago…</span> …</p>
+
+    <p id="c01p0002">There now is your insular city of the Manhattoes…</p>
+    …
+</section>
+
+You’ll notice that each element containing text content has an id attribute, as that’s what we’ll be referencing when we get to synchronizing with the audio track.
+
+The markup additionally includes span tags to differentiate words and sentences in the first p tag. The second paragraph only has an id attribute on it, however, as we’re going to omit synchronization on the individual text components it contains to show paragraph-level synchronization.
+
+We can now take this information to start building the body of our overlay. Switching back to our empty overlay document, the first element we’re going to include in the body is a seq:
+
+<body>
+    <seq
+        id="id1"
+        epub:textref="chapter_001.xhtml#c01"
+        epub:type="bodymatter chapter">
+
+    </seq>
+</body>
+
+This element serves the same grouping function the corresponding section element does in the markup, and you’ll notice the textref attribute references the section’s id. The logical grouping of content inside the seq element likewise enables escaping and skipping of structures during playback, as we’ll return to when we look at some structural considerations later.
+
+In this case, the epub:type attribute conveys that this seq represents a chapter in the body matter. Although the attribute isn’t required, there’s little benefit in adding seq elements if you omit any semantics, as a reading system will not be able to provide skippability and escapability behaviors unless it can identify the purpose of the structure.
+
+It may seem redundant to have the same semantic information in both the markup and overlay, but remember that each is tailored to different rendering and playback methods. Without this information in the overlay, the reading system would have to inspect the markup file to determine what the synchronization elements represent, and then resynchronize the overlay using the markup as a guide. Not a simple process. A single channel of information is much more efficient, although it does translate into a bit of redundancy (you also typically wouldn’t be crafting these documents by hand, and a recording application could potentially pick up the semantics from the markup and apply them to the overlay for you).
+
+We can now start defining synchronization points by adding par elements to the seq, which is the only other step in the process. Each par contains a child text and a child audio element, which define the fragment of your content and the associated portion of an audio file to render in parallel, respectively.
+
+Here’s the entry for our primary chapter heading, for example:
+
+<par id="heading1">
+    <text src="chapter_001.xhtml#c01h01"/>
+    <audio
+        src="audio/mobydick_001_002_melville.mp4"
+        clipBegin="0:00:24.500"
+        clipEnd="0:00:29.268"/>
+</par>
+
+The text element contains an src attribute that identifies the filename of the content document to synchronize with, and a fragment identifier (the value after the # character) that indicates the unique identifier of a particular element within that content document. In this case, we’re indicating that chapter_001.xhtml needs to be loaded and the element with the id c01h01 displayed (the h1 in our sample content, as expected).
+
+The audio element likewise identifies the source file containing the audio narration in its src attribute, and defines the starting and ending offsets within it using the clipBegin and clipEnd attributes. As indicated by these attributes, the narration of the heading text begins at the mid 24 second mark (to skip past the preliminary announcements) and ends just after the 29 second mark. The milliseconds on the end of the start and end values give an idea of the level of precision needed to create overlays, and why people typically don’t mark them up by hand. If you are only as precise as a second, the reading system can move readers to the new prose at the wrong time or start narration in the middle of a word or at the wrong word.
+
+But those concerns aside, that’s all there is to basic text and audio synchronization. So, as you can now see, no reading system witchcraft was required to synchronize the text document with its audio track! Instead, the audio playback is controlled by timestamps that precisely determine how an audio recording is mapped to the text structure. Whether synchronizing down to the word or moving through by paragraph, this process doesn’t change.
+
+To synchronize the first three words “Call me Ishmael” in the first paragraph, for example, we simply repeat the process of matching element ids and audio offsets:
+
+<par>
+    <text src="chapter_001.xhtml#c01w00001"/>
+    <audio
+        src="audio/mobydick_001_002_melville.mp4"
+        clipBegin="0:00:29.269"
+        clipEnd="0:00:29.441"/>
+</par>
+<par>
+    <text src="chapter_001.xhtml#c01w00002"/>
+    <audio
+        src="audio/mobydick_001_002_melville.mp4"
+        clipBegin="0:00:29.441"
+        clipEnd="0:00:29.640"/>
+</par>
+<par>
+    <text src="chapter_001.xhtml#c01w00003"/>
+    <audio
+        src="audio/mobydick_001_002_melville.mp4"
+        clipBegin="0:00:29.640"
+        clipEnd="0:00:30.397"/>
+</par>
+
+You’ll notice each clipEnd matches the next element’s clipBegin here because we have a single continuous playback track. Finding each of these synchronization points manually is not so easy, though, as you might imagine.
+
+Synchronizing to the sentence level, however, means only one synchronization point is required for all the words the sentence contains, thereby reducing the time and complexity of the process several magnitudes. The par is otherwise constructed exactly like the previous example:
+
+<par>
+    <text src="chapter_001.xhtml#c01s0002"/>
+    <audio
+        src="audio/mobydick_001_002_melville.mp4"
+        clipBegin="0:00:30.397"
+        clipEnd="0:00:44.783"/>
+</par>
+
+The process of creating overlays is only complicated by the time and text synchronizations involved, as is no doubt becoming clearer. Moving up another level, paragraph level synchronization reduces the process several more magnitudes as all the sentences can be skipped. Here’s the single entry we’d only have to make for the entire 28s second paragraph:
+
+<par>
+    <text src="chapter_001.xhtml#c01p0002"/>
+    <audio
+        src="audio/mobydick_001_002_melville.mp4"
+        clipBegin="0:01:46.450"
+        clipEnd="0:02:14.138"/>
+</par>
+
+The complexity isn’t only limited to the number of entries and finding the audio points, however, otherwise technology would easily overcome the problem. Narrating at a heading, paragraph, or even sentence level can be done relatively easily with trained narrators, as each of these structures provides a natural pause point for the person reading, a simplifier not provided when performing word-level synchronization.
+
+A real-world recording scenario, for example, would typically involve the narrator loading their ebook and synchronizing the text in the recording application as they narrate to speed up this process immensely (e.g., using the forward arrow or spacebar each time they start a new paragraph to have the recording program automatically set the new synchronization point). Performing the synchronization at the natural pause points is not problematic in this scenario, as the person reading is briefly not focused on that task and/or the person assisting has enough of a break to cleanly resynchronize. Trying to narrate and synchronize at the word level, however, is a tricky process to perform effectively, as people naturally talk more fluidly than any process can keep up with, even if two people are involved.
+
+Note
+
+The real-world experience I describe here comes from the creation of DAISY talking books, to be clear. Tools for the similar production of EPUB 3 overlays will undoubtedly appear in time, as well, but as of writing are in short supply.
+
+Ultimately, the only advice that can be given is to strive for the finest granularity you can. Paragraphs may be easier to synchronize than sentences, but if the viewing screen isn’t large enough to view the entire paragraph the invisible part won’t ever come into view as the narration plays (the reading system can only know to resynch at the next point; it can’t intrinsically know that narration has to match what is on screen or have any way to determine what is on screen at any given time).
+
+We’re not completely done yet, though. There are a few quick details to run through in order to now include this overlay in our EPUB.
+
+Note
+
+The following instructions assume a basic level of familiarity with EPUB publication files. Refer to the EPUB Publications 3.0 specification for more information.
+
+Assuming we’ve saved our overlay as chapter_001_overlay.smil, the first step is simply to include an entry in the manifest:
+
+<item
+    id="chapter_001_overlay"
+    href="chapter_001_overlay.smil"
+    media-type="application/smil+xml"/>
+
+We then need to include a media-overlay attribute on the manifest item for the corresponding content document for chapter one:
+
+<item
+    id="xchapter_001"
+    href="chapter_001.xhtml"
+    media-type="application/xhtml+xml"
+    media-overlay="chapter_001_overlay"/>
+
+The value of this attribute is the id we created for the overlay in the previous step.
+
+And finally we need to add metadata to the publication file indicating the total length of the audio for each individual overlay and for the publication as a whole. For completeness, we’ll also include the name of the narrator.
+
+<meta property="media:duration" refines="#chapter_001_overlay">0:14:43</meta>
+…
+<meta property="media:duration">0:23:46</meta>
+<meta property="media:narrator">Stuart Wills</meta>
+
+The refines attribute on the first meta element specifies the id of the manifest item we created for the overlay, as this is how we match the time value up to the content file it belongs to. The lack of a refines attribute on the next duration meta element indicates it contains the total time for the publication (only one can omit the refines attribute).
+
+There’s one final metadata item left to add and then we’re done:
+
+<meta property="media:active-class">-epub-media-overlay-active</meta>
+
+This special media:active-class meta property tells the reading system which CSS class to apply to the active element when the audio narration is being played (i.e., the highlighting to give it).
+
+For example, to apply a yellow background to each section of prose as it is read, as is traditionally found in accessible talking books, you would define the following definition in your CSS file:
+
+.-epub-media-overlay-active
+{
+    background-color: yellow;
+}
+
+And that’s the long and short of creating overlays.
+
+Structural Considerations
+
+I briefly touched on the need to escape nested structures, and skip unwanted ones, but let’s go back to this functionality as a first best practice, as it is critical to the usability of the overlays feature in exactly the same way markup is to content-level navigation.
+
+If you have the bad idea in your head that only par elements matter for playback, and you can go ahead and make overlays that are nothing more than a continuous sequence of these elements, get that idea back out of your head. It’s the equivalent of tagging everything in the body of a content file using div or p tags.
+
+Using seq elements for problematic structures like lists and tables provides the information a reading system needs to escape from them.
+
+Here’s how to structure a simple list, for example:
+
+<seq id="seq002" epub:type="list" epub:textref="chapter_012.xhtml#ol01">
+    <par id="list001item001" epub:type="list-item">
+        <text src="chapter_012.xhtml#ol01i01"/>
+        <audio src="audio/chapter12.mp4" clipBegin="0:26:48" clipEnd="0:27:11"/>
+    </par>
+    <par id="list001item002" epub:type="list-item">
+        <text src="chapter_012.xhtml#ol01i02"/>
+        <audio src="audio/chapter12.mp4" clipBegin="0:27:11" clipEnd="0:27:29"/>
+    </par>
+    …
+</seq>
+
+A reading system can now discover from the epub:type attribute the nature of the seq element and of each par it contains. If the reader indicates at any point during the playback of the par element list items that they want to jump to the end, the reading system simply continues playback at the next seq or par element following the parent seq. If the list contained sub-lists, you could similarly wrap each in its own seq element to allow the reader to escape back up through all the levels.
+
+A similar nested seq process is critical for table navigation: a seq to contain the entire table, individual seq elements for each row, and table-cell semantics on the par elements containing the text data.
+
+A simple three-cell table could be marked up using this model as follows:
+
+<seq epub:type="table" epub:textref="ch007.xhtml#tbl01">
+    <seq epub:type="table-row" epub:textref="ch007.xhtml#tbl01r01">
+        <par epub:type="table-cell">…</par>
+        <par epub:type="table-cell">…</par>
+        <par epub:type="table-cell">…</par>
+    </seq>
+</seq>
+
+You could also use a seq for the table cells if they contained complex data:
+
+<seq epub:type="table-cell" epub:textref="ch007.xhtml#tbl01r01c01">
+    <par>…</par>
+    …
+</seq>
+
+But attention shouldn’t only be given to seq elements when it comes to applying semantics. Readers also benefit when par elements are identifiable, particularly for skipping:
+
+<par id="note21" epub:type="note">
+    <text src="notes.xhtml#c02note03"/>
+    <audio src="audio/notes.mp4" clipBegin="0:14:23.146" clipEnd="0:15:11.744"/>
+</par>
+
+If all notes receive the semantic as in the above example, a reader could disable all note playback, ensuring the logical reading order is maintained. All secondary content that isn’t part of the logical reading order should be so identified so that it can be skipped.
+
+This small extra effort to mark up structures and secondary content does a lot to make your content more accessible.

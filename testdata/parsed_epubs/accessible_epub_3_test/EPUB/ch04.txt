@@ -1,0 +1,38 @@
+Chapter 4. Conclusion
+
+EPUB 3 holds out much promise, but only if you care about the quality of your content and actively work to make it better. If I’ve done my job, though, accessibility is hopefully no longer a foreign concept or impossible-sounding ideal anymore. It’s fundamentally about high-quality data, with hooks in for people who can’t consume the content in its native format, whether auditory or visual.
+
+The people you need to produce accessible EPUBs are not hard to find, either. Web content developers abound as the internet generation comes of age. And unlike in the early dark days of web accessibility, more and more people are learning WCAG and WAI-ARIA guidelines for accessible production. They’re not skills you can ignore as a developer, as so much basic accessibility legislation is premised on them now.
+
+My point, however, is only that creating accessible EPUB 3 publications is not a costly proposition. It doesn’t require seeking out highly-specialized skills that won’t provide you a return on your investment. Reflowable web content is the direction publishing is heading in, and well down the road to.
+
+But to wrap up, no guide can ever make you take action, only impart some measure of knowledge. Assuming I’ve met that threshold, the onus is now on you to take what you’ve learned and put it to good use.
+
+EPUB 3 Best Practices Teaser
+
+Accessible EPUB 3 is an excerpt of the book EPUB 3 Best Practices, currently in development for publication in 2012.
+
+For more details and updates on its anticipated release date, keep an eye on the web page for the book:
+
+http://shop.oreilly.com/product/0636920024897.do
+Cover art for EPUB 3 Best Practices, coming in 2012
+Figure 4-1. EPUB 3 Best Practices, coming in 2012
+About the Book
+
+The new EPUB 3 specification from the IDPF incorporates a wide range of technologies and functionality that are set to revolutionize electronic publishing. The format is poised to make the static two-dimensional page a thing of the past, introducing the world to new rich multimedia reading experiences and scripted interactivity. But a specification that offers so much can be a daunting thing to learn.
+
+EPUB 3 Best Practices steps in to help fill the knowledge void. Authored by people involved in the development of the specification, and with extensive experience in electronic publishing, this guide will provide you with a solid foundation on which to begin developing your own EPUBs. Topics covered include:
+
+A comprehensive survey of accessible production features and best practices
+
+A walkthrough of the new global language support features
+
+An introduction to the new multimedia elements and how to use them to embed content
+
+A guide to best practices for authoring of interactive elements and scripting
+
+A review of publication and distribution metadata
+
+Techniques for fixed and adaptive layouts
+
+EPUB 3 Best Practices is a must-read for anyone looking to unleash the potential of the new format.
