@@ -1,14 +1,24 @@
 {
-  "name": "hypotext",
+  "name": "degausser",
   "version": "1.0.0",
-  "description": "",
+  "description": "Transforms HTML to plain text by eliminating tags from a document.",
+  "author": "FlowPub",
+  "license": "BSD-3-Clause",
+  "homepage": "https://flowpub.io",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com/flowpub/degausser.git",
+    "directory": "js"
+  },
+  "bugs": {
+    "url": "https://github.com/flowpub/degausser/issues"
+  },
   "main": "index.js",
   "scripts": {
     "test": "jest"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
+    "glob": "^7.1.6",
     "jest": "^25.1.0",
     "prettier": "^1.19.1"
   }

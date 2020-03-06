@@ -1,21 +1,25 @@
 {
-  "name": "hypotext",
+  "private": true,
+  "name": "degausser-web",
   "version": "1.0.0",
-  "description": "",
+  "description": "Reference implementation of flowpub/degausser",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com/flowpub/degausser.git",
+    "directory": "web"
+  },
   "main": "index.js",
+  "author": "FlowPub",
+  "license": "BSD-3-Clause",
   "scripts": {
     "test": "jest",
     "static": "static ."
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "jest": "^25.1.0",
     "jest-puppeteer": "^4.4.0",
     "node-static": "^0.7.11",
-    "puppeteer": "^2.1.1"
-  },
-  "dependencies": {
+    "puppeteer": "^2.1.1",
     "cpy": "^8.0.1",
     "glob": "^7.1.6"
   }
