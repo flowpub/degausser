@@ -1,8 +1,8 @@
 # degausser
 
-![JS](https://github.com/flowpub/degausser/workflows/JS/badge.svg)
-![Go](https://github.com/flowpub/degausser/workflows/Go/badge.svg)
-![Reference](https://github.com/flowpub/degausser/workflows/Reference/badge.svg)
+[![JS](https://github.com/flowpub/degausser/workflows/JS/badge.svg)](https://github.com/flowpub/degausser/actions?query=workflow%3AJS)
+[![Go](https://github.com/flowpub/degausser/workflows/Go/badge.svg)](https://github.com/flowpub/degausser/actions?query=workflow%3AGo)
+[![Reference](https://github.com/flowpub/degausser/workflows/Reference/badge.svg)](https://github.com/flowpub/degausser/actions?query=workflow%3AReference)
 
 Implementations of HTML to plain text conversion.
 
