@@ -1,5 +1,5 @@
 const hypotext = require("../../src/hypotext");
-const getInputFile = require('../util/getInputFile')
+const { getInputFile } = require('../util')
 
 describe(`Testing Tables`, () => {
 
