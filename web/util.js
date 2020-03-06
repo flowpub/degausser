@@ -1,4 +1,4 @@
-const fsPromises = require("fs").promises;
+const fsp = require("fs").promises;
 
 async function asyncForEach(array, callback) {
   for (let index = 0; index < array.length; index++) {
@@ -7,7 +7,7 @@ async function asyncForEach(array, callback) {
 }
 
 async function loadTestCases(file) {
-  const json = await fsPromises.readFile(`./testdata/${file}`, "utf8");
+  const json = await fsp.readFile(`./testdata/${file}`, "utf8");
   return JSON.parse(json);
 }
 

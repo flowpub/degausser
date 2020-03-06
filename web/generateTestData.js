@@ -100,3 +100,5 @@ const main = async pathToEpubs => {
 module.exports = {
   parseEpubs: main
 };
+
+//main('./testdata/epubs')
