@@ -43,3 +43,31 @@ epubs.forEach(epubDir => {
         });
     });
 });
+
+test(`Testing Specific Page`, () => {
+    const filename = "copyright";
+    const txtFilePath = "../testdata/parsed_epubs/metamorphosis_test/OEBPS";
+    const sourceFilePath = "../testdata/epubs/metamorphosis/OEBPS";
+
+    const sourceTXT = fs.readFileSync(
+        path.join(txtFilePath, filename + ".txt"),
+        "utf8"
+    );
+
+    const sourceHTML = fs.readFileSync(
+        path.join(sourceFilePath, filename + ".html"),
+        "utf8"
+    );
+
+    const parser = new DOMParser();
+    let doc;
+    try {
+        doc = parser.parseFromString(sourceHTML, "application/xhtml+xml");
+    } catch (error) {
+        console.error(error);
+    }
+
+    const output = degausser(doc.documentElement);
+
+    console.log(output)
+});
