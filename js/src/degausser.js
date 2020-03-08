@@ -18,32 +18,30 @@ module.exports = parentNode => {
     // let isInTableRow = false;
     let haveEncounteredFirstCell = false;
 
-    let breakEntity = null;
-
+    let lastBreak = null;
     breakType = {
         NONE: "none",
         SINGLE: "single",
         DOUBLE: "double"
     };
     const addBreak = double => {
-        if (breakEntity === null) {
+        if (lastBreak === null) {
             // The only time it should be null is at the beginning of document
             return;
         }
 
-        processText();
         if (double) {
-            breakEntity = breakType.DOUBLE;
-        } else if (breakEntity !== breakType.DOUBLE) {
-            breakEntity = breakType.SINGLE;
+            lastBreak = breakType.DOUBLE;
+        } else if (lastBreak !== breakType.DOUBLE) {
+            lastBreak = breakType.SINGLE;
         }
     };
     const processBreaks = () => {
-        if (!breakEntity) {
+        if (!lastBreak) {
             return;
         }
 
-        switch (breakEntity) {
+        switch (lastBreak) {
             case breakType.SINGLE:
                 runs.push("\n");
                 break;
@@ -52,18 +50,9 @@ module.exports = parentNode => {
                 break;
         }
 
-        breakEntity = breakType.NONE;
+        lastBreak = breakType.NONE;
     };
-    const pushText = string => {
-        // Trim
-        const trimmed = trimBeginAndEnd(string);
-        if (!trimmed) {
-            return;
-        }
 
-        processBreaks();
-        text.push(string);
-    };
     const processText = () => {
         if (text.length === 0) {
             return;
@@ -78,8 +67,8 @@ module.exports = parentNode => {
             return;
         }
 
-        if (breakEntity === null) {
-            breakEntity = breakType.NONE;
+        if(lastBreak === null ){
+            lastBreak = breakType.NONE;
         }
 
         runs.push(trimBeginAndEnd(collapseWhitespace(trimmed)));
@@ -87,70 +76,67 @@ module.exports = parentNode => {
     };
 
     const processBlockConstruct = (tag, opening) => {
-        // Not a phrasing construct, therefore is Block
-        if (!phrasingConstructs.includes(tag)) {
-            processText();
-
-            if (tag === "tr") {
-                // isInTableRow = opening;
-                haveEncounteredFirstCell = false;
-            }
-
-            if (tag === "th" || tag === "td") {
-                if (opening) {
-                    // I'm assuming the DOM will fix all table element malformations
-                    if (!haveEncounteredFirstCell) {
-                        haveEncounteredFirstCell = true;
-                    } else {
-                        processBreaks();
-                        runs.push("\t");
-                    }
-                }
-                return;
-            }
-
-            if (tag === "p") {
-                // console.log(breakEntity);
-                addBreak(true);
-            }
-
-            addBreak(false);
-        }
-    };
-
-    const processNode = node => {
-        const tag = node.tagName && node.tagName.toLowerCase();
-
-        if (blacklist.includes(tag)) {
-            // console.log(tag)
+        if (phrasingConstructs.includes(tag)) {
             return;
         }
 
-        // if (!blacklist.includes(tag)) {
-        // Process Preformatted Tags
+        // Not a phrasing construct, therefore is Block
+        if (tag === "th" || tag === "td") {
+            // Special Block
+            if (opening) {
+                // I'm assuming the DOM will fix all table element malformations
+                if (!haveEncounteredFirstCell) {
+                    haveEncounteredFirstCell = true;
+                } else {
+                    processBreaks();
+                    runs.push("\t");
+                }
+            } else {
+                processText()
+            }
+            return;
+        }
+
+        // Regular Blocks
+        processText();
+
+        if (tag === "tr") {
+            haveEncounteredFirstCell = false;
+        }
+
+        if (tag === "p") {
+            addBreak(true);
+        }
+
+        addBreak(false);
+    };
+
+    const processTextNode = node => {
+        const string = node.textContent.normalize();
+
+        // Trim
+        const trimmed = trimBeginAndEnd(string);
+        if (trimmed) {
+            processBreaks();
+        }
+
+        text.push(string);
+    };
+    const processElementNode = node => {
+        const tag = node.tagName && node.tagName.toLowerCase();
+
+        // Special case for Preformatted
         if (tag === "pre") {
             processText();
             addBreak(false);
             processBreaks();
 
-            // Push straight into Runs
             runs.push(node.textContent);
-            breakEntity = breakType.SINGLE;
-            return;
-        }
-
-        if (node.nodeType === Node.TEXT_NODE) {
-            const normalized = node.textContent.normalize();
-
-            
-
-            // Process preceding break, and push text
-            pushText(normalized);
+            lastBreak = breakType.SINGLE
             return;
         }
 
         processBlockConstruct(tag, true);
-        // }
 
         if (node.hasChildNodes()) {
             node.childNodes.forEach(child => {
@@ -158,29 +144,36 @@ module.exports = parentNode => {
             });
         }
 
-        // if (!blacklist.includes(tag)) {
-        // console.log(tag);
         processBlockConstruct(tag, false);
 
-        if (node.nodeType === Node.ELEMENT_NODE) {
-            // Process other tags
-
-            switch (tag) {
-                case "br":
-                    processText();
-                    processBreaks();
-                    runs.push("\n");
-                    break;
-                case "wbr":
-                    pushText("\u200B");
-                    break;
-            }
-
-            if (node.hasAttribute("alt")) {
-                pushText(` ${node.getAttribute("alt")} `);
-            }
+        // Process other tags
+        switch (tag) {
+            case "br":
+                processText();
+                processBreaks();
+                runs.push("\n");
+                break;
+            case "wbr":
+                text.push("\u200B");
+                break;
         }
-        // }
+
+        if (node.hasAttribute("alt")) {
+            text.push(` ${node.getAttribute("alt")} `);
+        }
+    };
+
+    const processNode = node => {
+        if (node.nodeType === Node.TEXT_NODE) {
+            processTextNode(node);
+        }
+        if (node.nodeType === Node.ELEMENT_NODE) {
+            if (blacklist.includes(node.tagName.toLowerCase())) {
+                // console.log(tag)
+                return;
+            }
+            processElementNode(node);
+        }
     };
 
     processNode(parentNode);
@@ -188,8 +181,8 @@ module.exports = parentNode => {
     // Get any stragglers
     processText();
 
-    console.log(runs);
-    console.log(breakEntity)
+    // console.log(runs);
+    // console.log(lastBreak);
 
     return runs.join("");
 };

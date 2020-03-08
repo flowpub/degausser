@@ -1,5 +1,5 @@
 // Char codes for \t, \n, and non-&nbsp; space character
-const whitespaces = [9, 10, 32];
+const whitespaces = [9, 10, 13, 32, ];
 const isCharWhitespace = charCode => {
     return whitespaces.includes(charCode);
 };
@@ -78,6 +78,7 @@ const blacklist = ["base",
 "head",];
 
 const phrasingConstructs = [
+    'a',
     "abbr",
 	"audio",
 	"b",
