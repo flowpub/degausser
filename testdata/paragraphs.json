@@ -74,5 +74,9 @@
   {
     "i": "<p>Fernstraßen<wbr>bau<wbr>privat<wbr>finanzierungs<wbr>gesetz</p>",
     "o": "Fernstraßen\u200bbau\u200bprivat\u200bfinanzierungs\u200bgesetz"
+  },
+  {
+    "i": "\n<h2 class=\"title\">Chapter 4. Conclusion</h2>\n<p>EPUB 3 holds out much promise</p>",
+    "o": "Chapter 4. Conclusion\n\nEPUB 3 holds out much promise"
   }
 ]
