@@ -19,12 +19,14 @@ epubs.forEach(epubDir => {
                     path.basename(epubFile, path.extname(epubFile)) + ".txt"
                 );
                 const sourceTXT = fs.readFileSync(txtFile, "utf8");
+
                 const parser = new DOMParser();
+                const encoding = path.extname(epubFile) === 'xhtml' ? "application/xhtml+xml" : 'text/html'
                 let doc;
                 try {
                     doc = parser.parseFromString(
                         sourceHTML,
-                        "application/xhtml+xml"
+                        encoding
                     );
                 } catch (error) {
                     console.error(error);
@@ -45,9 +47,9 @@ epubs.forEach(epubDir => {
 });
 
 test.skip(`Testing Specific Page`, () => {
-    const filename = "copyright";
-    const txtFilePath = "../testdata/parsed_epubs/metamorphosis_test/OEBPS";
-    const sourceFilePath = "../testdata/epubs/metamorphosis/OEBPS";
+    const filename = "ch04";
+    const txtFilePath = "../testdata/parsed_epubs/accessible_epub_3_test/EPUB";
+    const sourceFilePath = "../testdata/epubs/accessible_epub_3/EPUB";
 
     const sourceTXT = fs.readFileSync(
         path.join(txtFilePath, filename + ".txt"),
@@ -55,7 +57,7 @@ test.skip(`Testing Specific Page`, () => {
     );
 
     const sourceHTML = fs.readFileSync(
-        path.join(sourceFilePath, filename + ".html"),
+        path.join(sourceFilePath, filename + ".xhtml"),
         "utf8"
     );
 
