@@ -1,5 +1,5 @@
 // Char codes for \t, \n, and non-&nbsp; space character
-const whitespaces = [9, 10, 13, 32, ];
+const whitespaces = [9, 10, 13, 32];
 const isCharWhitespace = charCode => {
     return whitespaces.includes(charCode);
 };
@@ -65,76 +65,77 @@ const collapseWhitespace = string => {
     return textElements.join(" ");
 };
 
-const blacklist = ["base",
-"command",
-"link",
-"meta",
-"noscript",
-"script",
-"style",
-"title",
-// special cases
-// "html",
-"head",];
+const blacklist = [
+    "base",
+    "command",
+    "link",
+    "meta",
+    "noscript",
+    "script",
+    "style",
+    "title",
+    // special cases
+    // "html",
+    "head"
+];
 
 const phrasingConstructs = [
-    'a',
+    "a",
     "abbr",
-	"audio",
-	"b",
-	"bdo",
-	"br",
-	"button",
-	"canvas",
-	"cite",
-	"code",
-	"command",
-	"data",
-	"datalist",
-	"dfn",
-	"em",
-	"embed",
-	"i",
-	"iframe",
-	"img",
-	"input",
-	"kbd",
-	"keygen",
-	"label",
-	"mark",
-	"math",
-	"meter",
-	"noscript",
-	"object",
-	"output",
-	"progress",
-	"q",
-	"ruby",
-	"samp",
-	"script",
-	"select",
-	"small",
-	"span",
-	"strong",
-	"sub",
-	"sup",
-	"svg",
-	"textarea",
-	"time",
-	"var",
-	"video",
-	"wbr",
-	// special cases
-	"map",
-	"area",
-]
+    "audio",
+    "b",
+    "bdo",
+    "br",
+    "button",
+    "canvas",
+    "cite",
+    "code",
+    "command",
+    "data",
+    "datalist",
+    "dfn",
+    "em",
+    "embed",
+    "i",
+    "iframe",
+    "img",
+    "input",
+    "kbd",
+    "keygen",
+    "label",
+    "mark",
+    "math",
+    "meter",
+    "noscript",
+    "object",
+    "output",
+    "progress",
+    "q",
+    "ruby",
+    "samp",
+    "script",
+    "select",
+    "small",
+    "span",
+    "strong",
+    "sub",
+    "sup",
+    "svg",
+    "textarea",
+    "time",
+    "var",
+    "video",
+    "wbr",
+    // special cases
+    "map",
+    "area"
+];
 
 module.exports = {
     blacklist,
-    
+
     trimBeginAndEnd,
     collapseWhitespace,
 
-    phrasingConstructs,
-
-}
+    phrasingConstructs
+};
