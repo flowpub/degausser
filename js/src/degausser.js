@@ -3,7 +3,7 @@ import {
     trimBeginAndEnd,
     collapseWhitespace,
     phrasingConstructs
-} from "./util";
+} from "./util.js";
 
 export default parentNode => {
     // If there's no Node, just return
