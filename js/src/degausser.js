@@ -15,7 +15,6 @@ module.exports = parentNode => {
     const runs = [];
     let text = [];
 
-    // let isInTableRow = false;
     let haveEncounteredFirstCell = false;
 
     let lastBreak = null;
@@ -67,7 +66,7 @@ module.exports = parentNode => {
             return;
         }
 
-        if(lastBreak === null ){
+        if (lastBreak === null) {
             lastBreak = breakType.NONE;
         }
 
@@ -81,6 +80,7 @@ module.exports = parentNode => {
         }
 
         // Not a phrasing construct, therefore is Block
+
         if (tag === "th" || tag === "td") {
             // Special Block
             if (opening) {
@@ -92,7 +92,7 @@ module.exports = parentNode => {
                     runs.push("\t");
                 }
             } else {
-                processText()
+                processText();
             }
             return;
         }
@@ -132,7 +132,7 @@ module.exports = parentNode => {
             processBreaks();
 
             runs.push(node.textContent);
-            lastBreak = breakType.SINGLE
+            lastBreak = breakType.SINGLE;
             return;
         }
 
@@ -144,8 +144,6 @@ module.exports = parentNode => {
             });
         }
 
-        processBlockConstruct(tag, false);
-
         // Process other tags
         switch (tag) {
             case "br":
@@ -154,13 +152,17 @@ module.exports = parentNode => {
                 runs.push("\n");
                 break;
             case "wbr":
+                processBreaks();
                 text.push("\u200B");
                 break;
         }
 
         if (node.hasAttribute("alt")) {
+            processBreaks();
             text.push(` ${node.getAttribute("alt")} `);
         }
+
+        processBlockConstruct(tag, false);
     };
 
     const processNode = node => {
@@ -169,7 +171,6 @@ module.exports = parentNode => {
         }
         if (node.nodeType === Node.ELEMENT_NODE) {
             if (blacklist.includes(node.tagName.toLowerCase())) {
-                // console.log(tag)
                 return;
             }
             processElementNode(node);
@@ -180,9 +181,6 @@ module.exports = parentNode => {
 
     // Get any stragglers
     processText();
-
-    // console.log(runs);
-    // console.log(lastBreak);
 
     return runs.join("");
 };
