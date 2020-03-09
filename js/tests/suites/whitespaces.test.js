@@ -1,5 +1,5 @@
-const degausser = require("../../src/degausser");
-const { getInputFile } = require("../util");
+import degausser from "../../src/degausser";
+import { getInputFile } from "../util";
 
 describe(`Testing Whitespaces`, () => {
     const file = getInputFile("whitespaces.json");

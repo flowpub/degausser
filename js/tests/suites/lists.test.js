@@ -1,5 +1,5 @@
-const degausser = require("../../src/degausser");
-const { getInputFile } = require("../util");
+import degausser from "../../src/degausser";
+import { getInputFile } from "../util";
 
 describe(`Testing Lists`, () => {
     const file = getInputFile("lists.json");

@@ -1,27 +1,26 @@
-const fs = require("fs");
-const glob = require("glob");
-const path = require("path");
+import { readdirSync, readFileSync, writeFileSync } from "fs";
+import glob from "glob";
+import { join, basename, dirname, extname } from "path";
 
-const degausser = require("../../src/degausser");
+import degausser from "../../src/degausser";
 
 const pathToEpubs = "../testdata/parsed_epubs";
-const epubs = fs
-    .readdirSync(pathToEpubs)
-    .map(epub => path.join(pathToEpubs, epub));
+const epubs = readdirSync(pathToEpubs)
+    .map(epub => join(pathToEpubs, epub));
 
 epubs.forEach(epubDir => {
-    test(`Testing EPUB: ${path.basename(epubDir)}`, () => {
+    test(`Testing EPUB: ${basename(epubDir)}`, () => {
         glob(`${epubDir}/**/*.{html,xhtml,htm}`, (er, files) => {
             for (const epubFile of files) {
-                const sourceHTML = fs.readFileSync(epubFile, "utf8");
-                const txtFile = path.join(
-                    path.dirname(epubFile),
-                    path.basename(epubFile, path.extname(epubFile)) + ".txt"
+                const sourceHTML = readFileSync(epubFile, "utf8");
+                const txtFile = join(
+                    dirname(epubFile),
+                    basename(epubFile, extname(epubFile)) + ".txt"
                 );
-                const sourceTXT = fs.readFileSync(txtFile, "utf8");
+                const sourceTXT = readFileSync(txtFile, "utf8");
 
                 const parser = new DOMParser();
-                const encoding = path.extname(epubFile) === 'xhtml' ? "application/xhtml+xml" : 'text/html'
+                const encoding = extname(epubFile) === 'xhtml' ? "application/xhtml+xml" : 'text/html'
                 let doc;
                 try {
                     doc = parser.parseFromString(
@@ -38,7 +37,7 @@ epubs.forEach(epubDir => {
 
                     const output = degausser(doc.documentElement);
                     expect(output).toBeTruthy();
-                    fs.writeFileSync(txtFile + ".out", output, "utf8");
+                    writeFileSync(txtFile + ".out", output, "utf8");
                     expect(output).toBe(sourceTXT);
                 }
             }
@@ -51,13 +50,13 @@ test.skip(`Testing Specific Page`, () => {
     const txtFilePath = "../testdata/parsed_epubs/accessible_epub_3_test/EPUB";
     const sourceFilePath = "../testdata/epubs/accessible_epub_3/EPUB";
 
-    const sourceTXT = fs.readFileSync(
-        path.join(txtFilePath, filename + ".txt"),
+    const sourceTXT = readFileSync(
+        join(txtFilePath, filename + ".txt"),
         "utf8"
     );
 
-    const sourceHTML = fs.readFileSync(
-        path.join(sourceFilePath, filename + ".xhtml"),
+    const sourceHTML = readFileSync(
+        join(sourceFilePath, filename + ".xhtml"),
         "utf8"
     );
 
