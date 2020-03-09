@@ -1,27 +1,32 @@
 {
-  "name": "degausser",
-  "version": "1.0.0",
-  "description": "Transforms HTML to plain text by eliminating tags from a document.",
-  "author": "FlowPub",
-  "license": "BSD-3-Clause",
-  "homepage": "https://opensource.flowpub.io",
-  "repository": {
-    "type": "git",
-    "url": "ssh://git@github.com/flowpub/degausser.git",
-    "directory": "js"
-  },
-  "bugs": {
-    "url": "https://github.com/flowpub/degausser/issues"
-  },
-  "main": "src/degausser",
-  "scripts": {
-    "test": "jest"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.8.7",
-    "@babel/preset-env": "^7.8.7",
-    "glob": "^7.1.6",
-    "jest": "^25.1.0",
-    "prettier": "^1.19.1"
-  }
+    "name": "degausser",
+    "version": "1.0.3",
+    "description": "Transforms HTML to plain text by eliminating tags from a document.",
+    "author": "FlowPub",
+    "license": "BSD-3-Clause",
+    "homepage": "https://opensource.flowpub.io",
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "ssh://git@github.com/flowpub/degausser.git",
+        "directory": "js"
+    },
+    "bugs": {
+        "url": "https://github.com/flowpub/degausser/issues"
+    },
+    "main": "src/degausser.js",
+    "files": [
+        "src/degausser.js",
+        "src/util.js"
+    ],
+    "scripts": {
+        "test": "jest"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.8.7",
+        "@babel/preset-env": "^7.8.7",
+        "glob": "^7.1.6",
+        "jest": "^25.1.0",
+        "prettier": "^1.19.1"
+    }
 }
