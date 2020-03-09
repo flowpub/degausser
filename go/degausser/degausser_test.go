@@ -6,7 +6,12 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"path/filepath"
+	"strings"
 	"testing"
+
+	"github.com/mattn/go-zglob"
+	"github.com/stretchr/testify/assert"
 )
 
 var verboseLogging bool
@@ -47,6 +52,77 @@ func getTestCase(testFile string) TestCases {
 		log.Fatal(jsonError)
 	}
 	return testCases
+}
+
+func loadEpub(path string, globs []string) []string {
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fileCollections := make([]string, 0)
+
+	for _, globPattern := range globs {
+		finalGlob := filepath.Join(cwd, path, globPattern)
+		fileCollections = append(fileCollections, finalGlob)
+	}
+
+	filePaths := make([]string, 0)
+
+	for _, glob := range fileCollections {
+		matches, err := zglob.Glob(glob)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if len(matches) > 0 {
+			for _, match := range matches {
+				filePaths = append(filePaths, match)
+			}
+		}
+	}
+
+	return filePaths
+}
+
+func TestEpub(t *testing.T) {
+	// Get Glob Patterns for required file types
+	var globs []string
+	globs = append(globs, "/**/*.html", "/**/*.xhtml", "/**/*.htm")
+
+	files, err := filepath.Glob("./parsed_epubs/*")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, file := range files {
+		epubFiles := loadEpub(file, globs)
+
+		for _, epubFile := range epubFiles {
+			// Get Source
+			markup, err := ioutil.ReadFile(epubFile)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			sourceOutput, err := HTMLToPlainText(string(markup))
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			dirName, baseName := filepath.Split(epubFile)
+			fileName := strings.Split(baseName, ".")
+
+			// Get Reference
+			rawText, err := ioutil.ReadFile(dirName + fileName[0] + ".txt")
+			reference := string(rawText)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			assert.Equal(t, sourceOutput, reference)
+		}
+	}
 }
 
 func TestStrippingWhitespace(t *testing.T) {
