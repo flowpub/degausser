@@ -10,7 +10,7 @@ const epubs = fs
     .map(epub => path.join(pathToEpubs, epub));
 
 epubs.forEach(epubDir => {
-    test.skip(`Testing EPUB: ${path.basename(epubDir)}`, () => {
+    test(`Testing EPUB: ${path.basename(epubDir)}`, () => {
         glob(`${epubDir}/**/*.{html,xhtml,htm}`, (er, files) => {
             for (const epubFile of files) {
                 const sourceHTML = fs.readFileSync(epubFile, "utf8");
@@ -44,7 +44,7 @@ epubs.forEach(epubDir => {
     });
 });
 
-test(`Testing Specific Page`, () => {
+test.skip(`Testing Specific Page`, () => {
     const filename = "copyright";
     const txtFilePath = "../testdata/parsed_epubs/metamorphosis_test/OEBPS";
     const sourceFilePath = "../testdata/epubs/metamorphosis/OEBPS";
