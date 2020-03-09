@@ -13,11 +13,13 @@
   "bugs": {
     "url": "https://github.com/flowpub/degausser/issues"
   },
-  "main": "index.js",
+  "main": "src/degausser",
   "scripts": {
     "test": "jest"
   },
   "devDependencies": {
+    "@babel/core": "^7.8.7",
+    "@babel/preset-env": "^7.8.7",
     "glob": "^7.1.6",
     "jest": "^25.1.0",
     "prettier": "^1.19.1"

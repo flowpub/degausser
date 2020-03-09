@@ -131,7 +131,7 @@ const phrasingConstructs = [
     "area"
 ];
 
-module.exports = {
+export {
     blacklist,
 
     trimBeginAndEnd,

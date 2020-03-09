@@ -1,11 +1,11 @@
-const {
+import {
     blacklist,
     trimBeginAndEnd,
     collapseWhitespace,
     phrasingConstructs
-} = require("./util");
+} from "./util";
 
-module.exports = parentNode => {
+export default parentNode => {
     // If there's no Node, just return
     if (!parentNode) {
         return null;
@@ -18,7 +18,7 @@ module.exports = parentNode => {
     let haveEncounteredFirstCell = false;
 
     let lastBreak = null;
-    breakType = {
+    const breakType = {
         NONE: "none",
         SINGLE: "single",
         DOUBLE: "double"
