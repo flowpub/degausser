@@ -4,7 +4,7 @@
   "description": "Transforms HTML to plain text by eliminating tags from a document.",
   "author": "FlowPub",
   "license": "BSD-3-Clause",
-  "homepage": "https://flowpub.io",
+  "homepage": "https://opensource.flowpub.io",
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com/flowpub/degausser.git",
