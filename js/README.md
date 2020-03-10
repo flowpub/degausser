@@ -12,9 +12,9 @@ With the limitation of not taking into account layout or styling.
 ## Usage
 Example:
 ```js
-import degausser from 'degausser'
+const template = document.createElement("template")
 
-const html = `
+template.innerHTML = `
 <h3>For example:</h3>
 <p id="source">
   <style>#source { color: red; }</style>
@@ -28,7 +28,10 @@ const html = `
   <span style="display:none">HIDDEN TEXT</span>
 </p>
 `
-const plain = degausser(html)
+
+const documentFragment = template.content
+
+const plain = degausser(documentFragment)
 
 console.log(plain)
 ```
