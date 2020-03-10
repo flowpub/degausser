@@ -45,7 +45,7 @@ func HTMLToPlainText(htmlMarkup string) (string, error) {
 
 	appendNewLine := func(doubleBreak bool) {
 		if doubleBreak {
-			breaks = append(breaks, "\n\n")
+			breaks = append(breaks, "\n", "\n")
 		} else {
 			breaks = append(breaks, "\n")
 		}
@@ -53,15 +53,25 @@ func HTMLToPlainText(htmlMarkup string) (string, error) {
 
 	processBreaks := func() {
 		if len(breaks) != 0 {
-			joined := strings.Join(breaks, "")
-			split := strings.Split(joined, "")
-			runs = append(runs, split...)
+			runs = append(runs, breaks...)
 			breaks = make([]string, 0)
 		}
 	}
 
+	isMiddleOfContent := func() bool {
+		return LastIn(runs) != "\n" && LastIn(runs) != "\x00"
+	}
+
 	shouldBreak := func() bool {
-		return LastIn(runs) != "\n" && LastIn(runs) != "\x00" && len(breaks) == 0
+		return isMiddleOfContent() && len(breaks) == 0
+	}
+
+	handleParagraphBreaks := func() {
+		if len(breaks) == 0 {
+			appendNewLine(true)
+		} else if len(breaks) == 1 {
+			appendNewLine(false)
+		}
 	}
 
 	visitElement := func(node *html.Node, enter bool) {
@@ -91,12 +101,10 @@ func HTMLToPlainText(htmlMarkup string) (string, error) {
 					} else {
 						hasEncounteredFirstCell = true
 					}
+				} else if nodeName == "p" && isMiddleOfContent() {
+					handleParagraphBreaks()
 				} else if shouldBreak() {
-					if nodeName == "p" {
-						appendNewLine(true)
-					} else {
-						appendNewLine(false)
-					}
+					appendNewLine(false)
 				}
 			} else {
 				processBreaks()

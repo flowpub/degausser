@@ -54,5 +54,9 @@
   {
     "i": "<div id=\"h\">Test line 1<p>Testing</p><div><div></div> \n</div>\n</div><div></div>\n\t \nH\n\t \n<p></p>\n\t \nI\n\t \n<div id=\"i\">Test line 1<p>Testing</p><div><div></div> \n</div>\n</div>",
     "o": "Test line 1\n\nTesting\n\nH\n\nI\nTest line 1\n\nTesting"
+  },
+  {
+    "i": "<h2>Some heading here</h2><div>Some paragraph here</div>",
+    "o": "Some heading here\nSome paragraph here"
   }
 ]
