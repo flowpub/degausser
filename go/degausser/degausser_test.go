@@ -129,7 +129,7 @@ func TestEpub(t *testing.T) {
 				continue
 			}
 
-			assert.Equal(t, expected, actual)
+			assert.Equal(t, expected, actual, epubFile)
 		}
 	}
 }
