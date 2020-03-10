@@ -166,14 +166,24 @@ export default parentNode => {
     };
 
     const processNode = node => {
-        if (node.nodeType === Node.TEXT_NODE) {
-            processTextNode(node);
-        }
-        if (node.nodeType === Node.ELEMENT_NODE) {
-            if (blacklist.includes(node.tagName.toLowerCase())) {
-                return;
-            }
-            processElementNode(node);
+        switch(node.nodeType){
+            case Node.TEXT_NODE:
+                processTextNode(node);
+                break;
+            case Node.ELEMENT_NODE:
+                if (blacklist.includes(node.tagName.toLowerCase())) {
+                    return;
+                }
+                processElementNode(node);
+                break;
+            case Node.DOCUMENT_NODE:
+            case Node.DOCUMENT_FRAGMENT_NODE:
+                if (node.hasChildNodes()) {
+                    node.childNodes.forEach(child => {
+                        processNode(child);
+                    });
+                }
+                break;
         }
     };
 
