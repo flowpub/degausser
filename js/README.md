@@ -12,6 +12,8 @@ With the limitation of not taking into account layout or styling.
 ## Usage
 Example:
 ```js
+import degausser from 'degausser'
+
 const template = document.createElement("template")
 
 template.innerHTML = `
