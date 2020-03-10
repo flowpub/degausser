@@ -14,7 +14,7 @@ Example:
 ```js
 import degausser from 'degausser'
 
-const template = document.createElement("template")
+const template = document.createElement('template')
 
 template.innerHTML = `
 <h3>For example:</h3>
