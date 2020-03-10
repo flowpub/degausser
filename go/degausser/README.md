@@ -1,6 +1,6 @@
 # degausser
 
-[![JS](https://github.com/flowpub/degausser/workflows/JS/badge.svg)](https://github.com/flowpub/degausser/actions?query=workflow%3AJS)
+[![Go](https://github.com/flowpub/degausser/workflows/Go/badge.svg)](https://github.com/flowpub/degausser/actions?query=workflow%3AGo)
 
 HTML to plain text conversion.
 
@@ -13,12 +13,13 @@ With the limitation of not taking into account layout or styling.
 
 Example:
 
-```js
-import degausser from 'degausser'
+```go
+package main
 
-const template = document.createElement('template')
+import "github.com/flowpub/degausser/go/degausser"
 
-template.innerHTML = `
+func main() {
+	html := `
 <h3>For example:</h3>
 <p id="source">
   <style>#source { color: red; }</style>
@@ -31,13 +32,14 @@ template.innerHTML = `
   below.
   <span style="display:none">HIDDEN TEXT</span>
 </p>
-`
+	`
+	plain, err := degausser.HTMLToPlainText(html)
+	if err != nil {
+		panic(err)
+	}
 
-const documentFragment = template.content
-
-const plain = degausser(documentFragment)
-
-console.log(plain)
+	print(plain)
+}
 ```
 
 Output:
