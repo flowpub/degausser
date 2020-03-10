@@ -16,6 +16,8 @@
     },
     "main": "src/degausser.js",
     "files": [
+        "README.md",
+        "LICENSE",
         "src/degausser.js",
         "src/util.js"
     ],
