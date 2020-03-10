@@ -1,6 +1,6 @@
 import degausser from "../../src/degausser";
 
-describe("Testing input node types", () => {
+describe("Given different node types as input", () => {
     test("Document Node", () => {
         document.documentElement.innerHTML = "<div>Hi!</div>";
 
@@ -35,10 +35,8 @@ describe("Testing input node types", () => {
     });
 
     test("Comment Node", () => {
-
         const comment = document.createComment("This is a comment");
 
         expect(degausser(comment)).toBe("");
-
     });
 });
