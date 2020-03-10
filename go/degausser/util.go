@@ -37,6 +37,7 @@ Start:
 //
 // The node names, `map` and `area`, are treated as special set members.
 var PhrasingContent = []string{
+	"a",
 	"abbr",
 	"audio",
 	"b",
