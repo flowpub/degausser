@@ -38,8 +38,11 @@ const plain = degausser(documentFragment)
 console.log(plain)
 ```
 Output:
->For example:
->
->Take a look at
->how this text
->is interpreted below. HIDDEN TEXT
+
+```
+For example:
+
+Take a look at
+how this text
+is interpreted below. HIDDEN TEXT
+```
