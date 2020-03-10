@@ -2,7 +2,6 @@ package degausser
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
@@ -14,16 +13,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var verboseLogging bool
-
 var testCaseFiles []string
 
 func init() {
 	os.Chdir("./testdata")
-
-	if v := os.Getenv("degausser_VERBOSE"); v == "1" || v == "true" {
-		verboseLogging = true
-	}
 
 	files, err := ioutil.ReadDir(".")
 	if err != nil {
@@ -41,23 +34,26 @@ type TestCases []struct {
 	Output string `json:"o"`
 }
 
-func getTestCase(testFile string) TestCases {
+func getTestCase(testFile string) (TestCases, error) {
 	jsonBytes, err := ioutil.ReadFile(testFile)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
+
 	var testCases TestCases
-	jsonError := json.Unmarshal(jsonBytes, &testCases)
-	if jsonError != nil {
-		log.Fatal(jsonError)
+
+	err = json.Unmarshal(jsonBytes, &testCases)
+	if err != nil {
+		return nil, err
 	}
-	return testCases
+	
+	return testCases, nil
 }
 
-func loadEpub(path string, globs []string) []string {
+func loadEpub(path string, globs []string) ([]string, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	fileCollections := make([]string, 0)
@@ -72,7 +68,7 @@ func loadEpub(path string, globs []string) []string {
 	for _, glob := range fileCollections {
 		matches, err := zglob.Glob(glob)
 		if err != nil {
-			log.Fatal(err)
+			return nil, err
 		}
 
 		if len(matches) > 0 {
@@ -82,32 +78,44 @@ func loadEpub(path string, globs []string) []string {
 		}
 	}
 
-	return filePaths
+	return filePaths, nil
 }
 
 func TestEpub(t *testing.T) {
+
+	if testing.Short() {
+		t.Skip("skipping epub tests in short mode.")
+	}
+
 	// Get Glob Patterns for required file types
 	var globs []string
 	globs = append(globs, "/**/*.html", "/**/*.xhtml", "/**/*.htm")
 
 	files, err := filepath.Glob("./parsed_epubs/*")
 	if err != nil {
-		log.Fatal(err)
+		t.Error(err)
+		return
 	}
 
 	for _, file := range files {
-		epubFiles := loadEpub(file, globs)
+		epubFiles, err := loadEpub(file, globs)
+		if err != nil {
+			t.Error(err)
+			continue
+		}
 
 		for _, epubFile := range epubFiles {
 			// Get Source
 			markup, err := ioutil.ReadFile(epubFile)
 			if err != nil {
-				log.Fatal(err)
+				t.Error(err)
+				continue
 			}
 
-			sourceOutput, err := HTMLToPlainText(string(markup))
+			actual, err := HTMLToPlainText(string(markup))
 			if err != nil {
-				log.Fatal(err)
+				t.Error(err)
+				continue
 			}
 
 			dirName, baseName := filepath.Split(epubFile)
@@ -115,194 +123,193 @@ func TestEpub(t *testing.T) {
 
 			// Get Reference
 			rawText, err := ioutil.ReadFile(dirName + fileName[0] + ".txt")
-			reference := string(rawText)
+			expected := string(rawText)
 			if err != nil {
-				log.Fatal(err)
+				t.Error(err)
+				continue
 			}
 
-			assert.Equal(t, sourceOutput, reference)
+			assert.Equal(t, expected, actual)
 		}
 	}
 }
 
 func TestStrippingWhitespace(t *testing.T) {
-	testCases := getTestCase("./whitespaces.json")
+	testCases, err := getTestCase("./whitespaces.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
 
 	for _, testCase := range testCases {
-		if msg, err := wantString(testCase.Input, testCase.Output); err != nil {
+		actual, err := HTMLToPlainText(testCase.Input)
+		if err != nil {
 			t.Error(err)
-		} else if len(msg) > 0 {
-			t.Log(msg)
+			continue
 		}
+		
+		assert.Equal(t,testCase.Output, actual, testCase.Input)
 	}
 }
 
 func TestParagraphsAndBreaks(t *testing.T) {
-	testCases := getTestCase("./paragraphs.json")
-
+	testCases, err := getTestCase("./paragraphs.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	
 	for _, testCase := range testCases {
-		if msg, err := wantString(testCase.Input, testCase.Output); err != nil {
+		actual, err := HTMLToPlainText(testCase.Input)
+		if err != nil {
 			t.Error(err)
-		} else if len(msg) > 0 {
-			t.Log(msg)
+			continue
 		}
+		
+		assert.Equal(t,testCase.Output, actual, testCase.Input)
 	}
 }
 
 func TestContainers(t *testing.T) {
-	testCases := getTestCase("./containers.json")
-
+	testCases, err := getTestCase("./containers.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	
 	for _, testCase := range testCases {
-		if msg, err := wantString(testCase.Input, testCase.Output); err != nil {
+		actual, err := HTMLToPlainText(testCase.Input)
+		if err != nil {
 			t.Error(err)
-		} else if len(msg) > 0 {
-			t.Log(msg)
+			continue
 		}
+		
+		assert.Equal(t,testCase.Output, actual, testCase.Input)
 	}
 }
 
 func TestSpans(t *testing.T) {
-	testCases := getTestCase("./spans.json")
-
+	testCases, err := getTestCase("./spans.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	
 	for _, testCase := range testCases {
-		if msg, err := wantString(testCase.Input, testCase.Output); err != nil {
+		actual, err := HTMLToPlainText(testCase.Input)
+		if err != nil {
 			t.Error(err)
-		} else if len(msg) > 0 {
-			t.Log(msg)
+			continue
 		}
+		
+		assert.Equal(t,testCase.Output, actual, testCase.Input)
 	}
 }
 
 func TestLists(t *testing.T) {
-	testCases := getTestCase("./lists.json")
-
+	testCases, err := getTestCase("./lists.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	
 	for _, testCase := range testCases {
-		if msg, err := wantString(testCase.Input, testCase.Output); err != nil {
+		actual, err := HTMLToPlainText(testCase.Input)
+		if err != nil {
 			t.Error(err)
-		} else if len(msg) > 0 {
-			t.Log(msg)
+			continue
 		}
+		
+		assert.Equal(t,testCase.Output, actual, testCase.Input)
 	}
 }
 
 func TestTables(t *testing.T) {
-	testCases := getTestCase("./tables.json")
-
+	testCases, err := getTestCase("./tables.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	
 	for _, testCase := range testCases {
-		if msg, err := wantString(testCase.Input, testCase.Output); err != nil {
+		actual, err := HTMLToPlainText(testCase.Input)
+		if err != nil {
 			t.Error(err)
-		} else if len(msg) > 0 {
-			t.Log(msg)
+			continue
 		}
+		
+		assert.Equal(t,testCase.Output, actual, testCase.Input)
 	}
 }
 
 func TestLinks(t *testing.T) {
-	testCases := getTestCase("./links.json")
-
+	testCases, err := getTestCase("./links.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	
 	for _, testCase := range testCases {
-		if msg, err := wantString(testCase.Input, testCase.Output); err != nil {
+		actual, err := HTMLToPlainText(testCase.Input)
+		if err != nil {
 			t.Error(err)
-		} else if len(msg) > 0 {
-			t.Log(msg)
+			continue
 		}
+		
+		assert.Equal(t,testCase.Output, actual, testCase.Input)
 	}
 }
 
 func TestImageAltTags(t *testing.T) {
-	testCases := getTestCase("./images.json")
-
+	testCases, err := getTestCase("./images.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	
 	for _, testCase := range testCases {
-		if msg, err := wantString(testCase.Input, testCase.Output); err != nil {
+		actual, err := HTMLToPlainText(testCase.Input)
+		if err != nil {
 			t.Error(err)
-		} else if len(msg) > 0 {
-			t.Log(msg)
+			continue
 		}
+		
+		assert.Equal(t,testCase.Output, actual, testCase.Input)
 	}
 }
 
 func TestIgnoreStylesScriptsHead(t *testing.T) {
-	testCases := getTestCase("./scripts.json")
-
+	testCases, err := getTestCase("./scripts.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+	
 	for _, testCase := range testCases {
-		if msg, err := wantString(testCase.Input, testCase.Output); err != nil {
+		actual, err := HTMLToPlainText(testCase.Input)
+		if err != nil {
 			t.Error(err)
-		} else if len(msg) > 0 {
-			t.Log(msg)
+			continue
 		}
+		
+		assert.Equal(t,testCase.Output, actual, testCase.Input)
 	}
 }
 
 func TestCrazyOrComplex(t *testing.T) {
-	testCases := getTestCase("./crazy.json")
-
-	for _, testCase := range testCases {
-		if msg, err := wantString(testCase.Input, testCase.Output); err != nil {
-			t.Error(err)
-		} else if len(msg) > 0 {
-			t.Log(msg)
-		}
-	}
-}
-
-type StringMatcher interface {
-	MatchString(string) bool
-	String() string
-}
-
-type ExactStringMatcher string
-
-func (m ExactStringMatcher) MatchString(str string) bool {
-	return string(m) == str
-}
-func (m ExactStringMatcher) String() string {
-	return string(m)
-}
-
-func wantString(input string, output string) (string, error) {
-	return match(input, ExactStringMatcher(output))
-}
-
-func match(input string, matcher StringMatcher) (string, error) {
-	text, err := HTMLToPlainText(input)
+	testCases, err := getTestCase("./crazy.json")
 	if err != nil {
-		return "", err
+		t.Error(err)
+		return
 	}
-	if !matcher.MatchString(text) {
-		return "", fmt.Errorf(`error: input did not match specified expression
-Input
->>>
-%v
-<<<
-
-Output
->>>
-%v
-<<<
-
-Expected
->>>
-%v
-<<<`,
-			input,
-			text,
-			matcher.String(),
-		)
+	
+	for _, testCase := range testCases {
+		actual, err := HTMLToPlainText(testCase.Input)
+		if err != nil {
+			t.Error(err)
+			continue
+		}
+		
+		assert.Equal(t,testCase.Output, actual, testCase.Input)
 	}
-
-	var msg string
-
-	if verboseLogging {
-		msg = fmt.Sprintf(
-			`
-input:
-%v
-output:
-%v
-`,
-			input,
-			text,
-		)
-	}
-	return msg, nil
 }
