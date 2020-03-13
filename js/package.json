@@ -1,6 +1,6 @@
 {
     "name": "degausser",
-    "version": "1.1.0",
+    "version": "2.0.0",
     "description": "Transforms HTML to plain text by eliminating tags from a document.",
     "author": "FlowPub",
     "license": "MIT",
