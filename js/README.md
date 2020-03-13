@@ -14,7 +14,7 @@ With the limitation of not taking into account layout or styling.
 Example:
 
 ```js
-import degausser from 'degausser'
+import { degausser } from 'degausser'
 
 const template = document.createElement('template')
 
@@ -49,3 +49,7 @@ Take a look at
 how this text
 is interpreted below. HIDDEN TEXT
 ```
+
+### Using with Node.js
+
+It's recommended to use [jsdom](https://github.com/jsdom/jsdom) for a DOM implementation.

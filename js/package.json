@@ -3,7 +3,7 @@
     "version": "1.1.0",
     "description": "Transforms HTML to plain text by eliminating tags from a document.",
     "author": "FlowPub",
-    "license": "BSD-3-Clause",
+    "license": "MIT",
     "homepage": "https://opensource.flowpub.io",
     "type": "module",
     "repository": {
@@ -14,21 +14,28 @@
     "bugs": {
         "url": "https://github.com/flowpub/degausser/issues"
     },
-    "main": "src/degausser.js",
+    "module": "src/degausser.js",
+    "main": "dist/degausser.js",
     "files": [
         "README.md",
         "LICENSE",
-        "src/degausser.js",
-        "src/util.js"
+        "dist/",
+        "src/"
     ],
     "scripts": {
-        "test": "jest"
+        "build": "rollup -c",
+        "test": "jest",
+        "format": "prettier {src,test}/**/*.js --write",
+        "prepublishOnly": "npm test && npm run build"
     },
     "devDependencies": {
         "@babel/core": "^7.8.7",
         "@babel/preset-env": "^7.8.7",
+        "@rollup/plugin-node-resolve": "^7.1.1",
         "glob": "^7.1.6",
         "jest": "^25.1.0",
-        "prettier": "^1.19.1"
+        "prettier": "^1.19.1",
+        "rollup": "^2.0.5",
+        "rollup-plugin-babel": "^4.4.0"
     }
 }
