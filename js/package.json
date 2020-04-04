@@ -35,7 +35,7 @@
         "glob": "7.1.6",
         "jest": "25.2.7",
         "prettier": "2.0.2",
-        "rollup": "2.3.2",
+        "rollup": "2.3.3",
         "rollup-plugin-babel": "4.4.0"
     }
 }
