@@ -1,5 +1,3 @@
-
-
 import {
   autoBind,
   breakType,
