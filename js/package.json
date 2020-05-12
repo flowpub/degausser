@@ -37,5 +37,8 @@
         "prettier": "2.0.5",
         "rollup": "2.7.1",
         "rollup-plugin-babel": "4.4.0"
+    },
+    "dependencies": {
+        "auto-bind": "^4.0.0"
     }
 }
