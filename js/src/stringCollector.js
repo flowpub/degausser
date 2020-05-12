@@ -1,6 +1,5 @@
-import autoBind from 'auto-bind'
-
 import {
+  autoBind,
   breakType,
   trimBeginAndEnd,
   collapseWhitespace,
@@ -15,7 +14,7 @@ export class StringCollector {
     this.hasEncounteredFirstCell = false
     this.lastBreak = null
 
-    autoBind(this)
+    autoBind.call(this)
   }
 
   addBreak(double) {

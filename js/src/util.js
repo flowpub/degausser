@@ -1,16 +1,23 @@
+function autoBind() {
+  for (let prop of Object.getOwnPropertyNames(Object.getPrototypeOf(this))) {
+    if (prop === 'constructor' || typeof this[prop] !== 'function') continue
+    this[prop] = this[prop].bind(this)
+  }
+}
+
 // Char codes for \t, \n, and non-&nbsp; space character
 const whitespaces = [9, 10, 13, 32]
-const isCharWhitespace = charCode => {
+const isCharWhitespace = (charCode) => {
   return whitespaces.includes(charCode)
 }
 
 const breakType = {
   NONE: 'none',
   SINGLE: 'single',
-  DOUBLE: 'double'
+  DOUBLE: 'double',
 }
 
-const trimBeginAndEnd = string => {
+const trimBeginAndEnd = (string) => {
   // Get the first and last non-whitespace character index
   let firstNonWhite = null,
     lastNonWhite = null
@@ -41,7 +48,7 @@ const trimBeginAndEnd = string => {
     lastNonWhite ? lastNonWhite + 1 : undefined,
   )
 }
-const collapseWhitespace = string => {
+const collapseWhitespace = (string) => {
   // Collapse all other sequential whitespace into a single whitespace
   const textElements = []
   let startOfNonWhite = null
@@ -137,4 +144,11 @@ const phrasingConstructs = [
   'area',
 ]
 
-export { blacklist, breakType, trimBeginAndEnd, collapseWhitespace, phrasingConstructs }
+export {
+  autoBind,
+  blacklist,
+  breakType,
+  trimBeginAndEnd,
+  collapseWhitespace,
+  phrasingConstructs,
+}
