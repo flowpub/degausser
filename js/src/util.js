@@ -11,7 +11,7 @@ const isCharWhitespace = (charCode) => {
   return whitespaces.includes(charCode)
 }
 
-const breakType = {
+const BreakType = {
   NONE: 'none',
   SINGLE: 'single',
   DOUBLE: 'double',
@@ -147,7 +147,7 @@ const phrasingConstructs = [
 export {
   autoBind,
   blacklist,
-  breakType,
+  BreakType,
   trimBeginAndEnd,
   collapseWhitespace,
   phrasingConstructs,

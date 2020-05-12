@@ -1,6 +1,6 @@
 import {
   autoBind,
-  breakType,
+  BreakType,
   trimBeginAndEnd,
   collapseWhitespace,
   phrasingConstructs,
@@ -24,9 +24,9 @@ export class StringCollector {
     }
 
     if (double) {
-      this.lastBreak = breakType.DOUBLE
-    } else if (this.lastBreak !== breakType.DOUBLE) {
-      this.lastBreak = breakType.SINGLE
+      this.lastBreak = BreakType.DOUBLE
+    } else if (this.lastBreak !== BreakType.DOUBLE) {
+      this.lastBreak = BreakType.SINGLE
     }
   }
 
@@ -36,15 +36,15 @@ export class StringCollector {
     }
 
     switch (this.lastBreak) {
-      case breakType.SINGLE:
+      case BreakType.SINGLE:
         this.runs.push('\n')
         break
-      case breakType.DOUBLE:
+      case BreakType.DOUBLE:
         this.runs.push('\n\n')
         break
     }
 
-    this.lastBreak = breakType.NONE
+    this.lastBreak = BreakType.NONE
   }
 
   processText() {
@@ -62,7 +62,7 @@ export class StringCollector {
     }
 
     if (this.lastBreak === null) {
-      this.lastBreak = breakType.NONE
+      this.lastBreak = BreakType.NONE
     }
 
     this.runs.push(trimBeginAndEnd(collapseWhitespace(trimmed)))
@@ -79,7 +79,7 @@ export class StringCollector {
       this.processBreaks()
 
       this.runs.push(node.textContent)
-      this.lastBreak = breakType.SINGLE
+      this.lastBreak = BreakType.SINGLE
 
       return true
     }

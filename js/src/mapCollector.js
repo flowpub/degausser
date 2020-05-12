@@ -1,14 +1,14 @@
 import {
   autoBind,
-  breakType,
+  BreakType,
   trimBeginAndEnd,
   collapseWhitespace,
   phrasingConstructs,
 } from './util'
 
 const MapType = {
-  text: 'Text',
-  break: 'Break',
+  TEXT: 'Text',
+  BREAK: 'Break',
 }
 
 export class MapCollector {
@@ -29,9 +29,9 @@ export class MapCollector {
     }
 
     if (double) {
-      this.lastBreak = breakType.DOUBLE
-    } else if (this.lastBreak !== breakType.DOUBLE) {
-      this.lastBreak = breakType.SINGLE
+      this.lastBreak = BreakType.DOUBLE
+    } else if (this.lastBreak !== BreakType.DOUBLE) {
+      this.lastBreak = BreakType.SINGLE
     }
   }
 
@@ -41,21 +41,21 @@ export class MapCollector {
     }
 
     switch (this.lastBreak) {
-      case breakType.SINGLE:
+      case BreakType.SINGLE:
         this.map.push({
-          type: MapType.break,
+          type: MapType.BREAK,
           double: false,
         })
         break
-      case breakType.DOUBLE:
+      case BreakType.DOUBLE:
         this.map.push({
-          type: MapType.break,
+          type: MapType.BREAK,
           double: true,
         })
         break
     }
 
-    this.lastBreak = breakType.NONE
+    this.lastBreak = BreakType.NONE
   }
 
   processText() {
@@ -93,7 +93,7 @@ export class MapCollector {
       }
 
       this.map.push({
-        type: MapType.text,
+        type: MapType.TEXT,
         node: textMap.node,
         content: shrunkText,
         length: shrunkText.length,
@@ -104,7 +104,7 @@ export class MapCollector {
     }
 
     if (this.lastBreak === null) {
-      this.lastBreak = breakType.NONE
+      this.lastBreak = BreakType.NONE
     }
 
     this.text = []
@@ -119,10 +119,10 @@ export class MapCollector {
       this.addBreak(false)
       this.processBreaks()
 
-      this.lastBreak = breakType.SINGLE
+      this.lastBreak = BreakType.SINGLE
 
       this.map.push({
-        type: MapType.text,
+        type: MapType.TEXT,
         node,
         content: node.textContent,
         length: node.textContent.length,
@@ -138,7 +138,7 @@ export class MapCollector {
         this.processBreaks()
 
         this.map.push({
-          type: MapType.text,
+          type: MapType.TEXT,
           node,
           content: '\n',
           length: 1,
@@ -182,7 +182,7 @@ export class MapCollector {
         } else {
           this.processBreaks()
           this.map.push({
-            type: MapType.text,
+            type: MapType.TEXT,
             node,
             content: '\t',
             length: 1,
@@ -226,7 +226,7 @@ export class MapCollector {
 
     for (const entity of this.map) {
       switch (entity.type) {
-        case MapType.text:
+        case MapType.TEXT:
           result.push({
             node: entity.node,
             content: entity.content,
@@ -237,7 +237,7 @@ export class MapCollector {
           runningIndex += entity.length
 
           break
-        case MapType.break:
+        case MapType.BREAK:
           const lastResult = result[result.length - 1]
 
           if (entity.double) {
