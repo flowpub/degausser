@@ -4,6 +4,12 @@ const isCharWhitespace = charCode => {
   return whitespaces.includes(charCode)
 }
 
+const breakType = {
+  NONE: 'none',
+  SINGLE: 'single',
+  DOUBLE: 'double'
+}
+
 const trimBeginAndEnd = string => {
   // Get the first and last non-whitespace character index
   let firstNonWhite = null,
@@ -131,4 +137,4 @@ const phrasingConstructs = [
   'area',
 ]
 
-export { blacklist, trimBeginAndEnd, collapseWhitespace, phrasingConstructs }
+export { blacklist, breakType, trimBeginAndEnd, collapseWhitespace, phrasingConstructs }
