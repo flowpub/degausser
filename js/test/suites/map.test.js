@@ -16,7 +16,7 @@ describe(`Testing Map on Containers`, () => {
           mapSection.start,
           mapSection.start + mapSection.length,
         )
-        sliced === mapSection.content
+        expect(sliced).toMatch(mapSection.content)
       }
     })
   })
@@ -37,7 +37,7 @@ describe(`Testing Map on Crazy`, () => {
           mapSection.start,
           mapSection.start + mapSection.length,
         )
-        sliced === mapSection.content
+        expect(sliced).toMatch(mapSection.content)
       }
     })
   })
@@ -58,7 +58,7 @@ describe(`Testing Map on images`, () => {
           mapSection.start,
           mapSection.start + mapSection.length,
         )
-        sliced === mapSection.content
+        expect(sliced).toMatch(mapSection.content)
       }
     })
   })
@@ -79,7 +79,7 @@ describe(`Testing Map on links`, () => {
           mapSection.start,
           mapSection.start + mapSection.length,
         )
-        sliced === mapSection.content
+        expect(sliced).toMatch(mapSection.content)
       }
     })
   })
@@ -100,7 +100,7 @@ describe(`Testing Map on Lists`, () => {
           mapSection.start,
           mapSection.start + mapSection.length,
         )
-        sliced === mapSection.content
+        expect(sliced).toMatch(mapSection.content)
       }
     })
   })
@@ -121,7 +121,7 @@ describe(`Testing Map on Paragraphs`, () => {
           mapSection.start,
           mapSection.start + mapSection.length,
         )
-        sliced === mapSection.content
+        expect(sliced).toMatch(mapSection.content)
       }
     })
   })
@@ -142,7 +142,7 @@ describe(`Testing Map on Scripts`, () => {
           mapSection.start,
           mapSection.start + mapSection.length,
         )
-        sliced === mapSection.content
+        expect(sliced).toMatch(mapSection.content)
       }
     })
   })
@@ -163,7 +163,7 @@ describe(`Testing Map on Spans`, () => {
           mapSection.start,
           mapSection.start + mapSection.length,
         )
-        sliced === mapSection.content
+        expect(sliced).toMatch(mapSection.content)
       }
     })
   })
@@ -184,7 +184,7 @@ describe(`Testing Map on Tables`, () => {
           mapSection.start,
           mapSection.start + mapSection.length,
         )
-        sliced === mapSection.content
+        expect(sliced).toMatch(mapSection.content)
       }
     })
   })
@@ -205,7 +205,7 @@ describe(`Testing Map on Whitespaces`, () => {
           mapSection.start,
           mapSection.start + mapSection.length,
         )
-        sliced === mapSection.content
+        expect(sliced).toMatch(mapSection.content)
       }
     })
   })

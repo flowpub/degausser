@@ -39,7 +39,7 @@ epubs.forEach(epubDir => {
               mapSection.start,
               mapSection.start + mapSection.length,
             )
-            sliced === mapSection.content
+            expect(sliced).toMatch(mapSection.content)
           }
         }
       }
