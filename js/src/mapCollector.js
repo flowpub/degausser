@@ -74,34 +74,45 @@ export class MapCollector {
       return
     }
 
-    let result = trimBeginAndEnd(collapseWhitespace(trimmed))
+    let fullText = trimBeginAndEnd(collapseWhitespace(trimmed))
 
-    // Find results of mapping
+    let blockMap = []
     let currentIndexOfString = 0
+
     for (const textMap of this.text) {
       const shrunkText = trimBeginAndEnd(collapseWhitespace(textMap.string))
       if (!shrunkText) {
         continue
       }
 
-      const index = result.indexOf(shrunkText)
+      const index = fullText.indexOf(shrunkText)
 
       if (index < 0) {
         throw new Error(
-          `Could not find shrunk string \"${shrunkText}\" in \"${result}\"`,
+          `Could not find shrunk string \"${shrunkText}\" in \"${fullText}\"`,
         )
       }
 
-      this.map.push({
+      blockMap.push({
         type: MapType.TEXT,
         node: textMap.node,
+        start: currentIndexOfString + index,
         content: shrunkText,
         length: shrunkText.length,
       })
 
-      result = result.slice(shrunkText.length)
-      currentIndexOfString += shrunkText.length
+      fullText = fullText.slice(index + shrunkText.length)
+      currentIndexOfString += shrunkText.length + index
     }
+
+    // Do some more magic on block map
+    for (let i = 1; i < blockMap.length; ++i){
+      if (blockMap[i].start - blockMap[i - 1].start !== blockMap[i - 1].length) {
+        blockMap[i - 1].length = blockMap[i].start - blockMap[i - 1].start
+      }
+    }
+
+    this.map.push(...blockMap)
 
     if (this.lastBreak === null) {
       this.lastBreak = BreakType.NONE
