@@ -35,8 +35,8 @@ const processNode = (node, collector) => {
 const processElementNode = (node, collector) => {
   const skipRest = collector.processElementNode(node, true)
 
-  if (skipRest){
-      return
+  if (skipRest) {
+    return
   }
 
   if (node.hasChildNodes()) {

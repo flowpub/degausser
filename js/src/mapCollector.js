@@ -106,8 +106,11 @@ export class MapCollector {
     }
 
     // Do some more magic on block map
-    for (let i = 1; i < blockMap.length; ++i){
-      if (blockMap[i].start - blockMap[i - 1].start !== blockMap[i - 1].length) {
+    for (let i = 1; i < blockMap.length; ++i) {
+      if (
+        blockMap[i].start - blockMap[i - 1].start !==
+        blockMap[i - 1].length
+      ) {
         blockMap[i - 1].length = blockMap[i].start - blockMap[i - 1].start
       }
     }

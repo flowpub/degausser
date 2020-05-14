@@ -5,9 +5,9 @@ import { join, basename, dirname, extname } from 'path'
 import { degausser } from '../../src/degausser'
 
 const pathToEpubs = '../testdata/parsed_epubs'
-const epubs = readdirSync(pathToEpubs).map(epub => join(pathToEpubs, epub))
+const epubs = readdirSync(pathToEpubs).map((epub) => join(pathToEpubs, epub))
 
-epubs.forEach(epubDir => {
+epubs.forEach((epubDir) => {
   test(`Testing EPUB: ${basename(epubDir)}`, () => {
     glob(`${epubDir}/**/*.{html,xhtml,htm}`, (_, files) => {
       for (const epubFile of files) {
@@ -36,7 +36,7 @@ epubs.forEach(epubDir => {
           expect(output).toBeTruthy()
           expect(output).toBe(sourceTXT)
 
-          const map = degausser(doc.documentElement, {map: true})
+          const map = degausser(doc.documentElement, { map: true })
 
           for (const mapSection of map) {
             const sliced = output.slice(
