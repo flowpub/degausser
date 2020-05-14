@@ -35,6 +35,16 @@ epubs.forEach(epubDir => {
           const output = degausser(doc.documentElement)
           expect(output).toBeTruthy()
           expect(output).toBe(sourceTXT)
+
+          const map = degausser(doc.documentElement, {map: true})
+
+          for (const mapSection of map) {
+            const sliced = output.slice(
+              mapSection.start,
+              mapSection.start + mapSection.length,
+            )
+            expect(sliced).toMatch(mapSection.content)
+          }
         }
       }
     })
