@@ -3,6 +3,7 @@ import {
   BreakType,
   trimBeginAndEnd,
   collapseWhitespace,
+  collectTrimmedWhitespace,
   phrasingConstructs,
 } from './util'
 
@@ -93,12 +94,15 @@ export class MapCollector {
         )
       }
 
+      const whitespace = collectTrimmedWhitespace(textMap.node.textContent)
+
       blockMap.push({
         type: MapType.TEXT,
         node: textMap.node,
         start: currentIndexOfString + index,
-        content: shrunkText,
         length: shrunkText.length,
+        content: shrunkText,
+        whitespace
       })
 
       fullText = fullText.slice(index + shrunkText.length)
@@ -244,6 +248,7 @@ export class MapCollector {
           result.push({
             node: entity.node,
             content: entity.content,
+            whitespace: entity.whitespace,
             start: runningIndex,
             length: entity.length,
           })
