@@ -9,6 +9,12 @@ const getInputFile = fileName => {
   }
 }
 
+const whitespaces = [9, 10, 13, 32]
+const isCharCodeWhitespace = (charCode) => {
+  return whitespaces.includes(charCode)
+}
+
 module.exports = {
   getInputFile,
+  isCharCodeWhitespace
 }
