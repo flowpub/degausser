@@ -50,10 +50,10 @@ describe(`Testing Mapping`, () => {
     const mapping = degausser(document.documentElement, { map: true })
 
     // Test getting proper range
-    let range = getRangeFromOffset(35, 48, mapping)
+    let range = getRangeFromOffset(35, 48, document, mapping)
     expect(range.toString()).toMatch(`our\n\t\t\tjob done.`)
 
-    range = getRangeFromOffset(112, 125, mapping)
+    range = getRangeFromOffset(112, 125, document, mapping)
     expect(range.toString()).toMatch(`and\t\t\t\tdocumenta`)
   })
 })

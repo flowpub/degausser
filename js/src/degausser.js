@@ -12,20 +12,25 @@ export const degausser = (parentNode, options = {}) => {
   return walkDOM(parentNode, collector)
 }
 
-export const getRangeFromOffset = (start, end, map = null) => {
-  const docType = document.nodeType
+export const getRangeFromOffset = (
+  start,
+  end,
+  doc = document,
+  map = null,
+) => {
+  const docType = doc.nodeType
   if (
     docType !== Node.DOCUMENT_NODE &&
     docType !== Node.DOCUMENT_FRAGMENT_NODE
   ) {
     throw new Error('Bad Document Node')
   }
-  
-  if (map === null){
-    map = degausser(document, {map: true})
+
+  if (map === null) {
+    map = degausser(doc, { map: true })
   }
 
-  const range = document.createRange()
+  const range = doc.createRange()
 
   for (let mapIndex = 0; mapIndex < map.length; ++mapIndex) {
     const entry = map[mapIndex]
