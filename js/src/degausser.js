@@ -57,7 +57,6 @@ export const getRangeFromOffset = (
         range.setEndAfter(entry.node)
       } else {
         const adjustedEnd = end - entry.start
-        console.log('Adjusted End', adjustedEnd)
 
         let skips = 0
         for (const whitespaceEntry of entry.whitespace) {

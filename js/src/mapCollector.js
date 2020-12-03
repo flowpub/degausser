@@ -246,25 +246,27 @@ export class MapCollector {
 
           const whitespace = []
 
-          const nodeContent = entity.node.tagName === 'img' ? 
+          if (entity.node.nodeType === Node.TEXT_NODE || entity.node.tagName === 'img') {
+            const nodeContent = entity.node.tagName === 'img' ?
             entity.node.getAttribute('alt').normalize() : 
             entity.node.textContent.normalize()
 
-          for (let charInMap = 0, charInNode = 0; charInNode < nodeContent.length; ++charInNode) {
-            const isEqual = entity.content.charAt(charInMap) === nodeContent.charAt(charInNode)
-            const isMapWhitespace = isCharWhitespace(entity.content.charCodeAt(charInMap))
-            const isNodeWhitespace = isCharWhitespace(nodeContent.charCodeAt(charInNode))
+            for (let charInMap = 0, charInNode = 0; charInNode < nodeContent.length; ++charInNode) {
+              const isEqual = entity.content.charAt(charInMap) === nodeContent.charAt(charInNode)
+              const isMapWhitespace = isCharWhitespace(entity.content.charCodeAt(charInMap))
+              const isNodeWhitespace = isCharWhitespace(nodeContent.charCodeAt(charInNode))
 
-            if (isEqual || (isMapWhitespace && isNodeWhitespace)) {
-              ++charInMap
-            } else if (isMapWhitespace || isNodeWhitespace) {
-              const skips = {
-                after: charInMap - 1,
-                position: charInNode
+              if (isEqual || (isMapWhitespace && isNodeWhitespace)) {
+                ++charInMap
+              } else if (isMapWhitespace || isNodeWhitespace) {
+                const skips = {
+                  after: charInMap - 1,
+                  position: charInNode
+                }
+                whitespace.push(skips)
+              } else {
+                throw new Error(`Degauss error, character mismatch and not a whitespace`)
               }
-              whitespace.push(skips)
-            } else {
-              throw new Error(`Degauss error, character mismatch and not a whitespace`)
             }
           }
 
