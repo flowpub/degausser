@@ -1,6 +1,13 @@
 import { degausser } from '../../src/degausser'
 import { getInputFile } from '../util'
 
+/*
+  Note: For whatever reason, JSDoc strips leading spaces when
+        a string is added to the document.
+        
+        When creating additional tests, please do not use leading spaces.
+*/
+
 describe(`Testing Whitespaces`, () => {
   const file = getInputFile('whitespaces.json')
 
