@@ -23,20 +23,31 @@ describe(`Testing Mapping`, () => {
       if (node.nodeType === Node.TEXT_NODE) {
         const textContent = node.textContent
 
-        for (let index = 0, outputIndex = 0; index < output.length; ++index) {
-          if (mapSection.whitespace.includes(index)) {
+        for (let index = 0, outputIndex = 0; index < textContent.length; ++index) {
+          let skip = false
+          for (let i = 0; i < mapSection.whitespace.length; ++i) {
+            let entry = mapSection.whitespace[i]
+            if (entry.position === index) {
+              skip = true
+              break
+            }
+            if (entry.after > index){
+              // Break early if the entry is for after this index
+              break
+            }
+          }
+
+          if (skip) {
             continue
           }
 
-          const letter = output[outputIndex]
-          if (isCharCodeWhitespace(letter.charCodeAt(0))) {
-            expect(
-              isCharCodeWhitespace(textContent[index].charCodeAt(0)),
-            ).toBe(true)
+          if (isCharCodeWhitespace(textContent.charCodeAt(index))) {
+            expect(isCharCodeWhitespace(output.charCodeAt(outputIndex))).toBe(true)
+            expect(isCharCodeWhitespace(textContent.charCodeAt(index))).toBe(true)
           } else {
-            expect(output[outputIndex]).toMatch(textContent[index])
+            expect(output.charAt(outputIndex)).toMatch(textContent.charAt(index))
           }
-
+          
           ++outputIndex
         }
       }
