@@ -43,7 +43,7 @@ export const getRangeFromOffset = (
 
         let skips = 0
         for (const whitespaceEntry of entry.whitespace) {
-          if (whitespaceEntry <= adjustedStart) {
+          if (whitespaceEntry.after < adjustedStart) {
             ++skips
           }
         }
@@ -60,7 +60,7 @@ export const getRangeFromOffset = (
 
         let skips = 0
         for (const whitespaceEntry of entry.whitespace) {
-          if (whitespaceEntry <= adjustedEnd) {
+          if (whitespaceEntry.after < adjustedEnd) {
             ++skips
           }
         }

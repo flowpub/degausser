@@ -78,25 +78,6 @@ const collapseWhitespace = (string) => {
   return textElements.join(' ')
 }
 
-const collectTrimmedWhitespace = (string) => {
-  const spaces = []
-
-  let encounteredWhitespace = false
-  for (let index = 0; index < string.length; ++index) {
-    if (isCharWhitespace(string.charCodeAt(index))) {
-      if (encounteredWhitespace) {
-        spaces.push(index)
-      } else {
-        encounteredWhitespace = true
-      }
-    } else {
-      encounteredWhitespace = false
-    }
-  }
-
-  return spaces
-}
-
 const blacklist = [
   'base',
   'command',
@@ -169,6 +150,6 @@ export {
   BreakType,
   trimBeginAndEnd,
   collapseWhitespace,
-  collectTrimmedWhitespace,
   phrasingConstructs,
+  isCharWhitespace
 }

@@ -3,7 +3,7 @@ import {
   BreakType,
   trimBeginAndEnd,
   collapseWhitespace,
-  collectTrimmedWhitespace,
+  isCharWhitespace,
   phrasingConstructs,
 } from './util'
 
@@ -94,15 +94,12 @@ export class MapCollector {
         )
       }
 
-      const whitespace = collectTrimmedWhitespace(textMap.node.textContent)
-
       blockMap.push({
         type: MapType.TEXT,
         node: textMap.node,
         start: currentIndexOfString + index,
         length: shrunkText.length,
         content: shrunkText,
-        whitespace
       })
 
       fullText = fullText.slice(index + shrunkText.length)
@@ -245,10 +242,38 @@ export class MapCollector {
     for (const entity of this.map) {
       switch (entity.type) {
         case MapType.TEXT:
+          // TODO: Tests
+
+          const whitespace = []
+
+          if (entity.node.nodeType === Node.TEXT_NODE || entity.node.tagName === 'img') {
+            const nodeContent = entity.node.tagName === 'img' ?
+            entity.node.getAttribute('alt').normalize() : 
+            entity.node.textContent.normalize()
+
+            for (let charInMap = 0, charInNode = 0; charInNode < nodeContent.length; ++charInNode) {
+              const isEqual = entity.content.charAt(charInMap) === nodeContent.charAt(charInNode)
+              const isMapWhitespace = isCharWhitespace(entity.content.charCodeAt(charInMap))
+              const isNodeWhitespace = isCharWhitespace(nodeContent.charCodeAt(charInNode))
+
+              if (isEqual || (isMapWhitespace && isNodeWhitespace)) {
+                ++charInMap
+              } else if (isMapWhitespace || isNodeWhitespace) {
+                const skips = {
+                  after: charInMap - 1,
+                  position: charInNode
+                }
+                whitespace.push(skips)
+              } else {
+                throw new Error(`Degauss error, character mismatch and not a whitespace`)
+              }
+            }
+          }
+
           result.push({
             node: entity.node,
             content: entity.content,
-            whitespace: entity.whitespace,
+            whitespace: whitespace,
             start: runningIndex,
             length: entity.length,
           })

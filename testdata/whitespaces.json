@@ -4,12 +4,12 @@
     "o": "test text"
   },
   {
-    "i": "  \ttext\ntext\n",
-    "o": "text text"
+    "i": "t  \ttext\ntext\n",
+    "o": "t text text"
   },
   {
-    "i": "  \na \n\t \n \n a \t",
-    "o": "a a"
+    "i": "t  \na \n\t \n \n a \t",
+    "o": "t a a"
   },
   {
     "i": "test        text",
