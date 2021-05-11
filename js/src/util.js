@@ -144,6 +144,76 @@ const phrasingConstructs = [
   'area',
 ]
 
+// copied from readium-cfi-js library
+// original function called "isElementBlacklisted"
+const isElementNotBlacklisted = (element,
+  classBlacklist,
+  elementBlacklist,
+  idBlacklist
+) => {
+
+  if (classBlacklist && classBlacklist.length) {
+    const classList = getClassNameArray(element);
+    if (classList.length === 1 && classBlacklist.includes(classList[0])) {
+      return false;
+    }
+    if (classList.length && intersection(classBlacklist, classList).length) {
+      return false;
+    }
+  }
+
+  if (elementBlacklist && elementBlacklist.length) {
+    if (element.tagName) {
+      const isElementInBlacklist = elementBlacklist.find((blacklistedTag) =>
+        matchesLocalNameOrElement(element, blacklistedTag.toLowerCase()),
+      );
+
+      if (isElementInBlacklist) {
+        return false;
+      }
+    }
+  }
+
+  if (idBlacklist && idBlacklist.length) {
+    const { id } = element;
+    if (id && id.length && idBlacklist.includes(id)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+const intersection = (array1, array2) => {
+  const intersectionArray = [];
+  for (let value of array1) {
+    const index = array2.indexOf(value)
+    if (index !== -1) {
+      intersectionArray.push(value)
+    }
+  }
+
+  return intersectionArray
+}
+
+const getClassNameArray = (element) => {
+  const { className } = element;
+  if (typeof className === 'string') {
+    return className.split(/\s/);
+  }
+  if (typeof className === 'object' && 'baseVal' in className) {
+    return className.baseVal.split(/\s/);
+  }
+  return [];
+}
+
+const matchesLocalNameOrElement = (element, otherNameOrElement) => {
+  if (typeof otherNameOrElement === 'string') {
+    return (element.localName || element.nodeName) === otherNameOrElement;
+  }
+  return element === otherNameOrElement;
+}
+
 export {
   autoBind,
   blacklist,
@@ -151,5 +221,6 @@ export {
   trimBeginAndEnd,
   collapseWhitespace,
   phrasingConstructs,
+  isElementNotBlacklisted,
   isCharWhitespace
 }
