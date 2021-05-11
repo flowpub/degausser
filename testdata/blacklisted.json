@@ -1,0 +1,14 @@
+[
+  {
+    "i": "<span>Test <span id='blacklisted'> id=blacklisted should be blacklisted</span>text</span>",
+    "o": "Test text"
+  },
+  {
+    "i": "<span>Test <strong> element=strong should be blacklisted</strong>text</span>",
+    "o": "Test text"
+  },
+  {
+    "i": "<span>Test <span class='blacklisted2'> class=blacklisted2 should be blacklisted</span>text</span>",
+    "o": "Test text"
+  }
+]
