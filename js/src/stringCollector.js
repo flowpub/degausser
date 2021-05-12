@@ -4,12 +4,14 @@ import {
   trimBeginAndEnd,
   collapseWhitespace,
   phrasingConstructs,
+  isElementBlacklisted,
 } from './util'
 
 export class StringCollector {
-  constructor() {
+  constructor(options = {}) {
     this.runs = []
     this.text = []
+    this.options = options
 
     this.hasEncounteredFirstCell = false
     this.lastBreak = null
@@ -70,6 +72,15 @@ export class StringCollector {
   }
 
   processElementNode(node, isOpening) {
+    if (isElementBlacklisted(
+      node,
+      this.options.classBlacklist,
+      this.options.elementBlacklist,
+      this.options.idBlacklist
+    )) {
+      return true
+    }
+
     const tag = node.tagName.toLowerCase()
 
     // Special case for Preformatted

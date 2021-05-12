@@ -5,6 +5,7 @@ import {
   collapseWhitespace,
   isCharWhitespace,
   phrasingConstructs,
+  isElementBlacklisted,
 } from './util'
 
 const MapType = {
@@ -13,9 +14,11 @@ const MapType = {
 }
 
 export class MapCollector {
-  constructor() {
+  constructor(options = {}) {
     this.map = []
     this.text = []
+
+    this.options = options
 
     this.hasEncounteredFirstCell = false
     this.lastBreak = null
@@ -126,6 +129,15 @@ export class MapCollector {
   }
 
   processElementNode(node, isOpening) {
+    if (isElementBlacklisted(
+      node,
+      this.options.classBlacklist,
+      this.options.elementBlacklist,
+      this.options.idBlacklist
+    )) {
+      return true
+    }
+
     const tag = node.tagName.toLowerCase()
 
     // Special case for Preformatted

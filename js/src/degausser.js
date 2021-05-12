@@ -3,10 +3,10 @@ import { MapCollector } from './mapCollector'
 import { walkDOM } from './domWalker'
 
 export const degausser = (parentNode, options = {}) => {
-  let collector = new StringCollector()
+  let collector = new StringCollector(options)
 
   if (options.map) {
-    collector = new MapCollector()
+    collector = new MapCollector(options)
   }
 
   return walkDOM(parentNode, collector)
