@@ -5,7 +5,7 @@ import {
   collapseWhitespace,
   isCharWhitespace,
   phrasingConstructs,
-  isElementNotBlacklisted,
+  isElementBlacklisted,
 } from './util'
 
 const MapType = {
@@ -129,7 +129,7 @@ export class MapCollector {
   }
 
   processElementNode(node, isOpening) {
-    if (!isElementNotBlacklisted(
+    if (isElementBlacklisted(
       node,
       this.options.classBlacklist,
       this.options.elementBlacklist,

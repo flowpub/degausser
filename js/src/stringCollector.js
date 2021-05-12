@@ -4,7 +4,7 @@ import {
   trimBeginAndEnd,
   collapseWhitespace,
   phrasingConstructs,
-  isElementNotBlacklisted,
+  isElementBlacklisted,
 } from './util'
 
 export class StringCollector {
@@ -72,7 +72,7 @@ export class StringCollector {
   }
 
   processElementNode(node, isOpening) {
-    if (!isElementNotBlacklisted(
+    if (isElementBlacklisted(
       node,
       this.options.classBlacklist,
       this.options.elementBlacklist,

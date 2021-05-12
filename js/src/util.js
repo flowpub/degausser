@@ -146,7 +146,7 @@ const phrasingConstructs = [
 
 // copied from readium-cfi-js library
 // original function called "isElementBlacklisted"
-const isElementNotBlacklisted = (element,
+const isElementBlacklisted = (element,
   classBlacklist,
   elementBlacklist,
   idBlacklist
@@ -155,10 +155,10 @@ const isElementNotBlacklisted = (element,
   if (classBlacklist && classBlacklist.length) {
     const classList = getClassNameArray(element);
     if (classList.length === 1 && classBlacklist.includes(classList[0])) {
-      return false;
+      return true;
     }
     if (classList.length && intersection(classBlacklist, classList).length) {
-      return false;
+      return true;
     }
   }
 
@@ -169,7 +169,7 @@ const isElementNotBlacklisted = (element,
       );
 
       if (isElementInBlacklist) {
-        return false;
+        return true;
       }
     }
   }
@@ -177,11 +177,11 @@ const isElementNotBlacklisted = (element,
   if (idBlacklist && idBlacklist.length) {
     const { id } = element;
     if (id && id.length && idBlacklist.includes(id)) {
-      return false;
+      return true;
     }
   }
 
-  return true;
+  return false;
 }
 
 const intersection = (array1, array2) => {
@@ -221,6 +221,6 @@ export {
   trimBeginAndEnd,
   collapseWhitespace,
   phrasingConstructs,
-  isElementNotBlacklisted,
+  isElementBlacklisted,
   isCharWhitespace
 }
