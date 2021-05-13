@@ -12,12 +12,7 @@ export const degausser = (parentNode, options = {}) => {
   return walkDOM(parentNode, collector)
 }
 
-export const getRangeFromOffset = (
-  start,
-  end,
-  doc = document,
-  map = null,
-) => {
+export const getRangeFromOffset = (start, end, doc = document, map = null) => {
   const docType = doc.nodeType
   if (
     docType !== Node.DOCUMENT_NODE &&

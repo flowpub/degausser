@@ -129,12 +129,14 @@ export class MapCollector {
   }
 
   processElementNode(node, isOpening) {
-    if (isElementBlacklisted(
-      node,
-      this.options.classBlacklist,
-      this.options.elementBlacklist,
-      this.options.idBlacklist
-    )) {
+    if (
+      isElementBlacklisted(
+        node,
+        this.options.classBlacklist,
+        this.options.elementBlacklist,
+        this.options.idBlacklist,
+      )
+    ) {
       return true
     }
 
@@ -258,26 +260,42 @@ export class MapCollector {
 
           const whitespace = []
 
-          if (entity.node.nodeType === Node.TEXT_NODE || entity.node.tagName === 'img') {
-            const nodeContent = entity.node.tagName === 'img' ?
-            entity.node.getAttribute('alt').normalize() : 
-            entity.node.textContent.normalize()
+          if (
+            entity.node.nodeType === Node.TEXT_NODE ||
+            entity.node.tagName === 'img'
+          ) {
+            const nodeContent =
+              entity.node.tagName === 'img'
+                ? entity.node.getAttribute('alt').normalize()
+                : entity.node.textContent.normalize()
 
-            for (let charInMap = 0, charInNode = 0; charInNode < nodeContent.length; ++charInNode) {
-              const isEqual = entity.content.charAt(charInMap) === nodeContent.charAt(charInNode)
-              const isMapWhitespace = isCharWhitespace(entity.content.charCodeAt(charInMap))
-              const isNodeWhitespace = isCharWhitespace(nodeContent.charCodeAt(charInNode))
+            for (
+              let charInMap = 0, charInNode = 0;
+              charInNode < nodeContent.length;
+              ++charInNode
+            ) {
+              const isEqual =
+                entity.content.charAt(charInMap) ===
+                nodeContent.charAt(charInNode)
+              const isMapWhitespace = isCharWhitespace(
+                entity.content.charCodeAt(charInMap),
+              )
+              const isNodeWhitespace = isCharWhitespace(
+                nodeContent.charCodeAt(charInNode),
+              )
 
               if (isEqual || (isMapWhitespace && isNodeWhitespace)) {
                 ++charInMap
               } else if (isMapWhitespace || isNodeWhitespace) {
                 const skips = {
                   after: charInMap - 1,
-                  position: charInNode
+                  position: charInNode,
                 }
                 whitespace.push(skips)
               } else {
-                throw new Error(`Degauss error, character mismatch and not a whitespace`)
+                throw new Error(
+                  `Degauss error, character mismatch and not a whitespace`,
+                )
               }
             }
           }

@@ -72,12 +72,14 @@ export class StringCollector {
   }
 
   processElementNode(node, isOpening) {
-    if (isElementBlacklisted(
-      node,
-      this.options.classBlacklist,
-      this.options.elementBlacklist,
-      this.options.idBlacklist
-    )) {
+    if (
+      isElementBlacklisted(
+        node,
+        this.options.classBlacklist,
+        this.options.elementBlacklist,
+        this.options.idBlacklist,
+      )
+    ) {
       return true
     }
 

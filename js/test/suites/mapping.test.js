@@ -23,7 +23,11 @@ describe(`Testing Mapping`, () => {
       if (node.nodeType === Node.TEXT_NODE) {
         const textContent = node.textContent
 
-        for (let index = 0, outputIndex = 0; index < textContent.length; ++index) {
+        for (
+          let index = 0, outputIndex = 0;
+          index < textContent.length;
+          ++index
+        ) {
           let skip = false
           for (let i = 0; i < mapSection.whitespace.length; ++i) {
             let entry = mapSection.whitespace[i]
@@ -31,7 +35,7 @@ describe(`Testing Mapping`, () => {
               skip = true
               break
             }
-            if (entry.after > index){
+            if (entry.after > index) {
               // Break early if the entry is for after this index
               break
             }
@@ -42,12 +46,18 @@ describe(`Testing Mapping`, () => {
           }
 
           if (isCharCodeWhitespace(textContent.charCodeAt(index))) {
-            expect(isCharCodeWhitespace(output.charCodeAt(outputIndex))).toBe(true)
-            expect(isCharCodeWhitespace(textContent.charCodeAt(index))).toBe(true)
+            expect(isCharCodeWhitespace(output.charCodeAt(outputIndex))).toBe(
+              true,
+            )
+            expect(isCharCodeWhitespace(textContent.charCodeAt(index))).toBe(
+              true,
+            )
           } else {
-            expect(output.charAt(outputIndex)).toMatch(textContent.charAt(index))
+            expect(output.charAt(outputIndex)).toMatch(
+              textContent.charAt(index),
+            )
           }
-          
+
           ++outputIndex
         }
       }

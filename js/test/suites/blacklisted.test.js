@@ -8,16 +8,19 @@ describe(`Testing Containers`, () => {
     test(`Testing ${element.i}`, () => {
       document.documentElement.innerHTML = element.i
 
-      const blacklistOptions= {
+      const blacklistOptions = {
         classBlacklist: ['blacklisted2'],
         idBlacklist: ['blacklisted'],
-        elementBlacklist: ['strong']
+        elementBlacklist: ['strong'],
       }
 
       const output = degausser(document.documentElement, blacklistOptions)
       expect(output).toBe(element.o)
 
-      const map = degausser(document.documentElement, { map: true, ...blacklistOptions})
+      const map = degausser(document.documentElement, {
+        map: true,
+        ...blacklistOptions,
+      })
       for (const mapSection of map) {
         const sliced = output.slice(
           mapSection.start,

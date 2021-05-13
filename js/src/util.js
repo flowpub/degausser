@@ -146,19 +146,19 @@ const phrasingConstructs = [
 
 // copied from readium-cfi-js library
 // original function called "isElementBlacklisted"
-const isElementBlacklisted = (element,
+const isElementBlacklisted = (
+  element,
   classBlacklist,
   elementBlacklist,
-  idBlacklist
+  idBlacklist,
 ) => {
-
   if (classBlacklist && classBlacklist.length) {
-    const classList = getClassNameArray(element);
+    const classList = getClassNameArray(element)
     if (classList.length === 1 && classBlacklist.includes(classList[0])) {
-      return true;
+      return true
     }
     if (classList.length && intersection(classBlacklist, classList).length) {
-      return true;
+      return true
     }
   }
 
@@ -166,26 +166,26 @@ const isElementBlacklisted = (element,
     if (element.tagName) {
       const isElementInBlacklist = elementBlacklist.find((blacklistedTag) =>
         matchesLocalNameOrElement(element, blacklistedTag.toLowerCase()),
-      );
+      )
 
       if (isElementInBlacklist) {
-        return true;
+        return true
       }
     }
   }
 
   if (idBlacklist && idBlacklist.length) {
-    const { id } = element;
+    const { id } = element
     if (id && id.length && idBlacklist.includes(id)) {
-      return true;
+      return true
     }
   }
 
-  return false;
+  return false
 }
 
 const intersection = (array1, array2) => {
-  const intersectionArray = [];
+  const intersectionArray = []
   for (let value of array1) {
     const index = array2.indexOf(value)
     if (index !== -1) {
@@ -197,21 +197,21 @@ const intersection = (array1, array2) => {
 }
 
 const getClassNameArray = (element) => {
-  const { className } = element;
+  const { className } = element
   if (typeof className === 'string') {
-    return className.split(/\s/);
+    return className.split(/\s/)
   }
   if (typeof className === 'object' && 'baseVal' in className) {
-    return className.baseVal.split(/\s/);
+    return className.baseVal.split(/\s/)
   }
-  return [];
+  return []
 }
 
 const matchesLocalNameOrElement = (element, otherNameOrElement) => {
   if (typeof otherNameOrElement === 'string') {
-    return (element.localName || element.nodeName) === otherNameOrElement;
+    return (element.localName || element.nodeName) === otherNameOrElement
   }
-  return element === otherNameOrElement;
+  return element === otherNameOrElement
 }
 
 export {
@@ -222,5 +222,5 @@ export {
   collapseWhitespace,
   phrasingConstructs,
   isElementBlacklisted,
-  isCharWhitespace
+  isCharWhitespace,
 }
