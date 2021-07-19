@@ -6,5 +6,5 @@ require (
 	github.com/flowpub/degausser v1.0.0
 	github.com/mattn/go-zglob v0.0.3
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/net v0.0.0-20210614182718-04defd469f4e
+	golang.org/x/net v0.0.0-20210716203947-853a461950ff
 )
