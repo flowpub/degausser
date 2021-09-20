@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" xml:lang="en" unique-identifier="pub-id">
+      <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <dc:title id="title">Book Bookity Bookinton</dc:title>
+            <dc:identifier id="pub-id">io.flowpub.bookbookitybookinton</dc:identifier>
+            <meta property="dcterms:modified">2020-03-29T12:00:00Z</meta>
+            <dc:date>2020-03-29</dc:date>
+            <dc:language>en</dc:language>
+      </metadata>
+      <manifest>
+            <item id="doc1" href="chapter-uno.xhtml" properties="switch" media-type="application/xhtml+xml"/>
+            <item id="doc2" href="chapter-dos.xhtml" media-type="application/xhtml+xml"/>
+            <item id="nav" href="nav.xhtml" properties="nav" media-type="application/xhtml+xml"/>            
+      </manifest>
+      <spine>
+            <itemref idref="doc1"/>
+            <itemref idref="doc2"/>
+      </spine>
+</package>

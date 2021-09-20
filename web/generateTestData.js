@@ -101,4 +101,4 @@ module.exports = {
   parseEpubs: main
 };
 
-//main('./testdata/epubs')
+main('./testdata/epubs')

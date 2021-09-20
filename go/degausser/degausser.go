@@ -76,7 +76,14 @@ func HTMLToPlainText(htmlMarkup string) (string, error) {
 
 	visitElement := func(node *html.Node, enter bool) {
 		nodeName := GetNodeName(node)
-		isNonPhrasing := !IsElementNodeOfType(node, PhrasingContent)
+		isPhrasing := IsElementNodeOfType(node, PhrasingContent)
+		isFlow := IsElementNodeOfType(node, FlowContent)
+
+		isNonPhrasing := !isPhrasing
+		if !isPhrasing && !isFlow {
+			print(nodeName)
+			isNonPhrasing = false
+		}
 
 		if enter {
 			if nodeName == "pre" {
