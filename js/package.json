@@ -1,11 +1,10 @@
 {
     "name": "degausser",
-    "version": "2.3.0",
+    "version": "2.3.1",
     "description": "Transforms HTML to plain text by eliminating tags from a document.",
     "author": "FlowPub",
     "license": "MIT",
     "homepage": "https://opensource.flowpub.io",
-    "type": "module",
     "repository": {
         "type": "git",
         "url": "ssh://git@github.com/flowpub/degausser.git",
