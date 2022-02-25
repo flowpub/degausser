@@ -7,7 +7,7 @@ import { join, basename, dirname, extname } from 'path'
 const pathToEpubs = '../testdata/parsed_epubs'
 const epubs = readdirSync(pathToEpubs).map((epub) => join(pathToEpubs, epub))
 
-fdescribe('range from offset', () => {
+describe('range from offset', () => {
   test('paragraph boundary', () => {
     const epubFile = './test/testdata/parsed_epubs/metamorphosis_test/OEBPS/chapter-001-chapter-i.html'
     const sourceHTML = readFileSync(epubFile, 'utf8')
