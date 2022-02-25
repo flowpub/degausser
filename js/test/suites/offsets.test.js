@@ -1,11 +1,6 @@
-import { degausser, getRangeFromOffset } from '../../src/degausser'
-import { getInputFile, isCharCodeWhitespace } from '../util'
-import { readdirSync, readFileSync, writeFileSync } from 'fs'
-import glob from 'glob'
-import { join, basename, dirname, extname } from 'path'
-
-const pathToEpubs = '../testdata/parsed_epubs'
-const epubs = readdirSync(pathToEpubs).map((epub) => join(pathToEpubs, epub))
+import { getRangeFromOffset } from '../../src/degausser'
+import { readFileSync } from 'fs'
+import { extname } from 'path'
 
 describe('range from offset', () => {
   test('paragraph boundary', () => {
