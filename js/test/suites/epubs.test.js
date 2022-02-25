@@ -9,6 +9,10 @@ const epubs = readdirSync(pathToEpubs).map((epub) => join(pathToEpubs, epub))
 
 epubs.forEach((epubDir) => {
   test(`Testing EPUB: ${basename(epubDir)}`, () => {
+    // todo don't use callbacks
+    // using callbacks can sometimes make the test appear to pass even though it fails
+    // e.g., use `expect(false).toBeTruthy()` anywhere in the callback and the test will pass
+    // but there will be an error message in the console
     glob(`${epubDir}/**/*.{html,xhtml,htm}`, (_, files) => {
       for (const epubFile of files) {
         const sourceHTML = readFileSync(epubFile, 'utf8')
