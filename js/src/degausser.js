@@ -43,7 +43,12 @@ export const getRangeFromOffset = (start, end, doc = document, map = null) => {
           }
         }
 
-        range.setStart(entry.node, adjustedStart + skips)
+        if (adjustedStart + skips - entry.node.length === 1){
+          // space between the end of the node and the start of the next
+          range.setStartAfter(entry.node)
+        } else {
+          range.setStart(entry.node, adjustedStart + skips)
+        }
       }
     }
 
@@ -60,7 +65,12 @@ export const getRangeFromOffset = (start, end, doc = document, map = null) => {
           }
         }
 
-        range.setEnd(entry.node, adjustedEnd + skips)
+        if (adjustedEnd + skips - entry.node.length === 1){
+          // space between the end of the node and the start of the next
+          range.setEndAfter(entry.node)
+        } else {
+          range.setEnd(entry.node, adjustedEnd + skips)
+        }
       }
       break
     }
