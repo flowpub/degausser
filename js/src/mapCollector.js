@@ -6,6 +6,7 @@ import {
   isCharWhitespace,
   phrasingConstructs,
   isElementBlacklisted,
+  getAltText,
 } from './util'
 
 const MapType = {
@@ -181,9 +182,14 @@ export class MapCollector {
         return true
     }
 
-    if (node.hasAttribute('alt')) {
+    if (
+      node.tagName.toLowerCase() === 'img' ||
+      node.tagName.toLowerCase() === 'image' ||
+      node.tagName.toLowerCase() === 'area'
+    ) {
       this.processBreaks()
-      this.text.push({ node, string: ` ${node.getAttribute('alt')} ` })
+      const altText = getAltText(node)
+      this.text.push({ node, string: ` ${altText} ` })
 
       return true
     }
@@ -265,8 +271,8 @@ export class MapCollector {
             entity.node.tagName === 'img'
           ) {
             const nodeContent =
-              entity.node.tagName === 'img'
-                ? entity.node.getAttribute('alt').normalize()
+              (entity.node.tagName === 'img' || entity.node.tagName === 'image')
+                ? getAltText(entity.node).normalize()
                 : entity.node.textContent.normalize()
 
             for (

@@ -5,6 +5,7 @@ import {
   collapseWhitespace,
   phrasingConstructs,
   isElementBlacklisted,
+  getAltText,
 } from './util'
 
 export class StringCollector {
@@ -112,9 +113,14 @@ export class StringCollector {
         return true
     }
 
-    if (node.hasAttribute('alt')) {
+    if (
+      node.tagName.toLowerCase() === 'img' ||
+      node.tagName.toLowerCase() === 'image' ||
+      node.tagName.toLowerCase() === 'area'
+    ) {
       this.processBreaks()
-      this.text.push(` ${node.getAttribute('alt')} `)
+      const altText = getAltText(node)
+      this.text.push(` ${altText} `)
 
       return true
     }

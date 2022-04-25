@@ -214,6 +214,16 @@ const matchesLocalNameOrElement = (element, otherNameOrElement) => {
   return element === otherNameOrElement
 }
 
+const getAltText = (node) => {
+  const altText = node.getAttribute('alt')
+  if (!altText) {
+    const altTextPlaceholder = String.fromCharCode(31).repeat(100)
+    return altTextPlaceholder
+  }
+
+  return altText
+}
+
 export {
   autoBind,
   blacklist,
@@ -223,4 +233,5 @@ export {
   phrasingConstructs,
   isElementBlacklisted,
   isCharWhitespace,
+  getAltText,
 }
