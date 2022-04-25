@@ -7,6 +7,7 @@ import {
   phrasingConstructs,
   isElementBlacklisted,
   getAltText,
+  elementCanHaveAltText,
 } from './util'
 
 const MapType = {
@@ -182,11 +183,7 @@ export class MapCollector {
         return true
     }
 
-    if (
-      node.tagName.toLowerCase() === 'img' ||
-      node.tagName.toLowerCase() === 'image' ||
-      node.tagName.toLowerCase() === 'area'
-    ) {
+    if (elementCanHaveAltText(node.tagName)) {
       this.processBreaks()
       const altText = getAltText(node)
       this.text.push({ node, string: ` ${altText} ` })
@@ -271,7 +268,7 @@ export class MapCollector {
             entity.node.tagName === 'img'
           ) {
             const nodeContent =
-              (entity.node.tagName === 'img' || entity.node.tagName === 'image')
+              elementCanHaveAltText(entity.node.tagName)
                 ? getAltText(entity.node).normalize()
                 : entity.node.textContent.normalize()
 

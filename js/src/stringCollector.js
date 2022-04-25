@@ -6,6 +6,7 @@ import {
   phrasingConstructs,
   isElementBlacklisted,
   getAltText,
+  elementCanHaveAltText,
 } from './util'
 
 export class StringCollector {
@@ -113,11 +114,7 @@ export class StringCollector {
         return true
     }
 
-    if (
-      node.tagName.toLowerCase() === 'img' ||
-      node.tagName.toLowerCase() === 'image' ||
-      node.tagName.toLowerCase() === 'area'
-    ) {
+    if (elementCanHaveAltText(node.tagName)) {
       this.processBreaks()
       const altText = getAltText(node)
       this.text.push(` ${altText} `)
