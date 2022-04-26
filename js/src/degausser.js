@@ -2,8 +2,8 @@ import { StringCollector } from './stringCollector'
 import { MapCollector } from './mapCollector'
 import { walkDOM } from './domWalker'
 
+const unitSeparatorCode = 31
 export const degausser = (parentNode, options = {}) => {
-  const unitSeparatorCode = 31
   const defaultOptions = {
     placeholderCharacter: String.fromCharCode(unitSeparatorCode),
     placeholderLength: 100,
@@ -19,7 +19,7 @@ export const degausser = (parentNode, options = {}) => {
   return walkDOM(parentNode, collector)
 }
 
-export const getRangeFromOffset = (start, end, doc = document, map = null) => {
+export const getRangeFromOffset = (start, end, doc = document, map = null, options = {}) => {
   const docType = doc.nodeType
   if (
     docType !== Node.DOCUMENT_NODE &&
@@ -29,7 +29,13 @@ export const getRangeFromOffset = (start, end, doc = document, map = null) => {
   }
 
   if (map === null) {
-    map = degausser(doc, { map: true })
+    const defaultOptions = {
+      placeholderCharacter: String.fromCharCode(unitSeparatorCode),
+      placeholderLength: 100,
+    }
+    const finalOptions = Object.assign(defaultOptions, options)
+    finalOptions.map = true
+    map = degausser(doc, finalOptions)
   }
 
   const range = doc.createRange()
