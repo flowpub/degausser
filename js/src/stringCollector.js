@@ -119,8 +119,8 @@ export class StringCollector {
 
       const altText = getAltText(
         node,
-        this.options.placeholderCharacter,
-        this.options.placeholderLength
+        this.options.placeholderString,
+        this.options.placeholderCopies
       )
       this.text.push(` ${altText} `)
 

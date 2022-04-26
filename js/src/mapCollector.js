@@ -186,7 +186,7 @@ export class MapCollector {
     if (elementCanHaveAltText(node.tagName)) {
       this.processBreaks()
 
-      const altText = getAltText(node, this.options.placeholderCharacter, this.options.placeholderLength)
+      const altText = getAltText(node, this.options.placeholderString, this.options.placeholderCopies)
       this.text.push({ node, string: ` ${altText} ` })
 
       return true
@@ -272,8 +272,8 @@ export class MapCollector {
             if (elementCanHaveAltText(entity.node.tagName)) {
               const altText = getAltText(
                 entity.node,
-                this.options.placeholderCharacter,
-                this.options.placeholderLength
+                this.options.placeholderString,
+                this.options.placeholderCopies
               ).normalize()
               nodeContent = altText
             } else {

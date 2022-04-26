@@ -2,11 +2,20 @@ import { StringCollector } from './stringCollector'
 import { MapCollector } from './mapCollector'
 import { walkDOM } from './domWalker'
 
-const unitSeparatorCode = 31
+/**
+ * Extracts text from the given node.
+ * Options include (but are not limited to):
+ * - placeholderString: string to take the place of alt text when alt it is empty/undefined
+ * - placeholderCopies: the number of times placeholderString repeats
+ * @param parentNode
+ * @param options
+ * @returns {*}
+ */
 export const degausser = (parentNode, options = {}) => {
+  const unitSeparatorCode = 31
   const defaultOptions = {
-    placeholderCharacter: String.fromCharCode(unitSeparatorCode),
-    placeholderLength: 100,
+    placeholderString: String.fromCharCode(unitSeparatorCode),
+    placeholderCopies: 100,
   }
   const finalOptions = Object.assign(defaultOptions, options)
 
