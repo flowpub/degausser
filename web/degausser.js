@@ -8,11 +8,9 @@ globalThis.degausser = input => {
     }
   });
   Array.from(div.querySelectorAll("img, area, image")).forEach(el => {
-    if (el.childNodes.length === 0) {
-      const unitSeparatorCode = 31
-      const altStringLength = 100
-      el.outerHTML = el.alt || String.fromCharCode(unitSeparatorCode).repeat(altStringLength);
-    }
+    const unitSeparatorCode = 31
+    const altStringLength = 100
+    el.outerHTML = el.alt || String.fromCharCode(unitSeparatorCode).repeat(altStringLength);
   });
   Array.from(div.querySelectorAll("wbr")).forEach(el => {
     if (el.childNodes.length === 0) {
