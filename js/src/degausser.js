@@ -29,11 +29,7 @@ export const getRangeFromOffset = (start, end, doc = document, map = null, optio
   }
 
   if (map === null) {
-    const defaultOptions = {
-      placeholderCharacter: String.fromCharCode(unitSeparatorCode),
-      placeholderLength: 100,
-    }
-    const finalOptions = Object.assign(defaultOptions, options)
+    const finalOptions = Object.assign({}, options)
     finalOptions.map = true
     map = degausser(doc, finalOptions)
   }
