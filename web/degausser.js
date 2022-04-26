@@ -9,7 +9,9 @@ globalThis.degausser = input => {
   });
   Array.from(div.querySelectorAll("img, area, image")).forEach(el => {
     if (el.childNodes.length === 0) {
-      el.outerHTML = el.alt || String.fromCharCode(31).repeat(100);
+      const unitSeparatorCode = 31
+      const altStringLength = 100
+      el.outerHTML = el.alt || String.fromCharCode(unitSeparatorCode).repeat(altStringLength);
     }
   });
   Array.from(div.querySelectorAll("wbr")).forEach(el => {

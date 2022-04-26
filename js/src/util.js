@@ -223,8 +223,9 @@ const matchesLocalNameOrElement = (element, otherNameOrElement) => {
 const getAltText = (node) => {
   const altText = node.getAttribute('alt')
   if (!altText) {
-    // unit separator character
-    const altTextPlaceholder = String.fromCharCode(31).repeat(100)
+    const unitSeparatorCode = 31
+    const altStringLength = 100
+    const altTextPlaceholder = String.fromCharCode(unitSeparatorCode).repeat(altStringLength)
     return altTextPlaceholder
   }
 
