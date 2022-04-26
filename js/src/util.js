@@ -218,14 +218,14 @@ const matchesLocalNameOrElement = (element, otherNameOrElement) => {
  * Gets the alt text from an element, if it exists, otherwise returns placeholder alt text composed of 100 unit separator character.
  * If node has empty alt attribute or alt attribute with empty string, this will return the placeholder alt text instead.
  * @param node
+ * @param placeholderCharacter
+ * @param placeholderLength
  * @returns {string}
  */
-const getAltText = (node) => {
+const getAltText = (node, placeholderCharacter, placeholderLength) => {
   const altText = node.getAttribute('alt')
   if (!altText) {
-    const unitSeparatorCode = 31
-    const altStringLength = 100
-    const altTextPlaceholder = String.fromCharCode(unitSeparatorCode).repeat(altStringLength)
+    const altTextPlaceholder = placeholderCharacter.repeat(placeholderLength)
     return altTextPlaceholder
   }
 

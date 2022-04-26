@@ -116,7 +116,12 @@ export class StringCollector {
 
     if (elementCanHaveAltText(node.tagName)) {
       this.processBreaks()
-      const altText = getAltText(node)
+
+      const altText = getAltText(
+        node,
+        this.options.placeholderCharacter,
+        this.options.placeholderLength
+      )
       this.text.push(` ${altText} `)
 
       return true
