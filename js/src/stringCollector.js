@@ -5,6 +5,8 @@ import {
   collapseWhitespace,
   phrasingConstructs,
   isElementBlacklisted,
+  getAltText,
+  elementCanHaveAltText,
 } from './util'
 
 export class StringCollector {
@@ -112,9 +114,15 @@ export class StringCollector {
         return true
     }
 
-    if (node.hasAttribute('alt')) {
+    if (elementCanHaveAltText(node.tagName)) {
       this.processBreaks()
-      this.text.push(` ${node.getAttribute('alt')} `)
+
+      const altText = getAltText(
+        node,
+        this.options.placeholderString,
+        this.options.placeholderCopies
+      )
+      this.text.push(` ${altText} `)
 
       return true
     }

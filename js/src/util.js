@@ -214,6 +214,38 @@ const matchesLocalNameOrElement = (element, otherNameOrElement) => {
   return element === otherNameOrElement
 }
 
+/**
+ * Gets the alt text from an element, if it exists, otherwise returns placeholder alt text composed of 100 unit separator character.
+ * If node has empty alt attribute or alt attribute with empty string, this will return the placeholder alt text instead.
+ * @param node
+ * @param placeholderCharacter
+ * @param placeholderLength
+ * @returns {string}
+ */
+const getAltText = (node, placeholderCharacter, placeholderLength) => {
+  const altText = node.getAttribute('alt')
+  if (!altText) {
+    const altTextPlaceholder = placeholderCharacter.repeat(placeholderLength)
+    return altTextPlaceholder
+  }
+
+  return altText
+}
+
+/**
+ * Checks if element with given tagname can have an alt attribute.
+ * @param tagName
+ * @returns {boolean}
+ */
+const elementCanHaveAltText = (tagName) => {
+  if (!tagName) {
+    return false
+  }
+
+  const tagNameLowerCase = tagName.toLowerCase()
+  return tagNameLowerCase === 'img' || tagNameLowerCase === 'image' || tagNameLowerCase === 'area'
+}
+
 export {
   autoBind,
   blacklist,
@@ -223,4 +255,6 @@ export {
   phrasingConstructs,
   isElementBlacklisted,
   isCharWhitespace,
+  getAltText,
+  elementCanHaveAltText,
 }
