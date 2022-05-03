@@ -1,3 +1,4 @@
+import { DOCUMENT_FRAGMENT_NODE, DOCUMENT_NODE, ELEMENT_NODE, TEXT_NODE } from './constants'
 import { blacklist } from './util'
 
 export const walkDOM = (parentNode, collector) => {
@@ -12,19 +13,24 @@ export const walkDOM = (parentNode, collector) => {
 
 const processNode = (node, collector) => {
   switch (node.nodeType) {
-    case Node.TEXT_NODE:
+    case TEXT_NODE:
       collector.processTextNode(node)
       break
-    case Node.ELEMENT_NODE:
+    case ELEMENT_NODE:
       if (blacklist.includes(node.tagName.toLowerCase())) {
         return
       }
       processElementNode(node, collector)
       break
-    case Node.DOCUMENT_NODE:
-    case Node.DOCUMENT_FRAGMENT_NODE:
+    case DOCUMENT_NODE:
+    case DOCUMENT_FRAGMENT_NODE:
       if (node.hasChildNodes()) {
-        node.childNodes.forEach((child) => {
+        let childNodes = node.childNodes
+        if (!Array.isArray(childNodes)) {
+          childNodes = Array.from(childNodes)
+        }
+
+        childNodes.forEach((child) => {
           processNode(child, collector)
         })
       }
@@ -40,7 +46,12 @@ const processElementNode = (node, collector) => {
   }
 
   if (node.hasChildNodes()) {
-    node.childNodes.forEach((child) => {
+    let childNodes = node.childNodes
+    if (!Array.isArray(childNodes)) {
+      childNodes = Array.from(childNodes)
+    }
+
+    childNodes.forEach((child) => {
       processNode(child, collector)
     })
   }
