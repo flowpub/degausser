@@ -1,22 +1,40 @@
 import { StringCollector } from './stringCollector'
 import { MapCollector } from './mapCollector'
 import { walkDOM } from './domWalker'
+import { DOMParser } from '@xmldom/xmldom'
+import { DOCUMENT_FRAGMENT_NODE, DOCUMENT_NODE } from './constants'
 
-export const degausser = (parentNode, options = {}) => {
+/**
+ * 
+ * @param {*} parentNode 
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Node
+ * @param {*} options 
+ * @param {*} mimeType
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/DOMParser/parseFromString
+ * @returns 
+ */
+
+export const degausser = (parentNode, options = {}, mimeType = 'text/html') => {
+  let actualNode = parentNode
+
+  if (typeof parentNode === 'string') {
+    actualNode = new DOMParser().parseFromString(parentNode, mimeType)
+  }
+
   let collector = new StringCollector(options)
 
   if (options.map) {
     collector = new MapCollector(options)
   }
 
-  return walkDOM(parentNode, collector)
+  return walkDOM(actualNode, collector)
 }
 
 export const getRangeFromOffset = (start, end, doc = document, map = null) => {
   const docType = doc.nodeType
   if (
-    docType !== Node.DOCUMENT_NODE &&
-    docType !== Node.DOCUMENT_FRAGMENT_NODE
+    docType !== DOCUMENT_NODE &&
+    docType !== DOCUMENT_FRAGMENT_NODE
   ) {
     throw new Error('Bad Document Node')
   }

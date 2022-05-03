@@ -1,3 +1,4 @@
+import { TEXT_NODE } from '../../src/constants'
 import { degausser, getRangeFromOffset } from '../../src/degausser'
 import { getInputFile, isCharCodeWhitespace } from '../util'
 
@@ -20,7 +21,7 @@ describe(`Testing Mapping`, () => {
 
       // Test whether whitespace map is correct
       const node = mapSection.node
-      if (node.nodeType === Node.TEXT_NODE) {
+      if (node.nodeType === TEXT_NODE) {
         const textContent = node.textContent
 
         for (

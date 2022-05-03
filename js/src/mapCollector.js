@@ -1,3 +1,4 @@
+import { TEXT_NODE } from './constants'
 import {
   autoBind,
   BreakType,
@@ -261,7 +262,7 @@ export class MapCollector {
           const whitespace = []
 
           if (
-            entity.node.nodeType === Node.TEXT_NODE ||
+            entity.node.nodeType === TEXT_NODE ||
             entity.node.tagName === 'img'
           ) {
             const nodeContent =
