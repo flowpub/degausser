@@ -20,14 +20,6 @@
     "o": "Fernstraßenbauprivatfinanzierungsgesetz\n\nFernstraßen\u200bbau\u200bprivat\u200bfinanzierungs\u200bgesetz\n\nFernstraßen\u00adbau\u00adprivat\u00adfinanzierungs\u00ADgesetz"
   },
   {
-    "i": "<html><head><title/></head><body>foo bar</body></html>",
-    "o": "foo bar"
-  },
-  {
-    "i": "<html><head><title /></head><body>foo bar2</body></html>",
-    "o": "foo bar2"
-  },
-  {
     "i": "<pre>&lt;title/&gt;testing</pre>",
     "o": "<title/>testing"
   }
