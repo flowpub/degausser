@@ -1,6 +1,7 @@
 package degausser
 
 import (
+	"regexp"
 	"strings"
 
 	"golang.org/x/net/html"
@@ -13,8 +14,8 @@ import (
 // element node's `.innerText` property.
 // This does not take layout or styling into account.
 func HTMLToPlainText(htmlMarkup string) (string, error) {
-	htmlMarkup = strings.Replace(htmlMarkup, "<title/>", "<title></title>", 1)
-	htmlMarkup = strings.Replace(htmlMarkup, "<title />", "<title></title>", 1)
+	selfClosingTitleRegex := regexp.MustCompile(`<title\s*/>`)
+	htmlMarkup = selfClosingTitleRegex.ReplaceAllString(htmlMarkup, "<title></title>")
 	doc, err := html.Parse(strings.NewReader(htmlMarkup))
 	if err != nil {
 		return "", err
