@@ -6,12 +6,26 @@ describe(`Testing Crazy Shit`, () => {
 
   file.forEach((element) => {
     test(`Testing ${element.i}`, () => {
-      document.documentElement.innerHTML = element.i
+      const domParser = new DOMParser()
 
-      const output = degausser(document.documentElement)
+      // for testing full xhtml docs
+      // otherwise use inner html
+      const doc = domParser.parseFromString(element.i, 'text/xml')
+      const errorNode = doc.querySelector('parsererror');
+      let documentElement
+      if (errorNode) {
+        // parsing failed
+        document.documentElement.innerHTML = element.i
+        documentElement = document.documentElement
+      } else {
+        // parsing succeeded
+        documentElement = doc.documentElement
+      }
+
+      const output = degausser(documentElement)
       expect(output).toBe(element.o)
 
-      const map = degausser(document.documentElement, { map: true })
+      const map = degausser(documentElement, { map: true })
       for (const mapSection of map) {
         const sliced = output.slice(
           mapSection.start,

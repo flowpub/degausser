@@ -24,8 +24,8 @@
     "o": "foo bar"
   },
   {
-    "i": "<html><head><title /></head><body>foo bar</body></html>",
-    "o": "foo bar"
+    "i": "<html><head><title /></head><body>foo bar2</body></html>",
+    "o": "foo bar2"
   },
   {
     "i": "<pre>&lt;title/&gt;testing</pre>",
