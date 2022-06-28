@@ -74,4 +74,12 @@ describe("textify!", () => {
       expect(await degausser(page, testCase.i)).toBe(testCase.o);
     });
   });
+
+  xit("xhtml", async() => {
+    // todo test this properly
+    const testCases = await loadTestCases("xhtml.json");
+    await asyncForEach(testCases, async testCase => {
+      expect(await degausser(page, testCase.i)).toBe(testCase.o);
+    });
+  })
 });

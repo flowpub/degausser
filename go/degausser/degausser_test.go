@@ -316,3 +316,21 @@ func TestCrazyOrComplex(t *testing.T) {
 		assert.Equal(t,testCase.Output, actual, testCase.Input)
 	}
 }
+
+func TestXhtml(t *testing.T) {
+	testCases, err := getTestCase("./xhtml.json")
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	for _, testCase := range testCases {
+		actual, err := HTMLToPlainText(testCase.Input)
+		if err != nil {
+			t.Error(err)
+			continue
+		}
+
+		assert.Equal(t,testCase.Output, actual, testCase.Input)
+	}
+}
