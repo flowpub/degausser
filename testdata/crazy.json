@@ -18,9 +18,5 @@
   {
     "i": "<div>\n  <p>Fernstraßenbauprivatfinanzierungsgesetz</p>\n  <p>Fernstraßen<wbr>bau<wbr>privat<wbr>finanzierungs<wbr>gesetz</p>\n  <p>Fernstraßen&shy;bau&shy;privat&shy;finanzierungs&shy;gesetz</p>\n</div>",
     "o": "Fernstraßenbauprivatfinanzierungsgesetz\n\nFernstraßen\u200bbau\u200bprivat\u200bfinanzierungs\u200bgesetz\n\nFernstraßen\u00adbau\u00adprivat\u00adfinanzierungs\u00ADgesetz"
-  },
-  {
-    "i": "<pre>&lt;title/&gt;testing</pre>",
-    "o": "<title/>testing"
   }
 ]
