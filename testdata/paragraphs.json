@@ -40,6 +40,10 @@
     "o": "Test text\n\nTest text"
   },
   {
+    "i": "<p>T</p><br><p>E</p>",
+    "o": "T\n\n\nE"
+  },
+  {
     "i": "T<br><p>E</p><br>S<p></p>T",
     "o": "T\n\n\nE\n\n\nS\n\nT"
   },
