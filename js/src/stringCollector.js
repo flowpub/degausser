@@ -44,7 +44,22 @@ export class StringCollector {
         this.runs.push('\n')
         break
       case BreakType.DOUBLE:
-        this.runs.push('\n\n')
+        let paragraphBreakAdded = false
+        // iterate through runs backwards:
+        for (let i = this.runs.length - 1; i >= 0; i--) {
+          const run = this.runs[i]
+          if (run === '\n\n') {
+            // found double break
+            paragraphBreakAdded = true
+            break
+          } else if (run !== '\n') {
+            // found text content
+            break
+          }
+        }
+        if (!paragraphBreakAdded) {
+          this.runs.push('\n\n')
+        }
         break
     }
 

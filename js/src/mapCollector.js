@@ -54,14 +54,33 @@ export class MapCollector {
         })
         break
       case BreakType.DOUBLE:
-        this.map.push({
-          type: MapType.BREAK,
-          double: true,
-        })
+        let paragraphBreakAdded = false
+        // iterate through map backwards:
+        for (let i = this.map.length - 1; i >= 0; --i) {
+          const map = this.map[i]
+          if (map.type === MapType.BREAK && map.double) {
+            paragraphBreakAdded = true
+            break
+          } else if (!this.isSingleBreak(map)) {
+            break
+          }
+        }
+        if (!paragraphBreakAdded) {
+          this.map.push({
+            type: MapType.BREAK,
+            double: true,
+          })
+        }
         break
     }
 
     this.lastBreak = BreakType.NONE
+  }
+
+  isSingleBreak(mapObject) {
+    const isSingleBreak = mapObject.type === MapType.BREAK && !mapObject.double
+    const isNewLine = mapObject.type === MapType.TEXT && mapObject.content === '\n'
+    return isSingleBreak || isNewLine
   }
 
   processText() {
