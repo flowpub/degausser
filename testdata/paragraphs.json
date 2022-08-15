@@ -44,6 +44,18 @@
     "o": "T\n\n\nE"
   },
   {
+    "i": "<p>T<br><br></p><p>E</p>",
+    "o": "T\n\n\n\nE"
+  },
+  {
+    "i": "<p>T <br><br></p><p>E</p>",
+    "o": "T \n\n\n\nE"
+  },
+  {
+    "i": "<p>T <i>P</i>, D <br><br></p><p>E</p>",
+    "o": "T P, D \n\n\n\nE"
+  },
+  {
     "i": "T<br><p>E</p><br>S<p></p>T",
     "o": "T\n\n\nE\n\n\nS\n\nT"
   },
