@@ -7,7 +7,7 @@ import {
   phrasingConstructs,
   isElementBlacklisted,
   getAltText,
-  elementCanHaveAltText,
+  elementCanHaveAltText, trimBeginOnly, trimEndNewLine,
 } from './util'
 
 const MapType = {
@@ -83,29 +83,43 @@ export class MapCollector {
     return isSingleBreak || isNewLine
   }
 
-  processText() {
+  processText(trimEndSpaces = true) {
     if (this.text.length === 0) {
       return
     }
 
     const joinedText = this.text.map((element) => element.string).join('')
-    // TODO: might have to check for null string here
-    const trimmed = trimBeginAndEnd(joinedText)
+    let fullText = joinedText
+    if (trimEndSpaces) {
+      const trimmed = trimBeginAndEnd(joinedText)
 
-    if (!trimmed) {
-      // Trimmed into an empty string
-      //  Preserve all preceding breaks
-      this.text = []
-      return
+      if (!trimmed) {
+        // Trimmed into an empty string
+        // Preserve all preceding breaks
+        this.text = []
+        return
+      }
+      fullText = trimBeginAndEnd(collapseWhitespace(trimmed))
+    } else {
+      fullText = trimEndNewLine(trimBeginOnly(fullText))
+      if (!fullText) {
+        // Trimmed into an empty string
+        // Preserve all preceding breaks
+        this.text = []
+        return
+      }
     }
-
-    let fullText = trimBeginAndEnd(collapseWhitespace(trimmed))
 
     let blockMap = []
     let currentIndexOfString = 0
 
     for (const textMap of this.text) {
-      const shrunkText = trimBeginAndEnd(collapseWhitespace(textMap.string))
+      let shrunkText = textMap.string
+      if (trimEndSpaces) {
+        shrunkText = trimBeginAndEnd(collapseWhitespace(shrunkText))
+      } else {
+        shrunkText = trimEndNewLine(trimBeginOnly(shrunkText))
+      }
       if (!shrunkText) {
         continue
       }
@@ -184,7 +198,7 @@ export class MapCollector {
     // Process other tags
     switch (tag) {
       case 'br':
-        this.processText()
+        this.processText(false)
         this.processBreaks()
 
         this.map.push({

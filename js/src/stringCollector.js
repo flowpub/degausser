@@ -7,6 +7,8 @@ import {
   isElementBlacklisted,
   getAltText,
   elementCanHaveAltText,
+  trimBeginOnly,
+  trimEndNewLine,
 } from './util'
 
 export class StringCollector {
@@ -66,25 +68,42 @@ export class StringCollector {
     this.lastBreak = BreakType.NONE
   }
 
-  processText() {
+  processText(trimEndSpaces = true) {
     if (this.text.length === 0) {
       return
     }
 
-    // Trim
-    const trimmed = trimBeginAndEnd(this.text.join(''))
-    if (!trimmed) {
-      // Trimmed into an empty string
-      //  Preserve all preceding breaks
-      this.text = []
-      return
+    let text = this.text.join('')
+    if (trimEndSpaces) {
+      // Trim start and end
+      text = trimBeginAndEnd(text)
+      if (!text) {
+        // Trimmed into an empty string
+        // Preserve all preceding breaks
+        this.text = []
+        return
+      }
+    } else {
+      // trim start only, not end
+      // new line at end still needs to be trimmed
+      text = trimEndNewLine(trimBeginOnly(text))
+      if (!text) {
+        // Trimmed into an empty string
+        // Preserve all preceding breaks
+        this.text = []
+        return
+      }
     }
 
     if (this.lastBreak === null) {
       this.lastBreak = BreakType.NONE
     }
 
-    this.runs.push(trimBeginAndEnd(collapseWhitespace(trimmed)))
+    if (trimEndSpaces) {
+      this.runs.push(trimBeginAndEnd(collapseWhitespace(text)))
+    } else {
+      this.runs.push(trimEndNewLine(trimBeginOnly(text)))
+    }
     this.text = []
   }
 
@@ -117,7 +136,7 @@ export class StringCollector {
     // Process other tags
     switch (tag) {
       case 'br':
-        this.processText()
+        this.processText(false)
         this.processBreaks()
         this.runs.push('\n')
 

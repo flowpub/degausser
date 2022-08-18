@@ -11,10 +11,82 @@ const isCharWhitespace = (charCode) => {
   return whitespaces.includes(charCode)
 }
 
+const isCharNewLine = (charCode) => {
+  return charCode === 10 || charCode === 13
+}
+
 const BreakType = {
   NONE: 'none',
   SINGLE: 'single',
   DOUBLE: 'double',
+}
+
+/**
+ * Trim whitespace from the start of the string
+ * @param string
+ * @returns { string }
+ */
+const trimBeginOnly = (string) => {
+  // Get the first non-whitespace character index
+  let firstNonWhite = null
+  for (let index = 0; index < string.length; index++) {
+      if (!isCharWhitespace(string.charCodeAt(index))) {
+      firstNonWhite = index
+      break
+      }
+  }
+
+  // If the first non-whitespace character is null, the string is entirely whitespace
+  if (firstNonWhite === null) {
+      return string
+  }
+
+  // Return the non-empty sections of the string
+  return string.slice(firstNonWhite)
+}
+
+/**
+ * Trim any new line characters from the end of the string
+ * Also trim any whitespace that comes after that new line character, but not any that comes before.
+ * @param string
+ * @returns {*}
+ */
+const trimEndNewLine = (string) => {
+  let lastNonNewLine = null
+  let foundNewLineCharacter = false
+  let foundNonWhiteSpaceCharacter = false
+  for (let index = string.length - 1; index >= 0; index--) {
+    if (isCharWhitespace(string.charCodeAt(index))) {
+      if (!isCharNewLine(string.charCodeAt(index))) {
+        // okay to trim out any white space
+        continue
+      } else {
+        foundNewLineCharacter = true
+      }
+    } else {
+      foundNonWhiteSpaceCharacter = true
+    }
+    if (!isCharNewLine(string.charCodeAt(index))) {
+      if (foundNewLineCharacter) {
+        lastNonNewLine = index
+      }
+      break
+    }
+  }
+
+  if (!foundNonWhiteSpaceCharacter) {
+    return null
+  }
+  // If both are null, the string is entirely whitespace
+  if (lastNonNewLine === null) {
+    return string
+  }
+
+  // Return the non-empty sections of the string
+  return string.slice(
+      0,
+      lastNonNewLine ? lastNonNewLine + 1 : undefined,
+  )
 }
 
 const trimBeginAndEnd = (string) => {
@@ -250,6 +322,8 @@ export {
   autoBind,
   blacklist,
   BreakType,
+  trimBeginOnly,
+  trimEndNewLine,
   trimBeginAndEnd,
   collapseWhitespace,
   phrasingConstructs,
