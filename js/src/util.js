@@ -56,8 +56,10 @@ const trimEndNewLine = (string) => {
   let foundNewLineCharacter = false
   let foundNonWhiteSpaceCharacter = false
   for (let index = string.length - 1; index >= 0; index--) {
-    if (isCharWhitespace(string.charCodeAt(index))) {
-      if (!isCharNewLine(string.charCodeAt(index))) {
+    const charCode = string.charCodeAt(index)
+    const isNewLine = isCharNewLine(charCode)
+    if (isCharWhitespace(charCode)) {
+      if (!isNewLine) {
         // okay to trim out any white space
         continue
       } else {
@@ -66,7 +68,7 @@ const trimEndNewLine = (string) => {
     } else {
       foundNonWhiteSpaceCharacter = true
     }
-    if (!isCharNewLine(string.charCodeAt(index))) {
+    if (!isNewLine) {
       if (foundNewLineCharacter) {
         lastNonNewLine = index
       }
