@@ -2,13 +2,12 @@ import {
   autoBind,
   BreakType,
   trimBeginAndEnd,
-  collapseWhitespace,
   phrasingConstructs,
   isElementBlacklisted,
   getAltText,
   elementCanHaveAltText,
-  trimBeginOnly,
-  trimEndNewLine,
+  trimAndCollapseWhitespace,
+  trimAllExceptEndWhiteSpace,
 } from './util'
 
 export class StringCollector {
@@ -68,43 +67,34 @@ export class StringCollector {
     this.lastBreak = BreakType.NONE
   }
 
-  processText(trimEndSpaces = true) {
+  processTextAndTrim(trimmingFunction) {
     if (this.text.length === 0) {
       return
     }
 
-    let text = this.text.join('')
-    if (trimEndSpaces) {
-      // Trim start and end
-      text = trimBeginAndEnd(text)
-      if (!text) {
-        // Trimmed into an empty string
-        // Preserve all preceding breaks
-        this.text = []
-        return
-      }
-    } else {
-      // trim start only, not end
-      // new line at end still needs to be trimmed
-      text = trimEndNewLine(trimBeginOnly(text))
-      if (!text) {
-        // Trimmed into an empty string
-        // Preserve all preceding breaks
-        this.text = []
-        return
-      }
+    // Trim
+    const trimmed = trimmingFunction(this.text.join(''))
+    if (!trimmed) {
+      // Trimmed into an empty string
+      // Preserve all preceding breaks
+      this.text = []
+      return
     }
 
     if (this.lastBreak === null) {
       this.lastBreak = BreakType.NONE
     }
 
-    if (trimEndSpaces) {
-      this.runs.push(trimBeginAndEnd(collapseWhitespace(text)))
-    } else {
-      this.runs.push(trimEndNewLine(trimBeginOnly(text)))
-    }
+    this.runs.push(trimmingFunction(trimmed))
     this.text = []
+  }
+
+  processText(trimEndSpaces = true) {
+    if (trimEndSpaces) {
+      this.processTextAndTrim(trimAndCollapseWhitespace)
+    } else {
+      this.processTextAndTrim(trimAllExceptEndWhiteSpace)
+    }
   }
 
   processElementNode(node, isOpening) {

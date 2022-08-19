@@ -2,12 +2,13 @@ import {
   autoBind,
   BreakType,
   trimBeginAndEnd,
-  collapseWhitespace,
   isCharWhitespace,
   phrasingConstructs,
   isElementBlacklisted,
   getAltText,
-  elementCanHaveAltText, trimBeginOnly, trimEndNewLine,
+  elementCanHaveAltText,
+  trimAllExceptEndWhiteSpace,
+  trimAndCollapseWhitespace,
 } from './util'
 
 const MapType = {
@@ -83,43 +84,28 @@ export class MapCollector {
     return isSingleBreak || isNewLine
   }
 
-  processText(trimEndSpaces = true) {
+  processTextAndTrim(trimmingFunction) {
     if (this.text.length === 0) {
       return
     }
 
     const joinedText = this.text.map((element) => element.string).join('')
-    let fullText = joinedText
-    if (trimEndSpaces) {
-      const trimmed = trimBeginAndEnd(joinedText)
-
-      if (!trimmed) {
-        // Trimmed into an empty string
-        // Preserve all preceding breaks
-        this.text = []
-        return
-      }
-      fullText = trimBeginAndEnd(collapseWhitespace(trimmed))
-    } else {
-      fullText = trimEndNewLine(trimBeginOnly(fullText))
-      if (!fullText) {
-        // Trimmed into an empty string
-        // Preserve all preceding breaks
-        this.text = []
-        return
-      }
+    // TODO: might have to check for null string here
+    const trimmed = trimmingFunction(joinedText)
+    if (!trimmed) {
+      // Trimmed into an empty string
+      // Preserve all preceding breaks
+      this.text = []
+      return
     }
+
+    let fullText = trimmingFunction(trimmed)
 
     let blockMap = []
     let currentIndexOfString = 0
 
     for (const textMap of this.text) {
-      let shrunkText = textMap.string
-      if (trimEndSpaces) {
-        shrunkText = trimBeginAndEnd(collapseWhitespace(shrunkText))
-      } else {
-        shrunkText = trimEndNewLine(trimBeginOnly(shrunkText))
-      }
+      const shrunkText = trimmingFunction(textMap.string)
       if (!shrunkText) {
         continue
       }
@@ -161,6 +147,14 @@ export class MapCollector {
     }
 
     this.text = []
+  }
+
+  processText(trimEndSpaces = true) {
+    if (trimEndSpaces) {
+      this.processTextAndTrim(trimAndCollapseWhitespace)
+    } else {
+      this.processTextAndTrim(trimAllExceptEndWhiteSpace)
+    }
   }
 
   processElementNode(node, isOpening) {

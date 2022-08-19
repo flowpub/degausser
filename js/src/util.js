@@ -89,6 +89,16 @@ const trimEndNewLine = (string) => {
   )
 }
 
+/**
+ * Trims any whitespace at the start and trims any newline characters at the end of the string.
+ * Trims any whitespace after newline characters at the end of the string, but not any that comes before.
+ * @param string
+ * @returns {*}
+ */
+const trimAllExceptEndWhiteSpace = (string) => {
+  return trimEndNewLine(trimBeginOnly(string))
+}
+
 const trimBeginAndEnd = (string) => {
   // Get the first and last non-whitespace character index
   let firstNonWhite = null,
@@ -120,6 +130,7 @@ const trimBeginAndEnd = (string) => {
     lastNonWhite ? lastNonWhite + 1 : undefined,
   )
 }
+
 const collapseWhitespace = (string) => {
   // Collapse all other sequential whitespace into a single whitespace
   const textElements = []
@@ -148,6 +159,10 @@ const collapseWhitespace = (string) => {
   }
 
   return textElements.join(' ')
+}
+
+const trimAndCollapseWhitespace = (string) => {
+  return trimBeginAndEnd(collapseWhitespace(string))
 }
 
 const blacklist = [
@@ -325,6 +340,8 @@ export {
   trimBeginOnly,
   trimEndNewLine,
   trimBeginAndEnd,
+  trimAllExceptEndWhiteSpace,
+  trimAndCollapseWhitespace,
   collapseWhitespace,
   phrasingConstructs,
   isElementBlacklisted,
