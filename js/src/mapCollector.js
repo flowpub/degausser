@@ -2,12 +2,13 @@ import {
   autoBind,
   BreakType,
   trimBeginAndEnd,
-  collapseWhitespace,
   isCharWhitespace,
   phrasingConstructs,
   isElementBlacklisted,
   getAltText,
   elementCanHaveAltText,
+  trimAllExceptEndWhiteSpace,
+  trimAndCollapseWhitespace,
 } from './util'
 
 const MapType = {
@@ -54,39 +55,57 @@ export class MapCollector {
         })
         break
       case BreakType.DOUBLE:
-        this.map.push({
-          type: MapType.BREAK,
-          double: true,
-        })
+        let paragraphBreakAdded = false
+        // iterate through map backwards:
+        for (let i = this.map.length - 1; i >= 0; --i) {
+          const map = this.map[i]
+          if (map.type === MapType.BREAK && map.double) {
+            paragraphBreakAdded = true
+            break
+          } else if (!this.isSingleBreak(map)) {
+            break
+          }
+        }
+        if (!paragraphBreakAdded) {
+          this.map.push({
+            type: MapType.BREAK,
+            double: true,
+          })
+        }
         break
     }
 
     this.lastBreak = BreakType.NONE
   }
 
-  processText() {
+  isSingleBreak(mapObject) {
+    const isSingleBreak = mapObject.type === MapType.BREAK && !mapObject.double
+    const isNewLine = mapObject.type === MapType.TEXT && mapObject.content === '\n'
+    return isSingleBreak || isNewLine
+  }
+
+  processTextAndTrim(trimmingFunction) {
     if (this.text.length === 0) {
       return
     }
 
     const joinedText = this.text.map((element) => element.string).join('')
     // TODO: might have to check for null string here
-    const trimmed = trimBeginAndEnd(joinedText)
-
+    const trimmed = trimmingFunction(joinedText)
     if (!trimmed) {
       // Trimmed into an empty string
-      //  Preserve all preceding breaks
+      // Preserve all preceding breaks
       this.text = []
       return
     }
 
-    let fullText = trimBeginAndEnd(collapseWhitespace(trimmed))
+    let fullText = trimmingFunction(trimmed)
 
     let blockMap = []
     let currentIndexOfString = 0
 
     for (const textMap of this.text) {
-      const shrunkText = trimBeginAndEnd(collapseWhitespace(textMap.string))
+      const shrunkText = trimmingFunction(textMap.string)
       if (!shrunkText) {
         continue
       }
@@ -130,6 +149,14 @@ export class MapCollector {
     this.text = []
   }
 
+  processText(trimEndSpaces = true) {
+    if (trimEndSpaces) {
+      this.processTextAndTrim(trimAndCollapseWhitespace)
+    } else {
+      this.processTextAndTrim(trimAllExceptEndWhiteSpace)
+    }
+  }
+
   processElementNode(node, isOpening) {
     if (
       isElementBlacklisted(
@@ -165,7 +192,7 @@ export class MapCollector {
     // Process other tags
     switch (tag) {
       case 'br':
-        this.processText()
+        this.processText(false)
         this.processBreaks()
 
         this.map.push({

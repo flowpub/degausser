@@ -2,11 +2,12 @@ import {
   autoBind,
   BreakType,
   trimBeginAndEnd,
-  collapseWhitespace,
   phrasingConstructs,
   isElementBlacklisted,
   getAltText,
   elementCanHaveAltText,
+  trimAndCollapseWhitespace,
+  trimAllExceptEndWhiteSpace,
 } from './util'
 
 export class StringCollector {
@@ -44,23 +45,38 @@ export class StringCollector {
         this.runs.push('\n')
         break
       case BreakType.DOUBLE:
-        this.runs.push('\n\n')
+        let paragraphBreakAdded = false
+        // iterate through runs backwards:
+        for (let i = this.runs.length - 1; i >= 0; i--) {
+          const run = this.runs[i]
+          if (run === '\n\n') {
+            // found double break
+            paragraphBreakAdded = true
+            break
+          } else if (run !== '\n') {
+            // found text content
+            break
+          }
+        }
+        if (!paragraphBreakAdded) {
+          this.runs.push('\n\n')
+        }
         break
     }
 
     this.lastBreak = BreakType.NONE
   }
 
-  processText() {
+  processTextAndTrim(trimmingFunction) {
     if (this.text.length === 0) {
       return
     }
 
     // Trim
-    const trimmed = trimBeginAndEnd(this.text.join(''))
+    const trimmed = trimmingFunction(this.text.join(''))
     if (!trimmed) {
       // Trimmed into an empty string
-      //  Preserve all preceding breaks
+      // Preserve all preceding breaks
       this.text = []
       return
     }
@@ -69,8 +85,16 @@ export class StringCollector {
       this.lastBreak = BreakType.NONE
     }
 
-    this.runs.push(trimBeginAndEnd(collapseWhitespace(trimmed)))
+    this.runs.push(trimmingFunction(trimmed))
     this.text = []
+  }
+
+  processText(trimEndSpaces = true) {
+    if (trimEndSpaces) {
+      this.processTextAndTrim(trimAndCollapseWhitespace)
+    } else {
+      this.processTextAndTrim(trimAllExceptEndWhiteSpace)
+    }
   }
 
   processElementNode(node, isOpening) {
@@ -102,7 +126,7 @@ export class StringCollector {
     // Process other tags
     switch (tag) {
       case 'br':
-        this.processText()
+        this.processText(false)
         this.processBreaks()
         this.runs.push('\n')
 
