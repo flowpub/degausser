@@ -332,10 +332,8 @@ const elementCanHaveAltText = (tagName) => {
   }
 
   const tagNameLowerCase = tagName.toLowerCase()
-  return tagNameLowerCase === 'img' ||
-    tagNameLowerCase === 'image' ||
-    tagNameLowerCase === 'area' ||
-    tagNameLowerCase === 'canvas'
+  const elementsWithAltText = ['area', 'img', 'input', 'canvas',]
+  return elementsWithAltText.includes(tagNameLowerCase)
 }
 
 export {
