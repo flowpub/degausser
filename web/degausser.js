@@ -7,10 +7,10 @@ globalThis.degausser = input => {
       el.outerHTML = el.alt || "";
     }
   });
-  Array.from(div.querySelectorAll("img, area, image")).forEach(el => {
+  Array.from(div.querySelectorAll("img, area, image, canvas")).forEach(el => {
     const unitSeparatorCode = 31
     const altStringLength = 100
-    el.outerHTML = el.alt || String.fromCharCode(unitSeparatorCode).repeat(altStringLength);
+    el.outerHTML = el.getAttribute('alt') || String.fromCharCode(unitSeparatorCode).repeat(altStringLength);
   });
   Array.from(div.querySelectorAll("wbr")).forEach(el => {
     if (el.childNodes.length === 0) {
