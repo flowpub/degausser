@@ -150,6 +150,14 @@ export class StringCollector {
 
       return true
     }
+    if (node.tagName.toLowerCase() === 'svg' && isOpening) {
+      const altText = getAltText(
+        node,
+        this.options.placeholderString,
+        this.options.placeholderCopies
+      )
+      this.text.push(` ${altText} `)
+    }
 
     this.processBlockConstruct(tag, isOpening)
 
