@@ -219,6 +219,15 @@ export class MapCollector {
       return true
     }
 
+    if (node.tagName.toLowerCase() === 'svg' && isOpening) {
+      const altText = getAltText(
+        node,
+        this.options.placeholderString,
+        this.options.placeholderCopies
+      )
+      this.text.push({ node, string: ` ${altText} ` })
+    }
+
     this.processBlockConstruct(node, isOpening)
 
     return false
@@ -304,7 +313,16 @@ export class MapCollector {
               ).normalize()
               nodeContent = altText
             } else {
-              nodeContent = entity.node.textContent.normalize()
+              nodeContent = ''
+              if (entity.node.tagName === 'svg') {
+                const altText = getAltText(
+                  entity.node,
+                  this.options.placeholderString,
+                  this.options.placeholderCopies
+                ).normalize()
+                nodeContent = altText
+              }
+              nodeContent += entity.node.textContent.normalize()
             }
 
             for (
