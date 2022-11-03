@@ -312,7 +312,11 @@ const matchesLocalNameOrElement = (element, otherNameOrElement) => {
  * @returns {string}
  */
 const getAltText = (node, placeholderCharacter, placeholderLength) => {
-  const altText = node.getAttribute('alt')?.trim()
+  let altText = node.getAttribute('alt')
+  if (altText) {
+    altText = altText.trim()
+  }
+
   if (!altText) {
     const altTextPlaceholder = placeholderCharacter.repeat(placeholderLength)
     return altTextPlaceholder
