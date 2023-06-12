@@ -20,7 +20,7 @@
     "jest-puppeteer": "4.4.0",
     "node-static": "0.7.11",
     "puppeteer": "5.5.0",
-    "cpy": "8.1.2",
+    "cpy": "10.1.0",
     "glob": "7.2.0"
   }
 }
