@@ -28,7 +28,7 @@
         "prepublishOnly": "npm test && npm run build"
     },
     "devDependencies": {
-        "@babel/core": "7.22.20",
+        "@babel/core": "7.23.0",
         "@babel/preset-env": "7.22.20",
         "@rollup/plugin-node-resolve": "8.4.0",
         "glob": "7.2.0",
