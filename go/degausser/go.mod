@@ -6,7 +6,7 @@ toolchain go1.25.1
 
 require (
 	github.com/mattn/go-zglob v0.0.6
-	github.com/stretchr/testify v1.11.0
+	github.com/stretchr/testify v1.11.1
 	golang.org/x/net v0.43.0
 )
 
