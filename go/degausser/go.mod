@@ -2,7 +2,7 @@ module github.com/flowpub/degausser/go/degausser
 
 go 1.25.0
 
-toolchain go1.26.5
+toolchain go1.27.4
 
 require (
 	github.com/mattn/go-zglob v0.0.8
